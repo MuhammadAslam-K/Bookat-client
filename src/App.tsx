@@ -1,15 +1,21 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
-import './App.css'
+import SignUp from "./components/signup/SignUp.jsx";
+import './App.css';
 
 function App() {
-
   return (
     <>
-      <h1 className="text-3xl font-extralight underline">
-      Hello world!
-    </h1>
+      <Toaster />
+      <Router>
+        <Routes>
+          <Route element={<SignUp />} path="/" />
+        </Routes>
+      </Router>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
