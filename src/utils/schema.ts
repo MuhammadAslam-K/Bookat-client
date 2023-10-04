@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 
 export const basicSchema = Yup.object({
-    userName: Yup.string()
+    name: Yup.string()
         .min(3, "Type a valid Name")
         .required("Please Enter the value"),
     email: Yup.string()

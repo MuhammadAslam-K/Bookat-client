@@ -1,27 +1,37 @@
 import { useState } from 'react'
 import { useFormik } from "formik"
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, Auth, signInWithPhoneNumber } from "firebase/auth";
 import { toast } from "react-hot-toast"
 import axios, { AxiosError } from 'axios';
 import { useNavigate, Link } from "react-router-dom"
 
 
-import { auth } from "../../services/firebase"
-import { basicSchema } from "../../utils/schema"
-import { authServer } from "../../services/axios"
-import { userSignUp } from '../../utils/interfaces';
 
-function SignUp() {
+import { auth } from "../../../services/firebase/config"
+import { basicSchema } from "../../../utils/schema"
+import { authServer } from "../../../services/axios"
+import { userSignUp } from '../../../utils/interfaces';
+import { signupComponentProps } from '../../../utils/interfaces';
 
+interface ErrorResponse {
+    error: string; // Define the structure of your error response here
+}
+
+function SignUp(data: signupComponentProps) {
+
+    const { login, signupSuccess, signupServer, person } = data
     const [showPassword, setShowPassword] = useState(false)
+    // const [otpPage, setOtpPage] = useState(false)
+    // const [OTP, setOTP] = useState("")
     const provider = new GoogleAuthProvider()
     const navigate = useNavigate()
 
     const formik = useFormik({
         initialValues: {
-            userName: "",
+            name: "",
             email: "",
             mobile: "",
+            refrelCode: "",
             password: "",
             re_password: "",
         },
@@ -31,14 +41,85 @@ function SignUp() {
         },
     });
 
+    // interface ExtendedWindow extends Window {
+    //     recaptchaVerifier?: firebase.auth.RecaptchaVerifier;
+    //     confirmationResult?: firebase.auth.ConfirmationResult;
+    // }
+    // const extendedWindow = window as ExtendedWindow;
+
+
+    // const onCaptchaVerify = () => {
+    //     try {
+    //         if (extendedWindow.recaptchaVerifier) {
+    //             console.log("called onCaptchaVerify")
+    //             extendedWindow.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+    //                 size: "normal",
+    //                 callback: () => {
+    //                     console.log(73)
+    //                     sendOTP()
+    //                     toast.success("Otp sent successfully");
+    //                 },
+    //                 "expired-callback": () => {
+    //                     toast.error("TimeOut");
+    //                 },
+    //             });
+    //         }
+    //         else {
+    //             console.log("called else");
+    //         }
+    //     } catch (error) {
+    //         console.log('error in onCaptchaVerify', error)
+    //     }
+    // };
+
+    // const sendOTP = () => {
+    //     console.log("called sendOTP");
+    //     const appVerifier = extendedWindow.recaptchaVerifier;
+    //     const number = "+91" + formik.values.mobile;
+
+    //     signInWithPhoneNumber(auth, number, appVerifier)
+    //         .then((confirmationResult) => {
+    //             // SMS sent. Prompt user to type the code from the message, then sign the
+    //             // user in with confirmationResult.confirm(code).
+    //             extendedWindow.confirmationResult = confirmationResult;
+    //             // ...
+    //         }).catch((error) => {
+    //             console.log(error)
+    //         });
+    // }
+
+    // const VerifyOTP = () => {
+    //     console.log("OTP", OTP)
+    //     extendedWindow.confirmationResult.confirm(OTP).then((result) => {
+    //         // User signed in successfully.
+    //         const user = result.user;
+    //         console.log(user)
+    //         // ...
+    //     }).catch((error) => {
+    //         console.log(error);
+
+    //         // User couldn't sign in (bad verification code?)
+    //         // ...
+    //     });
+    // }
+
+
+
+
+
     const handleSubmit = async (values: userSignUp) => {
         try {
-            await authServer.post("/signup", values)
-            navigate('/login')
+            // handleSendOTP()
+            // setOtpPage(true)
+            console.log("called handleSubmit");
+            // onCaptchaVerify()
+
+            await authServer.post(signupServer, values)
+            navigate(signupSuccess)
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<string> = error;
+                const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response) {
                     toast.error(axiosError.response.data.error);
                 } else {
@@ -51,13 +132,13 @@ function SignUp() {
     const submitSignUpWithGoogle = async (displayName: string, email: string) => {
         try {
             const value = { displayName, email }
-            await authServer.post("/google/signup", value)
-            navigate('/login')
+            await authServer.post(`/google${signupServer}`, value)
+            navigate(signupSuccess)
 
         } catch (error) {
 
             if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<string> = error;
+                const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response) {
                     toast.error(axiosError.response.data.error);
                 } else {
@@ -87,6 +168,40 @@ function SignUp() {
 
     return (
         <>
+            {/* OTP
+            {otpPage ?
+                <div className="flex h-screen items-center justify-center bg-gray-100" >
+                    <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
+                        <div className="w-full ">
+                            <div className="p-8 text-center">
+                                <h2 className="text-2xl font-semibold mb-2">Mobile Verification</h2>
+                                <p className="text-sm text-gray-400 mb-6">We have sent a code to your Mobile No</p>
+
+                                <form className="space-y-4">
+                                    <div className="flex items-center justify-center space-x-2">
+                                        <input type="text"
+                                            value={OTP}
+                                            onChange={(e) => setOTP(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <button className="w-full bg-blue-700 text-white py-3 rounded-xl hover:bg-blue-600 focus:ring-1 focus:ring-blue-700 focus:outline-none"
+                                        type='submit'
+                                        onClick={VerifyOTP}
+                                    >
+                                        Verify Account
+                                    </button>
+
+                                    <div className="text-center text-sm text-gray-500">
+                                        <p>Didn't receive the code? <a className="text-blue-600 hover:underline" href="http://" target="_blank" rel="noopener noreferrer">Resend</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                : */}
+            {/* // SIGN UP */}
             <div className="flex h-screen items-center justify-center bg-gray-100" >
                 <div className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                     <div className="w-full ">
@@ -97,20 +212,20 @@ function SignUp() {
                                 <div className='mb-6'>
                                     <input
                                         type="text"
-                                        name="userName"
-                                        placeholder="Username"
+                                        name="name"
+                                        placeholder="name"
                                         required
-                                        value={formik.values.userName}
+                                        value={formik.values.name}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         className={
-                                            formik.touched.userName && formik.errors.userName
+                                            formik.touched.name && formik.errors.name
                                                 ? with_error_class
                                                 : without_error_class
                                         }
                                     />
-                                    {formik.touched.userName && formik.errors.userName && (
-                                        <div className="text-red-500 text-xs">{formik.errors.userName}</div>
+                                    {formik.touched.name && formik.errors.name && (
+                                        <div className="text-red-500 text-xs">{formik.errors.name}</div>
                                     )}
                                 </div>
 
@@ -153,6 +268,22 @@ function SignUp() {
                                         <div className="text-red-500 text-xs">{formik.errors.mobile}</div>
                                     )}
 
+                                </div>
+
+                                <div className='mb-6'>
+                                    <input
+                                        type="text"
+                                        name="refrelCode"
+                                        placeholder="Refrel code (optional)"
+                                        value={formik.values.refrelCode}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        className={
+                                            formik.touched.refrelCode && formik.errors.refrelCode
+                                                ? with_error_class
+                                                : without_error_class
+                                        }
+                                    />
                                 </div>
 
                                 <div className='mb-6'>
@@ -211,25 +342,33 @@ function SignUp() {
                                 </button>
 
                             </form>
-                            <div className="mt-4 flex items-center">
-                                <div className="w-full border-t border-gray-400"></div>
-                                <div className="mx-4 text-sm text-gray-600">or</div>
-                                <div className="w-full border-t border-gray-400"></div>
-                            </div>
+                            {person == "user" &&
+                                <>
+                                    <div className="mt-4 flex items-center">
+                                        <div className="w-full border-t border-gray-400"></div>
+                                        <div className="mx-4 text-sm text-gray-600">or</div>
+                                        <div className="w-full border-t border-gray-400"></div>
+                                    </div>
 
-                            <button className="mt-4 w-full cursor-pointer rounded-lg bg-red-600 pt-3 pb-3 text-white shadow-lg hover:bg-red-400"
-                                onClick={signUpWithGoogle}
-                            >
-                                Sign up with Google
-                            </button>
+                                    <button className="mt-4 w-full cursor-pointer rounded-lg bg-red-600 pt-3 pb-3 text-white shadow-lg hover:bg-red-400"
+                                        onClick={signUpWithGoogle}
+                                    >
+                                        Sign up with Google
+                                    </button>
+                                </>
+                            }
                             <div className="mt-4 text-center">
-                                <p className="text-sm text-gray-600">Already have an account? <Link to={"/login"} className="font-bold text-blue-600 no-underline hover:text-blue-400">Sign in</Link></p>
+                                <p className="text-sm text-gray-600">Already have an account? <Link to={login} className="font-bold text-blue-600 no-underline hover:text-blue-400">Sign in</Link></p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div >
-
+                <div className="mt-4 text-center">
+                    {/* Other JSX elements */}
+                    <div id="recaptcha-container"></div>
+                </div>
+            </div>
+            {/* } */}
         </>
     )
 }
