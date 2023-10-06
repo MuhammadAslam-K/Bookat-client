@@ -5,8 +5,9 @@ import { signupComponentProps } from '../../../../utils/interfaces';
 function DriverSignup() {
     const data: signupComponentProps = {
         login: "/driver/login",
-        signupSuccess: "/driver/info/personal",
+        signupSuccess: "/driver/login",
         signupServer: "/driver/signup",
+        checkExists: "/driver/check/driverExists",
         person: "driver"
     };
 

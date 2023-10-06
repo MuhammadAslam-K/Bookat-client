@@ -3,9 +3,9 @@ import { loginComponentProps } from "../../utils/interfaces"
 
 function LoginPage() {
     const data: loginComponentProps = {
-        loginsucess: "/",
         loginserver: "/signin",
         signup: "/signup",
+        resetpassword: "/resetPasswordLink",
         person: "user",
     }
     return (

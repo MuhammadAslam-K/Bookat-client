@@ -6,9 +6,9 @@ import { loginComponentProps } from '../../../utils/interfaces'
 function AdminLoginPage() {
 
     const data: loginComponentProps = {
-        loginsucess: "/admin/dashboard",
         loginserver: "/admin/login",
         signup: "/admin/signup",
+        resetpassword: "",
         person: "admin"
     }
     return (
