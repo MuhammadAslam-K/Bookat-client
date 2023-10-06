@@ -6,6 +6,7 @@ function SignUpPage() {
         login: "/login",
         signupSuccess: "/login",
         signupServer: "/signup",
+        checkExists: "/check/userExists",
         person: "user"
     };
 

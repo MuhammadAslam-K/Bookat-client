@@ -1,12 +1,25 @@
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { uploadImageToStorage } from '../../../../services/firebase/storage';
 import { authServer } from '../../../../services/axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from 'react-redux';
+import { setVehicle } from '../../../../services/redux/slices/driverAuth';
+import axios, { AxiosError } from 'axios';
+
+
+interface ErrorResponse {
+    error: string;
+}
 
 function AddVehicleInfo() {
+    const documentValue = useSelector(state => state.driver.document);
+    const vehicleValue = useSelector(state => state.driver.vehicle);
+    const dispatch = useDispatch();
+
+
     const navigate = useNavigate()
 
     const [rcImage, setrcImage] = useState<string | null>(null);
@@ -20,6 +33,19 @@ function AddVehicleInfo() {
 
     const without_error_class = "pl-2 outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm";
     const with_error_class = "pl-2 outline-none border-2 border-red-400 w-full rounded-lg p-2.5 sm:text-sm  placeholder:text-red-500";
+
+
+    useEffect(() => {
+
+        if (!documentValue) {
+            navigate("/driver/info/personal")
+        }
+
+        if (vehicleValue) {
+            navigate("/driver/dashboard")
+        }
+    }, [documentValue, navigate, vehicleValue])
+
 
 
     const handleRcImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +121,9 @@ function AddVehicleInfo() {
     const handleSubmit = async (values: { registrationNo: string; vehicleModel: string; maxPersons: string; }) => {
         try {
             if (rcImage && vehicleImage1 && vehicleImage2) {
+
+                toast.success("Submitting your form. Please wait.")
+
                 const rcImageUrl = await uploadImageToStorage(rcImage, rcImageName, "vehicle", "rc")
                 const vehicleImageUrl1 = await uploadImageToStorage(vehicleImage1, vehicleImageName1, "vehicle", "vehicleImage1")
                 const vehicleImageUrl2 = await uploadImageToStorage(vehicleImage2, vehicleImageName2, "vehicle", "vehicleImage2")
@@ -114,10 +143,19 @@ function AddVehicleInfo() {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-                    navigate("/driver/info/vehicle")
+                    dispatch(setVehicle())
+                    navigate("/driver/dashboard")
                     console.log("response", response);
                 } catch (error) {
-                    toast.error((error as Error).message)
+                    console.log(error)
+                    if (axios.isAxiosError(error)) {
+                        const axiosError: AxiosError<ErrorResponse> = error;
+                        if (axiosError.response) {
+                            toast.error(axiosError.response.data.error);
+                        } else {
+                            toast.error('Network Error occurred.');
+                        }
+                    }
                 }
             }
 

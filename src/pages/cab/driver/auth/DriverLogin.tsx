@@ -4,9 +4,9 @@ import { loginComponentProps } from '../../../../utils/interfaces'
 
 function DriverLogin() {
     const data: loginComponentProps = {
-        loginsucess: "/driver/dashboard",
         loginserver: "/driver/login",
         signup: "/driver/signup",
+        resetpassword: "/driver/resetPasswordLink",
         person: "driver"
     }
     return (

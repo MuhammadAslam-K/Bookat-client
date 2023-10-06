@@ -1,14 +1,23 @@
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
 
 import { uploadImageToStorage } from '../../../../services/firebase/storage';
 import { authServer } from '../../../../services/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDocument } from '../../../../services/redux/slices/driverAuth';
+import axios, { AxiosError } from 'axios';
 
+
+interface ErrorResponse {
+    error: string;
+}
 
 function AddPersonalAndVehicleInfo() {
+    const documentValue = useSelector(state => state.driver.document);
+    const dispatch = useDispatch();
     const navigate = useNavigate()
 
     const [aadharImage, setAadharImage] = useState<string | null>(null);
@@ -22,6 +31,14 @@ function AddPersonalAndVehicleInfo() {
 
     const without_error_class = "pl-2 outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm";
     const with_error_class = "pl-2 outline-none border-2 border-red-400 w-full rounded-lg p-2.5 sm:text-sm";
+
+    useEffect(() => {
+        if (documentValue) {
+            navigate("/driver/info/vehicle")
+        }
+
+    }, [documentValue, navigate])
+
 
 
     const handleAadharImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +114,8 @@ function AddPersonalAndVehicleInfo() {
     const handleSubmit = async (values: { aadharId: string; drivingLicenseId: string; address: string; }) => {
         try {
             if (aadharImage && licenseImage && driverImage) {
+                toast.success("Submitting your form. Please wait.")
+
                 const aadharImageUrl = await uploadImageToStorage(aadharImage, aadharImageName, "driver", "aadhar")
                 const licenseImageUrl = await uploadImageToStorage(licenseImage, licenseImageName, "driver", "license")
                 const driverImageUrl = await uploadImageToStorage(driverImage, driverImageName, "driver", "driver")
@@ -117,11 +136,20 @@ function AddPersonalAndVehicleInfo() {
                             'Authorization': `Bearer ${token}`
                         }
                     });
+                    dispatch(setDocument())
+
                     navigate("/driver/info/vehicle")
                     console.log("response", response);
                 } catch (error) {
                     console.log(error);
-                    toast.error((error as Error).message)
+                    if (axios.isAxiosError(error)) {
+                        const axiosError: AxiosError<ErrorResponse> = error;
+                        if (axiosError.response) {
+                            toast.error(axiosError.response.data.error);
+                        } else {
+                            toast.error('Network Error occurred.');
+                        }
+                    }
                 }
             }
 
