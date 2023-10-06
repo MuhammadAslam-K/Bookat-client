@@ -16,12 +16,13 @@ import AddPersonlInfoPage from "./pages/cab/driver/addInfo/AddPersonlInfoPage.js
 
 import AdminLoginPage from "./pages/admin/auth/AdminLoginPage.js";
 import DriverPasswordResetPage from "./pages/cab/driver/auth/DriverPasswordResetPage.js";
+import { rootState } from "./utils/interfaces.js";
 
 
 
 function App() {
-  const user = useSelector((state) => state.user.loggedIn);
-  const driver = useSelector((state) => state.driver.loggedIn);
+  const user = useSelector((state: rootState) => state.user.loggedIn);
+  const driver = useSelector((state: rootState) => state.driver.loggedIn);
   // const driver = false
   // const user = false
 

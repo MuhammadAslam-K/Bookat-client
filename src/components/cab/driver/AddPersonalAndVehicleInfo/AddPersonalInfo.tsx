@@ -9,6 +9,7 @@ import { authServer } from '../../../../services/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDocument } from '../../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
+import { rootState } from '../../../../utils/interfaces';
 
 
 interface ErrorResponse {
@@ -16,7 +17,7 @@ interface ErrorResponse {
 }
 
 function AddPersonalAndVehicleInfo() {
-    const documentValue = useSelector(state => state.driver.document);
+    const documentValue = useSelector((state: rootState) => state.driver.document);
     const dispatch = useDispatch();
     const navigate = useNavigate()
 

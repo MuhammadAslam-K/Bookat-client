@@ -19,3 +19,23 @@ export interface signupComponentProps {
     checkExists: string,
     person: string,
 }
+
+interface userAuthSlice {
+    loggedIn: boolean
+}
+
+interface driverAuthSlice {
+    loggedIn: boolean
+    document: boolean
+    vehicle: boolean
+}
+
+interface adminAuthSlice {
+    loggedIn: boolean
+}
+
+export interface rootState {
+    user: userAuthSlice,
+    driver: driverAuthSlice,
+    admin: adminAuthSlice
+}

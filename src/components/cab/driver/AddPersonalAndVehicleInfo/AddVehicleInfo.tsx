@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux';
 import { setVehicle } from '../../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
+import { rootState } from '../../../../utils/interfaces';
 
 
 interface ErrorResponse {
@@ -15,8 +16,8 @@ interface ErrorResponse {
 }
 
 function AddVehicleInfo() {
-    const documentValue = useSelector(state => state.driver.document);
-    const vehicleValue = useSelector(state => state.driver.vehicle);
+    const documentValue = useSelector((state: rootState) => state.driver.document);
+    const vehicleValue = useSelector((state: rootState) => state.driver.vehicle);
     const dispatch = useDispatch();
 
 
