@@ -1,11 +1,12 @@
 import Login from "../../components/auth/login/Login"
 import { loginComponentProps } from "../../utils/interfaces"
+import userEndPoints from "../../endpoints/userEndPoints"
 
 function LoginPage() {
     const data: loginComponentProps = {
-        loginserver: "/signin",
+        loginserver: userEndPoints.login,
         signup: "/signup",
-        resetpassword: "/resetPasswordLink",
+        resetpassword: userEndPoints.resetPasswordLink,
         person: "user",
     }
     return (

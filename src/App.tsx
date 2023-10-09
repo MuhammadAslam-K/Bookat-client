@@ -1,5 +1,7 @@
 import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { ChakraProvider } from '@chakra-ui/react'
+
 
 import './App.css';
 import { useSelector } from "react-redux";
@@ -17,6 +19,9 @@ import AddPersonlInfoPage from "./pages/cab/driver/addInfo/AddPersonlInfoPage.js
 import AdminLoginPage from "./pages/admin/auth/AdminLoginPage.js";
 import DriverPasswordResetPage from "./pages/cab/driver/auth/DriverPasswordResetPage.js";
 import { rootState } from "./utils/interfaces.js";
+import DriverDashboardPage from "./pages/cab/driver/dashboard/DriverDashboardPage.js";
+import DriverProfilePage from "./pages/cab/driver/dashboard/DriverProfilePage.js";
+import DriverVehicleInfoPage from "./pages/cab/driver/dashboard/DriverVehicleInfoPage.js";
 
 
 
@@ -29,6 +34,7 @@ function App() {
   return (
     <>
       <Toaster />
+      <ChakraProvider />
       <Router>
         <Routes>
 
@@ -39,8 +45,11 @@ function App() {
           <Route path="/resetpassword" element={<PasswordResetPage />} />
 
           {/* DRIVER */}
+          <Route path="/driver/dashboard" element={driver ? <DriverDashboardPage /> : <Navigate to={'/driver/login'} />} />
           <Route path="/driver/info/personal" element={driver ? <AddPersonlInfoPage /> : <Navigate to={"/driver/login"} />} />
           <Route path="/driver/info/vehicle" element={driver ? <AddVehicleInfoPage /> : <Navigate to={"/driver/login"} />} />
+          <Route path="/driver/profile" element={driver ? <DriverProfilePage /> : <Navigate to={"/driver/login"} />} />
+          <Route path="/driver/vehicle" element={driver ? <DriverVehicleInfoPage /> : <Navigate to={"/driver/login"} />} />
 
           <Route path="/driver/signup" element={driver ? <Navigate to={"/driver/dashboard"} /> : <DriverSignup />} />
           <Route path="/driver/login" element={<DriverLogin />} />

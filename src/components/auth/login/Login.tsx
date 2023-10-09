@@ -7,13 +7,13 @@ import { toast } from "react-hot-toast"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 
-import { authServer } from "../../../services/axios"
 import { auth } from "../../../services/firebase/config"
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../../../services/redux/slices/userAuth';
 import { driverLogin } from "../../../services/redux/slices/driverAuth"
 import { adminLogin } from "../../../services/redux/slices/adminAuth"
 import { loginComponentProps } from '../../../utils/interfaces';
+import { userAxios } from '../../../Constraints/userAxiosInterceptors';
 
 
 interface ErrorResponse {
@@ -49,7 +49,7 @@ function Login(data: loginComponentProps) {
 
     const handleSubmit = async (values: { email: string, password: string }) => {
         try {
-            const response = await authServer.post(loginserver, values)
+            const response = await userAxios.post(loginserver, values)
             if (person == "user") {
                 dispatch(userLogin());
                 localStorage.setItem('userToken', response.data);
@@ -82,8 +82,8 @@ function Login(data: loginComponentProps) {
                 navigate("/admin/dashboard")
             }
 
-
         } catch (error) {
+            console.log(error)
             if (axios.isAxiosError(error)) {
                 const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response) {
@@ -112,7 +112,7 @@ function Login(data: loginComponentProps) {
     const submitSignInWithGoogle = async (displayName: string, email: string) => {
         try {
             const value = { displayName, email }
-            const response = await authServer.post(`/google${loginserver}`, value)
+            const response = await userAxios.post(`/google${loginserver}`, value)
             localStorage.setItem('userToken', response.data);
             dispatch(userLogin());
 
@@ -139,8 +139,8 @@ function Login(data: loginComponentProps) {
             }
             else {
                 const data = { email: formik.values.email }
-                const response = await authServer.post(resetpassword, data)
-                console.log(response);
+                const response = await userAxios.post(resetpassword, data)
+                console.log(response)
                 toast.success("Password Reset link has been sended to the Email")
             }
         } catch (error) {

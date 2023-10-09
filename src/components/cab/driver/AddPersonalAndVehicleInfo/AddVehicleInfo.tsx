@@ -2,13 +2,14 @@ import { useFormik } from 'formik';
 import * as Yup from "yup"
 import React, { useEffect, useState } from 'react'
 import { uploadImageToStorage } from '../../../../services/firebase/storage';
-import { authServer } from '../../../../services/axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux';
 import { setVehicle } from '../../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
 import { rootState } from '../../../../utils/interfaces';
+import { driverAxios } from '../../../../Constraints/driverAxiosInterceptors';
+import driverEndPoint from '../../../../endpoints/driverEndPoint';
 
 
 interface ErrorResponse {
@@ -136,14 +137,8 @@ function AddVehicleInfo() {
                     vehicleImageUrl2,
                 };
 
-                const token = localStorage.getItem('driverToken');
-
                 try {
-                    const response = await authServer.post("/driver/info/vehicle", formData, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
+                    const response = await driverAxios.post(driverEndPoint.addVehicleInfo, formData);
                     dispatch(setVehicle())
                     navigate("/driver/dashboard")
                     console.log("response", response);
