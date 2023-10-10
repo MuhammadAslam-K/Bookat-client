@@ -1,4 +1,5 @@
 import Login from '../../../components/auth/login/Login'
+import adminEndPoints from '../../../endpoints/adminEndPoints'
 import { loginComponentProps } from '../../../utils/interfaces'
 
 
@@ -6,7 +7,7 @@ import { loginComponentProps } from '../../../utils/interfaces'
 function AdminLoginPage() {
 
     const data: loginComponentProps = {
-        loginserver: "/admin/login",
+        loginserver: adminEndPoints.login,
         signup: "/admin/signup",
         resetpassword: "",
         person: "admin"

@@ -8,9 +8,10 @@ import { useNavigate, Link } from "react-router-dom"
 
 import { auth } from "../../../services/firebase/config"
 import { basicSchema } from "../../../utils/schema"
-import { authServer } from "../../../services/axios"
 import { userSignUp } from '../../../utils/interfaces';
 import { signupComponentProps } from '../../../utils/interfaces';
+import { userAxios } from '../../../Constraints/userAxiosInterceptors';
+import userEndPoints from '../../../endpoints/userEndPoints';
 const Otp = React.lazy(() => import('../otp/Otp'));
 
 
@@ -45,7 +46,7 @@ function SignUp(data: signupComponentProps) {
 
     const submitSignUpForm = async () => {
         try {
-            await authServer.post(signupServer, formik.values)
+            await userAxios.post(signupServer, formik.values)
             navigate(signupSuccess)
         } catch (error) {
             toast.error((error as Error).message)
@@ -57,12 +58,12 @@ function SignUp(data: signupComponentProps) {
         try {
             console.log("called");
             const data = { email: values.email, mobile: values.mobile }
-            await authServer.post(checkExists, data)
+            await userAxios.post(checkExists, data)
 
             const mobile = {
                 mobile: values.mobile
             }
-            await authServer.post("/otp", mobile)
+            await userAxios.post(userEndPoints.sendOtp, mobile)
             setOtp(true)
 
         } catch (error) {
@@ -82,7 +83,7 @@ function SignUp(data: signupComponentProps) {
     const submitSignUpWithGoogle = async (displayName: string, email: string) => {
         try {
             const value = { displayName, email }
-            await authServer.post(`/google${signupServer}`, value)
+            await userAxios.post(`/google${signupServer}`, value)
             navigate(signupSuccess)
 
         } catch (error) {
@@ -98,19 +99,22 @@ function SignUp(data: signupComponentProps) {
         }
     }
 
+
     const signUpWithGoogle = () => {
+
         signInWithPopup(auth, provider)
             .then((result) => {
                 const { displayName, email } = result.user;
 
                 if (displayName && email) {
-                    submitSignUpWithGoogle(displayName, email)
+                    submitSignUpWithGoogle(displayName, email);
                 }
 
             }).catch((error) => {
                 toast.error((error as Error).message);
             });
     }
+
 
 
     const without_error_class = "pl-2 outline-none border-b-4 w-full rounded-lg p-2.5 sm:text-sm";

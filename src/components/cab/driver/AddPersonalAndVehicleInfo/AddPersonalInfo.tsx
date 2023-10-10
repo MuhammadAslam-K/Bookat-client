@@ -5,10 +5,12 @@ import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
 
 import { uploadImageToStorage } from '../../../../services/firebase/storage';
-import { authServer } from '../../../../services/axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDocument } from '../../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
+import { rootState } from '../../../../utils/interfaces';
+import driverEndPoint from '../../../../endpoints/driverEndPoint';
+import { driverAxios } from '../../../../Constraints/driverAxiosInterceptors';
 
 
 interface ErrorResponse {
@@ -16,7 +18,7 @@ interface ErrorResponse {
 }
 
 function AddPersonalAndVehicleInfo() {
-    const documentValue = useSelector(state => state.driver.document);
+    const documentValue = useSelector((state: rootState) => state.driver.document);
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
@@ -128,14 +130,9 @@ function AddPersonalAndVehicleInfo() {
                     driverImageUrl
                 };
 
-                const token = localStorage.getItem('driverToken');
 
                 try {
-                    const response = await authServer.post("/driver/info/personal", formData, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
+                    const response = await driverAxios.post(driverEndPoint.addPersonalInfo, formData);
                     dispatch(setDocument())
 
                     navigate("/driver/info/vehicle")

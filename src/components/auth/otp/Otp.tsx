@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { authServer } from '../../../services/axios';
 import toast from 'react-hot-toast';
+import { userAxios } from '../../../Constraints/userAxiosInterceptors';
+import userEndPoints from '../../../endpoints/userEndPoints';
 
 interface OtpProps {
     mobile: string;
@@ -57,7 +58,7 @@ function Otp(props: OtpProps) {
             const phone = {
                 mobile: mobile
             }
-            await authServer.post("/otp", phone)
+            await userAxios.post(userEndPoints.sendOtp, phone)
 
         } catch (error) {
             toast.error((error as Error).message);
@@ -73,7 +74,7 @@ function Otp(props: OtpProps) {
                 mobile: mobile,
             };
 
-            const response = await authServer.post('/otp/verify', value);
+            const response = await userAxios.post(userEndPoints.verifyOtp, value);
             console.log("response", response);
 
             if (response.data.status == 401) {

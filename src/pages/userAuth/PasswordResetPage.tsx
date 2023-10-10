@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import PasswordReset from '../../components/auth/passwordReset/PasswordReset'
+import userEndPoints from '../../endpoints/userEndPoints';
 
 function PasswordResetPage() {
 
@@ -8,9 +9,9 @@ function PasswordResetPage() {
     const id = searchParams.get('id');
 
     const data = {
-        passwordResetServer: "/resetpassword",
+        passwordResetServer: userEndPoints.resetPassword,
         id: id,
-        successNavigation: "/login"
+        successNavigation: userEndPoints.login
     }
     return (
         <>

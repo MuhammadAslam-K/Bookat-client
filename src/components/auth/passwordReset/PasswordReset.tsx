@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from "yup"
 import toast from 'react-hot-toast';
-import { authServer } from '../../../services/axios';
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { userAxios } from '../../../Constraints/userAxiosInterceptors';
 
 interface ErrorResponse {
     error: string;
@@ -48,7 +48,7 @@ function PasswordReset(data: { passwordResetServer: string, id: string | null, s
                 password: values.password
             };
 
-            await authServer.post(passwordResetServer, data);
+            await userAxios.post(passwordResetServer, data);
             toast.success("Reset Password Successfully")
             navigate(successNavigation)
 
