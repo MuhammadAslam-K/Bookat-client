@@ -10,6 +10,7 @@ import axios, { AxiosError } from 'axios';
 import { rootState } from '../../../../utils/interfaces';
 import { driverAxios } from '../../../../Constraints/driverAxiosInterceptors';
 import driverEndPoint from '../../../../endpoints/driverEndPoint';
+import { customLoadingStyle } from '../../../../Constraints/customizeLoaderStyle';
 
 
 interface ErrorResponse {
@@ -123,25 +124,30 @@ function AddVehicleInfo() {
     const handleSubmit = async (values: { registrationNo: string; vehicleModel: string; maxPersons: string; }) => {
         try {
             if (rcImage && vehicleImage1 && vehicleImage2) {
-
-                toast.success("Submitting your form. Please wait.")
-
-                const rcImageUrl = await uploadImageToStorage(rcImage, rcImageName, "vehicle", "rc")
-                const vehicleImageUrl1 = await uploadImageToStorage(vehicleImage1, vehicleImageName1, "vehicle", "vehicleImage1")
-                const vehicleImageUrl2 = await uploadImageToStorage(vehicleImage2, vehicleImageName2, "vehicle", "vehicleImage2")
-
-                const formData = {
-                    ...values,
-                    rcImageUrl,
-                    vehicleImageUrl1,
-                    vehicleImageUrl2,
-                };
-
                 try {
-                    const response = await driverAxios.post(driverEndPoint.addVehicleInfo, formData);
+
+                    toast.loading('Submitting the form please wait...', {
+                        style: customLoadingStyle,
+                    });
+
+                    const rcImageUrl = await uploadImageToStorage(rcImage, rcImageName, "vehicle", "rc")
+                    const vehicleImageUrl1 = await uploadImageToStorage(vehicleImage1, vehicleImageName1, "vehicle", "vehicleImage1")
+                    const vehicleImageUrl2 = await uploadImageToStorage(vehicleImage2, vehicleImageName2, "vehicle", "vehicleImage2")
+
+                    const formData = {
+                        ...values,
+                        rcImageUrl,
+                        vehicleImageUrl1,
+                        vehicleImageUrl2,
+                    };
+
+
+                    await driverAxios.post(driverEndPoint.addVehicleInfo, formData);
                     dispatch(setVehicle())
+                    toast.dismiss()
+                    toast.success("Submitted the form successfully")
                     navigate("/driver/dashboard")
-                    console.log("response", response);
+                    
                 } catch (error) {
                     console.log(error)
                     if (axios.isAxiosError(error)) {
@@ -192,8 +198,8 @@ function AddVehicleInfo() {
                                                     id="inline-radio"
                                                     type="radio"
                                                     name="vehicleType"
-                                                    value="car"
-                                                    checked={formik.values.vehicleType === "car"}
+                                                    value="mini"
+                                                    checked={formik.values.vehicleType === "mini"}
                                                     onChange={formik.handleChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />
@@ -204,8 +210,20 @@ function AddVehicleInfo() {
                                                     id="inline-2-radio"
                                                     type="radio"
                                                     name="vehicleType"
-                                                    value="bike"
-                                                    checked={formik.values.vehicleType === "bike"}
+                                                    value="SUV"
+                                                    checked={formik.values.vehicleType === "SUV"}
+                                                    onChange={formik.handleChange}
+                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-wtext-gray-700 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Bike</label>
+                                            </div>
+                                            <div className="flex items-center mr-4">
+                                                <input
+                                                    id="inline-2-radio"
+                                                    type="radio"
+                                                    name="vehicleType"
+                                                    value="Prime"
+                                                    checked={formik.values.vehicleType === "Prime"}
                                                     onChange={formik.handleChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-wtext-gray-700 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />

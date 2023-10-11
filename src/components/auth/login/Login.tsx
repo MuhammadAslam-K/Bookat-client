@@ -217,9 +217,11 @@ function Login(data: loginComponentProps) {
                                         />
                                         <label htmlFor="showPassword">Show Password</label>
                                     </div>
-                                    <p className='text-blue-600 cursor-pointer hover:cursor-pointer'
-                                        onClick={handelPasswordResetLink}
-                                    >forgot password ?</p>
+                                    {person == "admin" ? "" :
+                                        <p className='text-blue-600 cursor-pointer hover:cursor-pointer'
+                                            onClick={handelPasswordResetLink}
+                                        >forgot password ?</p>
+                                    }
                                 </div>
 
                                 <button className="mt-3 w-full cursor-pointer rounded-lg bg-blue-600 pt-3 pb-3 text-white shadow-lg hover:bg-blue-400" type='submit'>
