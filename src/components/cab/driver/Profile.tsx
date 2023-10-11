@@ -65,8 +65,6 @@ function Profile() {
                 setDriverData(response.data)
 
             } catch (error) {
-                console.log(error);
-
                 if (axios.isAxiosError(error)) {
                     const axiosError: AxiosError<ErrorResponse> = error;
                     if (axiosError.response?.data) {
@@ -87,11 +85,9 @@ function Profile() {
     const handleDriverAvailable = async () => {
         try {
 
-            const response = await driverAxios.post(driverEndPoint.available)
-            console.log(response);
+            await driverAxios.post(driverEndPoint.available)
 
         } catch (error) {
-            console.log(error);
             if (axios.isAxiosError(error)) {
                 const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response) {

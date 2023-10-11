@@ -22,12 +22,17 @@ import { rootState } from "./utils/interfaces.js";
 import DriverDashboardPage from "./pages/cab/driver/dashboard/DriverDashboardPage.js";
 import DriverProfilePage from "./pages/cab/driver/dashboard/DriverProfilePage.js";
 import DriverVehicleInfoPage from "./pages/cab/driver/dashboard/DriverVehicleInfoPage.js";
+import UserManagementPage from "./pages/admin/user/UserManagementPage.js";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage.js";
+import DriverManagementPage from "./pages/admin/driver/DriverManagementPage.js";
+import DriverAndVehicleValidationPage from "./pages/admin/driver/DriverAndVehicleValidationPage.js";
 
 
 
 function App() {
   const user = useSelector((state: rootState) => state.user.loggedIn);
   const driver = useSelector((state: rootState) => state.driver.loggedIn);
+  const admin = useSelector((state: rootState) => state.admin.loggedIn);
   // const driver = false
   // const user = false
 
@@ -58,6 +63,10 @@ function App() {
 
           {/* ADMIN */}
           <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin/dashboard" element={admin ? <AdminDashboardPage /> : <Navigate to={"/admin/login"} />} />
+          <Route path="/admin/user" element={admin ? <UserManagementPage /> : <Navigate to={"/admin/login"} />} />
+          <Route path="/admin/driver" element={admin ? <DriverManagementPage /> : <Navigate to={"/admin/login"} />} />
+          <Route path="/admin/verify" element={admin ? <DriverAndVehicleValidationPage /> : <Navigate to={"/admin/login"} />} />
 
         </Routes>
       </Router>

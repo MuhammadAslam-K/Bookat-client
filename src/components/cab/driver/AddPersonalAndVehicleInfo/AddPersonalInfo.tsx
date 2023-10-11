@@ -11,6 +11,7 @@ import axios, { AxiosError } from 'axios';
 import { rootState } from '../../../../utils/interfaces';
 import driverEndPoint from '../../../../endpoints/driverEndPoint';
 import { driverAxios } from '../../../../Constraints/driverAxiosInterceptors';
+import { customLoadingStyle } from '../../../../Constraints/customizeLoaderStyle';
 
 
 interface ErrorResponse {
@@ -21,6 +22,7 @@ function AddPersonalAndVehicleInfo() {
     const documentValue = useSelector((state: rootState) => state.driver.document);
     const dispatch = useDispatch();
     const navigate = useNavigate()
+
 
     const [aadharImage, setAadharImage] = useState<string | null>(null);
     const [aadharImageName, setAadharImageName] = useState<string | null>(null);
@@ -40,7 +42,6 @@ function AddPersonalAndVehicleInfo() {
         }
 
     }, [documentValue, navigate])
-
 
 
     const handleAadharImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,27 +117,29 @@ function AddPersonalAndVehicleInfo() {
     const handleSubmit = async (values: { aadharId: string; drivingLicenseId: string; address: string; }) => {
         try {
             if (aadharImage && licenseImage && driverImage) {
-                toast.success("Submitting your form. Please wait.")
-
-                const aadharImageUrl = await uploadImageToStorage(aadharImage, aadharImageName, "driver", "aadhar")
-                const licenseImageUrl = await uploadImageToStorage(licenseImage, licenseImageName, "driver", "license")
-                const driverImageUrl = await uploadImageToStorage(driverImage, driverImageName, "driver", "driver")
-
-
-                const formData = {
-                    ...values,
-                    aadharImageUrl,
-                    licenseImageUrl,
-                    driverImageUrl
-                };
-
-
                 try {
-                    const response = await driverAxios.post(driverEndPoint.addPersonalInfo, formData);
-                    dispatch(setDocument())
+                    toast.loading('Submitting the form please wait...', {
+                        style: customLoadingStyle,
+                    });
 
+                    const aadharImageUrl = await uploadImageToStorage(aadharImage, aadharImageName, "driver", "aadhar")
+                    const licenseImageUrl = await uploadImageToStorage(licenseImage, licenseImageName, "driver", "license")
+                    const driverImageUrl = await uploadImageToStorage(driverImage, driverImageName, "driver", "driver")
+
+
+                    const formData = {
+                        ...values,
+                        aadharImageUrl,
+                        licenseImageUrl,
+                        driverImageUrl
+                    };
+
+                    await driverAxios.post(driverEndPoint.addPersonalInfo, formData);
+                    dispatch(setDocument())
+                    toast.dismiss()
+                    toast.success("Form submitted successfully")
                     navigate("/driver/info/vehicle")
-                    console.log("response", response);
+
                 } catch (error) {
                     console.log(error);
                     if (axios.isAxiosError(error)) {
