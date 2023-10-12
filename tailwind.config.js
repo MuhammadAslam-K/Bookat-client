@@ -5,9 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+    },
     text: {
-      'blue': '#091F5B'
+      'blue': '#091F5B',
+
     }
   },
 

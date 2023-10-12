@@ -1,4 +1,4 @@
-import Login from '../../../components/auth/login/Login'
+import Login from '../../../components/auth/Login'
 import adminEndPoints from '../../../endpoints/adminEndPoints'
 import { loginComponentProps } from '../../../utils/interfaces'
 

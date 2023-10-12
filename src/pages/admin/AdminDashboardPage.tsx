@@ -1,5 +1,5 @@
-import Navbar from "../../components/cab/admin/AdminNavbar"
-import Dashboard from "../../components/cab/admin/Dashboard"
+import Navbar from "../../components/admin/AdminNavbar"
+import Dashboard from "../../components/admin/Dashboard"
 
 function AdminDashboardPage() {
     return (

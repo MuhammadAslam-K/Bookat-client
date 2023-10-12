@@ -117,3 +117,18 @@ export interface UserInfo {
         cancelledRides: number;
     };
 }
+
+export interface driverProfile {
+    name: string,
+    email: string,
+    mobile: string,
+    aadharId: string,
+    licenseId: string,
+    aadharImageUrl: string,
+    licenseImageUrl: string,
+    driverImageUrl: string,
+    vehicleVerified: string,
+    driverVerified: string,
+    refrel: string,
+    isAvailable: boolean
+}

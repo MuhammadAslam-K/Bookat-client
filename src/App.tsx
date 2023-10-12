@@ -6,22 +6,22 @@ import { ChakraProvider } from '@chakra-ui/react'
 import './App.css';
 import { useSelector } from "react-redux";
 
-import LoginPage from "./pages/userAuth/LoginPage.js";
-import SignUpPage from "./pages/userAuth/SignUpPage.js";
-import PasswordResetPage from "./pages/userAuth/PasswordResetPage.js";
+import LoginPage from "./pages/user/auth/LoginPage.js";
+import SignUpPage from "./pages/user/auth/SignUpPage.js";
+import PasswordResetPage from "./pages/user/auth/PasswordResetPage.js";
 
-import DriverSignup from "./pages/cab/driver/auth/DriverSignup.js";
-import DriverLogin from "./pages/cab/driver/auth/DriverLogin.js";
-import AddVehicleInfoPage from "./pages/cab/driver/addInfo/AddVehicleInfoPage.js";
-import AddPersonlInfoPage from "./pages/cab/driver/addInfo/AddPersonlInfoPage.js";
+import DriverSignup from "./pages/driver/auth/DriverSignup.js";
+import DriverLogin from "./pages/driver/auth/DriverLogin.js";
+import AddVehicleInfoPage from "./pages/driver/addInfo/AddVehicleInfoPage.js";
+import AddPersonlInfoPage from "./pages/driver/addInfo/AddPersonlInfoPage.js";
 
 
 import AdminLoginPage from "./pages/admin/auth/AdminLoginPage.js";
-import DriverPasswordResetPage from "./pages/cab/driver/auth/DriverPasswordResetPage.js";
+import DriverPasswordResetPage from "./pages/driver/auth/DriverPasswordResetPage.js";
 import { rootState } from "./utils/interfaces.js";
-import DriverDashboardPage from "./pages/cab/driver/dashboard/DriverDashboardPage.js";
-import DriverProfilePage from "./pages/cab/driver/dashboard/DriverProfilePage.js";
-import DriverVehicleInfoPage from "./pages/cab/driver/dashboard/DriverVehicleInfoPage.js";
+import DriverDashboardPage from "./pages/driver/dashboard/DriverDashboardPage.js";
+import DriverProfilePage from "./pages/driver/dashboard/DriverProfilePage.js";
+import DriverVehicleInfoPage from "./pages/driver/dashboard/DriverVehicleInfoPage.js";
 import UserManagementPage from "./pages/admin/user/UserManagementPage.js";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.js";
 import DriverManagementPage from "./pages/admin/driver/DriverManagementPage.js";

@@ -13,5 +13,9 @@ export default {
 
     available: "/driver/available",
     profie: "/driver/profile",
+    updateProfile: "/driver/update/profile",
+
+    vehicle: "/driver/vehicle",
+    updateVehicle: "/driver/update/vehicle"
 }
 
