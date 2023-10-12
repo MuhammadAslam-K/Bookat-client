@@ -1,5 +1,5 @@
-import Navbar from "../../../components/cab/admin/AdminNavbar"
-import DataTable from "../../../components/cab/admin/DataTable"
+import Navbar from "../../../components/admin/AdminNavbar"
+import DataTable from "../../../components/admin/DataTable"
 import adminEndPoints from "../../../endpoints/adminEndPoints"
 
 function DriverManagementPage() {
