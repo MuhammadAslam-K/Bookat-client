@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { userAxios } from '../../Constraints/userAxiosInterceptors';
-import userEndPoints from '../../endpoints/userEndPoints';
+import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import userApis from '../../Constraints/apis/userApis';
 
 interface OtpProps {
     mobile: string;
@@ -58,7 +58,7 @@ function Otp(props: OtpProps) {
             const phone = {
                 mobile: mobile
             }
-            await userAxios.post(userEndPoints.sendOtp, phone)
+            await userAxios.post(userApis.sendOtp, phone)
 
         } catch (error) {
             toast.error((error as Error).message);
@@ -74,7 +74,7 @@ function Otp(props: OtpProps) {
                 mobile: mobile,
             };
 
-            const response = await userAxios.post(userEndPoints.verifyOtp, value);
+            const response = await userAxios.post(userApis.verifyOtp, value);
             console.log("response", response);
 
             if (response.data.status == 401) {

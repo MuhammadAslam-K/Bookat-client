@@ -1,11 +1,11 @@
 import Navbar from "../../../components/admin/AdminNavbar"
 import DataTable from "../../../components/admin/DataTable"
-import adminEndPoints from "../../../endpoints/adminEndPoints"
+import adminApis from "../../../Constraints/apis/adminApis"
 
 function UserManagementPage() {
     const data = {
-        blockEndpoint: adminEndPoints.blockUser,
-        getData: adminEndPoints.getuserData,
+        blockEndpoint: adminApis.blockUser,
+        getData: adminApis.getuserData,
         role: "user"
     }
     return (

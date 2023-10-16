@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { driverAxios } from "../../Constraints/driverAxiosInterceptors";
-import driverEndPoint from "../../endpoints/driverEndPoint";
+import { driverAxios } from "../../Constraints/axiosInterceptors/driverAxiosInterceptors";
+import driverApis from "../../Constraints/apis/driverApis";
 import axios, { AxiosError } from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup"
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
+import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
 
 interface ErrorResponse {
     error: string;
@@ -40,7 +41,7 @@ function VehicleInfo() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await driverAxios.get(driverEndPoint.vehicle)
+                const response = await driverAxios.get(driverApis.vehicle)
 
                 console.log(response)
                 const responseData = response.data.vehicleDocuments
@@ -62,7 +63,7 @@ function VehicleInfo() {
                     if (axiosError.response?.data) {
                         toast.error(axiosError.response.data.error);
                         dispatch(driverLogout())
-                        navigate("/driver/login")
+                        navigate(driverEndPoints.login)
 
                     } else {
                         toast.error('Network Error occurred.');
@@ -133,7 +134,7 @@ function VehicleInfo() {
                 }
 
                 console.log("values", values)
-                await driverAxios.post(driverEndPoint.updateVehicle, values);
+                await driverAxios.post(driverApis.updateVehicle, values);
                 toast.dismiss();
                 SetReadOnly(!readOnly);
                 toast.success("Updated profile successfully");

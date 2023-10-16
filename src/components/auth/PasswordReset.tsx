@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import toast from 'react-hot-toast';
 import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { userAxios } from '../../Constraints/userAxiosInterceptors';
+import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 
 interface ErrorResponse {
     error: string;

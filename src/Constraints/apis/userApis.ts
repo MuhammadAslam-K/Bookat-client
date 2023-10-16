@@ -9,4 +9,5 @@ export default {
     resetPasswordLink: "/resetPasswordLink",
     resetPassword: "/resetpassword",
 
+    bookRide: '/book/ride'
 }

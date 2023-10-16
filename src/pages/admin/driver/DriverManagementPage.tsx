@@ -1,11 +1,11 @@
 import Navbar from "../../../components/admin/AdminNavbar"
 import DataTable from "../../../components/admin/DataTable"
-import adminEndPoints from "../../../endpoints/adminEndPoints"
+import adminApis from "../../../Constraints/apis/adminApis"
 
 function DriverManagementPage() {
     const data = {
-        blockEndpoint: adminEndPoints.blockDriver,
-        getData: adminEndPoints.getDriversData,
+        blockEndpoint: adminApis.blockDriver,
+        getData: adminApis.getDriversData,
         role: "driver"
     }
     return (

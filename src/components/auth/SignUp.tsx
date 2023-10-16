@@ -10,8 +10,8 @@ import { auth } from "../../services/firebase/config"
 import { basicSchema } from "../../utils/schema"
 import { userSignUp } from '../../utils/interfaces';
 import { signupComponentProps } from '../../utils/interfaces';
-import { userAxios } from '../../Constraints/userAxiosInterceptors';
-import userEndPoints from '../../endpoints/userEndPoints';
+import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import userApis from '../../Constraints/apis/userApis';
 const Otp = React.lazy(() => import('./Otp'));
 
 
@@ -63,7 +63,7 @@ function SignUp(data: signupComponentProps) {
             const mobile = {
                 mobile: values.mobile
             }
-            await userAxios.post(userEndPoints.sendOtp, mobile)
+            await userAxios.post(userApis.sendOtp, mobile)
             setOtp(true)
 
         } catch (error) {
@@ -89,6 +89,7 @@ function SignUp(data: signupComponentProps) {
         } catch (error) {
 
             if (axios.isAxiosError(error)) {
+                console.log("submitSignUpWithGoogle", error);
                 const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response) {
                     toast.error(axiosError.response.data.error);
@@ -139,7 +140,6 @@ function SignUp(data: signupComponentProps) {
             <div className={`flex h-screen items-center justify-center  ${otp ? "bg-black opacity-60" : "bg-gray-100"}`} >
                 <div className="w-full max-w-md overflow-hidden rounded-3xl bg-gray-100 shadow-2xl sm:flex justify-center">
                     <div className="w-full ">
-
                         <div className="p-8">
                             <h1 className="text-3xl font-black text-blue mb-3">Sign up</h1>
                             <form className="" onSubmit={formik.handleSubmit}>

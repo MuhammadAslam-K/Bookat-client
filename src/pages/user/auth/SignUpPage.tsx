@@ -1,13 +1,15 @@
 import SignUp from "../../../components/auth/SignUp";
-import userEndPoints from "../../../endpoints/userEndPoints";
+import userApis from "../../../Constraints/apis/userApis";
+import userEndPoints from "../../../Constraints/endPoints/userEndPoints";
 import { signupComponentProps } from "../../../utils/interfaces";
 
 function SignUpPage() {
     const data: signupComponentProps = {
-        login: "/login",
-        signupSuccess: "/login",
-        signupServer: userEndPoints.signUp,
-        checkExists: userEndPoints.chekUserExists,
+        login: userEndPoints.login,
+        signupSuccess: userEndPoints.login,
+
+        signupServer: userApis.signUp,
+        checkExists: userApis.chekUserExists,
         person: "user"
     };
 
