@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import PasswordReset from '../../../components/auth/PasswordReset';
-import driverEndPoint from '../../../endpoints/driverEndPoint';
+import driverApis from '../../../Constraints/apis/driverApis';
+import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 
 function DriverPasswordResetPage() {
     const location = useLocation();
@@ -8,9 +9,9 @@ function DriverPasswordResetPage() {
     const id = searchParams.get('id');
 
     const data = {
-        passwordResetServer: driverEndPoint.resetPassword,
+        passwordResetServer: driverApis.resetPassword,
         id: id,
-        successNavigation: "/driver/login"
+        successNavigation: driverEndPoints.login
     }
     return (
         <>

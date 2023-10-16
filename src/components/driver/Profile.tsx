@@ -7,12 +7,13 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 
-import driverEndPoint from "../../endpoints/driverEndPoint";
-import { driverAxios } from "../../Constraints/driverAxiosInterceptors";
+import driverApis from "../../Constraints/apis/driverApis";
+import { driverAxios } from "../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import { driverLogout } from "../../services/redux/slices/driverAuth";
 import { driverProfile } from "../../utils/interfaces";
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
+import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
 
 
 interface ErrorResponse {
@@ -34,7 +35,7 @@ function Profile() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await driverAxios.get(driverEndPoint.profie)
+                const response = await driverAxios.get(driverApis.profie)
 
                 const data: driverProfile = {
                     name: response.data.name,
@@ -60,7 +61,7 @@ function Profile() {
                     if (axiosError.response?.data) {
                         toast.error(axiosError.response.data.error);
                         dispatch(driverLogout())
-                        navigate("/driver/login")
+                        navigate(driverEndPoints.login)
 
                     } else {
                         toast.error('Network Error occurred.');
@@ -75,7 +76,7 @@ function Profile() {
     const handleDriverAvailable = async () => {
         try {
 
-            await driverAxios.post(driverEndPoint.available)
+            await driverAxios.post(driverApis.available)
             Setreload(!reload)
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -156,7 +157,7 @@ function Profile() {
                     formik.setFieldValue('driverImageUrl', driverImageUrl);
                 }
 
-                await driverAxios.post(driverEndPoint.updateProfile, values);
+                await driverAxios.post(driverApis.updateProfile, values);
                 toast.dismiss();
                 SetReadOnly(!readOnly)
                 toast.success("Updated profile successfully");
@@ -270,7 +271,7 @@ function Profile() {
                                     </div>
                                     <div className="flex">
 
-                                        <Link to={"/driver/vehicle"}>
+                                        <Link to={driverEndPoints.vehicleInfo}>
                                             <p className="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">vehicle Info</p>
                                         </Link>
 

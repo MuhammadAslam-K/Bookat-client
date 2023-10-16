@@ -13,7 +13,11 @@ import { userLogin } from '../../services/redux/slices/userAuth';
 import { driverLogin } from "../../services/redux/slices/driverAuth"
 import { adminLogin } from "../../services/redux/slices/adminAuth"
 import { loginComponentProps } from '../../utils/interfaces';
-import { userAxios } from '../../Constraints/userAxiosInterceptors';
+import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import { customLoadingStyle } from '../../Constraints/customizeLoaderStyle';
+import userEndPoints from '../../Constraints/endPoints/userEndPoints';
+import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
+import adminEndPoint from '../../Constraints/endPoints/adminEndPoint';
 
 
 interface ErrorResponse {
@@ -53,7 +57,7 @@ function Login(data: loginComponentProps) {
             if (person == "user") {
                 dispatch(userLogin());
                 localStorage.setItem('userToken', response.data);
-                navigate('/')
+                navigate(userEndPoints.home)
             }
             else if (person == "driver") {
 
@@ -65,21 +69,21 @@ function Login(data: loginComponentProps) {
                 if (document) {
                     if (vehicle) {
                         console.log("Navigating to driver dashboard");
-                        navigate("/driver/dashboard");
+                        navigate(driverEndPoints.dashboard);
                     } else {
                         console.log("Navigating to driver vehicle info");
-                        navigate("/driver/info/vehicle");
+                        navigate(driverEndPoints.addVehicleInfo);
                     }
                 } else {
                     console.log("Navigating to driver personal info");
-                    navigate("/driver/info/personal");
+                    navigate(driverEndPoints.addPersonalInfo);
                 }
 
             }
             else if (person == "admin") {
                 dispatch(adminLogin())
                 localStorage.setItem('adminToken', response.data);
-                navigate("/admin/dashboard")
+                navigate(adminEndPoint.dashboard)
             }
 
         } catch (error) {
@@ -117,7 +121,7 @@ function Login(data: loginComponentProps) {
             dispatch(userLogin());
 
             if (person == "user") {
-                navigate("/")
+                navigate(userEndPoints.home)
             }
 
         } catch (error) {
@@ -138,12 +142,19 @@ function Login(data: loginComponentProps) {
                 toast.error("please enter the Email")
             }
             else {
+
+                toast.loading('Password Reset link is sending to your email please wait...', {
+                    style: customLoadingStyle,
+                });
+
                 const data = { email: formik.values.email }
                 const response = await userAxios.post(resetpassword, data)
                 console.log(response)
-                toast.success("Password Reset link has been sended to the Email")
+                toast.dismiss()
+                toast.success("link has been sended successfully")
             }
         } catch (error) {
+            toast.dismiss()
             if (axios.isAxiosError(error)) {
                 const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response) {

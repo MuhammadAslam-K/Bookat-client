@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Stack } from '@chakra-ui/react'
+import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,7 @@ function Navbar() {
                   alt=""
                 />
               </a> */}
-                            <Link to={'/driver/dashboard'}>
+                            <Link to={driverEndPoints.dashboard}>
                                 <div className="w-auto h-6 sm:h-7">Dashboard</div>
                             </Link>
                             {/* MOBILE VIEW */}
@@ -78,8 +79,8 @@ function Navbar() {
                         >
                             <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
                                 <Link
-
-                                    className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" to={''}                                >
+                                    to={''}
+                                    className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"                                 >
                                     Rides
                                 </Link>
 
@@ -112,7 +113,7 @@ function Navbar() {
                                     aria-label="toggle profile dropdown"
                                 >
                                     <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-                                        <Link to={'/driver/profile'}>
+                                        <Link to={driverEndPoints.driverProfile}>
                                             <Stack direction='row'>
                                                 <Avatar src='https://bit.ly/broken-link' />
                                             </Stack>
@@ -120,7 +121,7 @@ function Navbar() {
                                     </div>
 
                                     <h3 className="mx-2 text-gray-700 dark:text-gray-200 lg:hidden">
-                                        <Link to={"/driver/profile"}>
+                                        <Link to={driverEndPoints.driverProfile}>
                                             Profile
                                         </Link>
                                     </h3>

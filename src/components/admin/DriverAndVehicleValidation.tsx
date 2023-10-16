@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-import { adminAxios } from '../../Constraints/adminAxiosInterceptors';
-import adminEndPoints from '../../endpoints/adminEndPoints';
+import { adminAxios } from '../../Constraints/axiosInterceptors/adminAxiosInterceptors';
+import adminApis from '../../Constraints/apis/adminApis';
 import { DriverInfo } from '../../utils/interfaces';
 
 import { Modal, Ripple, initTE } from "tw-elements";
@@ -26,7 +26,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
         const fetchData = async () => {
             try {
 
-                const response: DriverInfo = await adminAxios.post(adminEndPoints.getDriverInfo, { id: id })
+                const response: DriverInfo = await adminAxios.post(adminApis.getDriverInfo, { id: id })
                 Setdata(response.data)
 
             } catch (error) {
@@ -53,7 +53,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Rejecting...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminEndPoints.rejectDriver, value)
+            await adminAxios.post(adminApis.rejectDriver, value)
             toast.dismiss()
             toast.success("Rejected Successfully")
             setPersonal("")
@@ -78,7 +78,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Rejecting...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminEndPoints.rejectVehicle, value)
+            await adminAxios.post(adminApis.rejectVehicle, value)
             toast.dismiss()
             toast.success("Rejected Successfully")
             setVehicle("")
@@ -104,7 +104,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Approving...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminEndPoints.approveDriver, value)
+            await adminAxios.post(adminApis.approveDriver, value)
             toast.dismiss()
             toast.success("Approved Successfully")
         } catch (error) {
@@ -128,7 +128,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Approving...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminEndPoints.approveVehicle, value)
+            await adminAxios.post(adminApis.approveVehicle, value)
             toast.dismiss()
             toast.success("Approved Successfully")
         } catch (error) {

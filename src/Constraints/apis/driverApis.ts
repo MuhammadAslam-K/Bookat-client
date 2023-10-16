@@ -1,6 +1,6 @@
 export default {
     login: "/driver/login",
-    signUp: "/driver/signUp",
+    signUp: "/driver/signup",
     chekDriverExists: "/driver/check/driverExists",
 
     sendOtp: "/otp",

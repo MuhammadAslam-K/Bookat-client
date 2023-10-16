@@ -8,9 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setVehicle } from '../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
 import { rootState } from '../../../utils/interfaces';
-import { driverAxios } from '../../../Constraints/driverAxiosInterceptors';
-import driverEndPoint from '../../../endpoints/driverEndPoint';
+import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
+import driverApis from '../../../Constraints/apis/driverApis';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
+import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 
 
 interface ErrorResponse {
@@ -41,11 +42,11 @@ function AddVehicleInfo() {
     useEffect(() => {
 
         if (!documentValue) {
-            navigate("/driver/info/personal")
+            navigate(driverEndPoints.addPersonalInfo)
         }
 
         if (vehicleValue) {
-            navigate("/driver/dashboard")
+            navigate(driverEndPoints.dashboard)
         }
     }, [documentValue, navigate, vehicleValue])
 
@@ -142,11 +143,11 @@ function AddVehicleInfo() {
                     };
 
 
-                    await driverAxios.post(driverEndPoint.addVehicleInfo, formData);
+                    await driverAxios.post(driverApis.addVehicleInfo, formData);
                     dispatch(setVehicle())
                     toast.dismiss()
                     toast.success("Submitted the form successfully")
-                    navigate("/driver/dashboard")
+                    navigate(driverEndPoints.dashboard)
 
                 } catch (error) {
                     console.log(error)
@@ -203,7 +204,7 @@ function AddVehicleInfo() {
                                                     onChange={formik.handleChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />
-                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Car</label>
+                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Mini</label>
                                             </div>
                                             <div className="flex items-center mr-4">
                                                 <input
@@ -215,7 +216,7 @@ function AddVehicleInfo() {
                                                     onChange={formik.handleChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-wtext-gray-700 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />
-                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Bike</label>
+                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">SUV</label>
                                             </div>
                                             <div className="flex items-center mr-4">
                                                 <input
@@ -227,7 +228,7 @@ function AddVehicleInfo() {
                                                     onChange={formik.handleChange}
                                                     className="w-4 h-4 text-blue-600 bg-gray-100 border-wtext-gray-700 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />
-                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Bike</label>
+                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Prime</label>
                                             </div>
                                         </div>
                                     </div>
@@ -252,7 +253,7 @@ function AddVehicleInfo() {
                                         <input
                                             type="file"
                                             name="rcImage"
-                                            placeholder="Aadhar Image"
+                                            placeholder="RC Image"
                                             required
                                             className='hidden'
                                             onChange={handleRcImageChange}

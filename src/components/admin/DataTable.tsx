@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { adminAxios } from "../../Constraints/adminAxiosInterceptors";
+import { adminAxios } from "../../Constraints/axiosInterceptors/adminAxiosInterceptors";
 import { adminLogout } from "../../services/redux/slices/adminAuth";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { DriverInfo, UserInfo } from "../../utils/interfaces";
 
 
 import { Modal, Ripple, initTE } from "tw-elements";
+import adminEndPoint from "../../Constraints/endPoints/adminEndPoint";
 initTE({ Modal, Ripple });
 
 
@@ -32,6 +33,8 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
             try {
 
                 const response = await adminAxios.get(getData)
+                console.log(response);
+
                 const Data: (DriverInfo | UserInfo)[] = response.data;
                 Setdata(Data)
 
@@ -43,7 +46,7 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
 
                         toast.error("Sorry, your login session has timed out. Kindly log in again")
                         dispatch(adminLogout())
-                        navigate("/admin/login")
+                        navigate(adminEndPoint.login)
                     }
                     if (axiosError.response) {
                         toast.error(axiosError.response.data.error);
@@ -69,7 +72,7 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
                 if (axiosError.response?.data.error == "jwt expired") {
                     toast.error("Sorry, your login session has timed out. Kindly log in again")
                     dispatch(adminLogout())
-                    navigate("/admin/login")
+                    navigate(adminEndPoint.login)
                 }
                 else if (axiosError.response) {
                     toast.error(axiosError.response.data.error);
@@ -153,7 +156,7 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
 
                                         <tr>
                                             <th scope="col" className="px-6 py-3">
-                                                User Name
+                                                Name
                                             </th>
                                             <th scope="col" className="px-6 py-3">
                                                 Email Id
@@ -199,25 +202,26 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
                                                     "driver" in items && (
                                                         <td className="px-6 py-4 dark:text-white">
                                                             {items.driver.driverVerified && items.vehicle.vehicleVerified
-                                                                ? <Link to={`/admin/verify/?id=${items._id}`} className="text-green-600 font-semibold cursor-pointer">Verified</Link >
-                                                                : <Link to={`/admin/verify/?id=${items._id}`} className="text-red-600 font-semibold cursor-pointer">Not Verified</Link>
+                                                                ? <Link to={`${adminEndPoint.driverAndVehicleVerify}/?id=${items._id}`} className="text-green-600 font-semibold cursor-pointer">Verified</Link >
+                                                                : <Link to={`${adminEndPoint.driverAndVehicleVerify}/?id=${items._id}`} className="text-red-600 font-semibold cursor-pointer">Not Verified</Link>
                                                             }
                                                         </td>
                                                     )}
                                                 <td className="px-6 py-4 dark:text-white" onClick={() => SetId(items._id)}>
-                                                    {items.block ? <button type="button"
-                                                        data-te-toggle="modal"
-                                                        data-te-target="#exampleModal"
-                                                        data-te-ripple-init
-                                                        data-te-ripple-color="light"
-                                                        className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Block</button>
-                                                        :
+                                                    {items.block ?
                                                         <button type="button"
                                                             data-te-toggle="modal"
                                                             data-te-target="#exampleModal"
                                                             data-te-ripple-init
                                                             data-te-ripple-color="light"
                                                             className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Unblock</button>
+                                                        :
+                                                        <button type="button"
+                                                            data-te-toggle="modal"
+                                                            data-te-target="#exampleModal"
+                                                            data-te-ripple-init
+                                                            data-te-ripple-color="light"
+                                                            className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Block</button>
                                                     }
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">

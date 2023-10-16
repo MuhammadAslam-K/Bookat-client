@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDocument } from '../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
 import { rootState } from '../../../utils/interfaces';
-import driverEndPoint from '../../../endpoints/driverEndPoint';
-import { driverAxios } from '../../../Constraints/driverAxiosInterceptors';
+import driverApis from '../../../Constraints/apis/driverApis';
+import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
+import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 
 
 interface ErrorResponse {
@@ -38,7 +39,7 @@ function AddPersonalAndVehicleInfo() {
 
     useEffect(() => {
         if (documentValue) {
-            navigate("/driver/info/vehicle")
+            navigate(driverEndPoints.addVehicleInfo)
         }
 
     }, [documentValue, navigate])
@@ -134,11 +135,11 @@ function AddPersonalAndVehicleInfo() {
                         driverImageUrl
                     };
 
-                    await driverAxios.post(driverEndPoint.addPersonalInfo, formData);
+                    await driverAxios.post(driverApis.addPersonalInfo, formData);
                     dispatch(setDocument())
                     toast.dismiss()
                     toast.success("Form submitted successfully")
-                    navigate("/driver/info/vehicle")
+                    navigate(driverEndPoints.addVehicleInfo)
 
                 } catch (error) {
                     console.log(error);

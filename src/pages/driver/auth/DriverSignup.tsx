@@ -1,13 +1,15 @@
+import driverApis from '../../../Constraints/apis/driverApis';
+import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import SignUp from '../../../components/auth/SignUp';
 import { signupComponentProps } from '../../../utils/interfaces';
 
 
 function DriverSignup() {
     const data: signupComponentProps = {
-        login: "/driver/login",
-        signupSuccess: "/driver/login",
-        signupServer: "/driver/signup",
-        checkExists: "/driver/check/driverExists",
+        login: driverEndPoints.login,
+        signupSuccess: driverEndPoints.login,
+        signupServer: driverApis.signUp,
+        checkExists: driverApis.chekDriverExists,
         person: "driver"
     };
 
