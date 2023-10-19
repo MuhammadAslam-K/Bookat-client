@@ -1,4 +1,4 @@
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { GeoJSONSource } from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import toast from 'react-hot-toast';
@@ -7,51 +7,85 @@ import userApis from '../../Constraints/apis/userApis';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import axios from 'axios';
 import polyline from '@mapbox/polyline';
+import io from 'socket.io-client';
 
 
 export interface LocationSuggestion {
     text: string;
     place_name: string;
 }
+
 interface Location {
     latitude: number | null;
     longitude: number | null;
 }
 
-
 function UserHome() {
+
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-    const mapContainer = useRef<HTMLDivElement>(null);
-    const markerRef = useRef<mapboxgl.Marker | null>(null);
+    const mapContainer = useRef<HTMLDivElement | null>(null);
+
+    const [markerRef, setmarkerRef] = useState<mapboxgl.Marker | null>(null);
+    const [FromMarker, setFromMarker] = useState<mapboxgl.Marker | null>(null);
+    const [ToMarker, setToMarker] = useState<mapboxgl.Marker | null>(null);
+
     const [latitude, setLatitude] = useState<number | null>(null);
     const [longitude, setLongitude] = useState<number | null>(null);
-
     const [fromLocation, setFromLocation] = useState<string>('');
+
     const [toLocation, setToLocation] = useState<string>('');
+
+    const [fromCoordinate, setFromCoordinate] = useState<Location | null>(null);
+    const [toCoordinate, setToCoordinate] = useState<Location | null>(null);
 
     const [fromLocationSuggestions, setFromLocationSuggestions] = useState<LocationSuggestion[]>([]);
     const [toLocationSuggestions, setToLocationSuggestions] = useState<LocationSuggestion[]>([]);
 
-    const [standardPrice, SetStandardPrice] = useState("")
-    const [suvdPrice, SetSuvdPrice] = useState("")
-    const [premiumPrice, SetPremiumPrice] = useState("")
+    const [standardPrice, SetStandardPrice] = useState<string>("");
+    const [suvdPrice, SetSuvdPrice] = useState<string>("");
+    const [premiumPrice, SetPremiumPrice] = useState<string>("");
 
-    const [distance, SetDistance] = useState("")
-
-    const [showCabs, SetShowcabs] = useState(false)
-    const [selectedCab, SetSelectedCab] = useState("")
+    const [distance, SetDistance] = useState<string>("");
+    const [showCabs, SetShowCabs] = useState(false);
+    const [selectedCab, SetSelectedCab] = useState("");
 
     const [location, setLocation] = useState<Location>({
         latitude: 0,
         longitude: 0,
     });
-    const [map, setMap] = useState<mapboxgl.Map>();
+    const [map, setMap] = useState<mapboxgl.Map | undefined>(undefined);
+
+
+    // const [socket, setsocket] = useState<Socket | null>(null)
+
+    useEffect(() => {
+
+        const socketClient = io('http://localhost:8001/');
+
+        if (socketClient) {
+            console.log(socketClient)
+            console.log(68)
+
+            socketClient.on('connect', () => {
+                console.log('Connected to the Socket.IO server');
+
+                socketClient.emit("test", function () {
+                    console.log('@hey-test working')
+                })
+                console.log("Clickeddd");
+            })
+        } else {
+            console.log("Can not connect")
+        }
+
+    }, [])
+
+
+
 
 
     useEffect(() => {
-        // let map: mapboxgl.Map | null = null;
-
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
                 function (position) {
@@ -71,33 +105,266 @@ function UserHome() {
             setLongitude(77.594566);
         }
 
-        if (mapContainer.current && latitude !== null && longitude !== null) {
+        if (mapContainer.current && longitude && latitude) {
             const map = new mapboxgl.Map({
                 container: mapContainer.current,
                 style: 'mapbox://styles/mapbox/streets-v11',
                 center: [longitude, latitude],
                 zoom: 10,
             });
-            setMap(map);
-            // if (map) {
-            markerRef.current = new mapboxgl.Marker({ draggable: true })
-                .setLngLat([longitude, latitude])
 
+            map.on('style.load', () => {
+                map.addSource('route', {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: [],
+                        },
+                    },
+                });
+
+                map.addLayer({
+                    id: 'route',
+                    type: 'line',
+                    source: 'route',
+                    layout: {
+                        'visibility': 'visible',
+                        'line-join': 'round',
+                        'line-cap': 'round',
+                    },
+                    paint: {
+                        'line-color': '#888',
+                        'line-width': 8,
+                    },
+                });
+            });
+
+            const currentMarker = new mapboxgl.Marker({ draggable: true })
+                .setLngLat([longitude, latitude])
                 .addTo(map);
 
-            markerRef.current.on('dragend', () => {
-                const lngLat = markerRef.current!.getLngLat();
-                console.log('Marker moved to:', lngLat);
-            });
-            // }
+
+            setmarkerRef(currentMarker)
+            setMap(map);
         }
 
         return () => {
             if (map) {
                 map.remove();
             }
+
         };
     }, [latitude, longitude]);
+
+
+    const handleBookRide = async () => {
+        try {
+            console.log("cab", selectedCab);
+            if (!selectedCab) {
+                toast.error("Please select the cab")
+            }
+            else {
+                if (location) {
+                    let amount
+
+                    if (selectedCab == "Standard") {
+                        amount = standardPrice
+                    } else if (selectedCab == "SUV") {
+                        amount = suvdPrice
+                    } else if (selectedCab == "Premium") {
+                        amount = premiumPrice
+                    }
+
+                    const data = {
+                        latlong: location,
+                        vehicle: selectedCab,
+                        amount: amount
+                    }
+
+                    const response = await userAxios.post(userApis.bookRide, data)
+                    console.log(response)
+                }
+            }
+
+        } catch (error) {
+            toast.error((error as Error).message)
+        }
+    }
+
+    const drawRoute = (map: mapboxgl.Map, fromCoordinates: mapboxgl.LngLatLike, toCoordinates: mapboxgl.LngLatLike, routeCoordinates: number[][]) => {
+        try {
+            const routeSource = map.getSource('route') as mapboxgl.GeoJSONSource;
+            if (routeSource) {
+                routeSource.setData({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: routeCoordinates,
+                    },
+                });
+
+                const bounds = new mapboxgl.LngLatBounds(fromCoordinates, toCoordinates);
+                map.fitBounds(bounds, { padding: 50 });
+            } else {
+                toast.error('Route source not found');
+            }
+        } catch (error) {
+            console.error('drawRoute', error);
+            toast.error((error as Error).message);
+        }
+    };
+
+    const displayRoute = async (from: Location, to: Location) => {
+        try {
+            const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+            const response = await axios.get(
+                `https://api.mapbox.com/directions/v5/mapbox/driving/${from.longitude},${from.latitude};${to.longitude},${to.latitude}`,
+                {
+                    params: {
+                        access_token: accessToken,
+                    },
+                }
+            );
+
+            const directionsData = response.data;
+            const routeCoordinates = polyline.decode(directionsData.routes[0].geometry);
+
+            if (map) {
+                // Create a GeoJSON source for the route
+                const routeSource = map.getSource('route') as GeoJSONSource | undefined;
+                if (routeSource) {
+                    routeSource.setData({
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: routeCoordinates,
+                        },
+                    })
+
+                    // Fit the map to the route
+                    const bounds = routeCoordinates.reduce((bounds, coord) => {
+                        return bounds.extend(coord);
+                    }, new mapboxgl.LngLatBounds(routeCoordinates[0], routeCoordinates[0]));
+                    map.fitBounds(bounds, { padding: 50 });
+                }
+            } else {
+                console.log("no map")
+            }
+
+        } catch (error) {
+            console.error('Error displaying route:', error);
+            toast.error('Error displaying route');
+        }
+    }
+
+
+    const handleListCabs = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            if (fromLocation === toLocation) {
+                toast.error('Choose a valid location');
+                return;
+            }
+
+            const fromCoordinates = await getCoordinates(fromLocation);
+            const toCoordinates = await getCoordinates(toLocation);
+
+            if (fromCoordinates && toCoordinates) {
+                if (fromCoordinate && toCoordinate) {
+                    const displayRout = await displayRoute(fromCoordinate, toCoordinate);
+                    console.log("displayRout", displayRout)
+                }
+                // Access latitude and longitude properties correctly
+                const fromLatitude = fromCoordinates.latitude;
+                const fromLongitude = fromCoordinates.longitude;
+                const toLatitude = toCoordinates.latitude;
+                const toLongitude = toCoordinates.longitude;
+
+
+                if (ToMarker) {
+                    ToMarker.remove();
+                }
+                if (FromMarker) {
+                    FromMarker.remove();
+                }
+                if (markerRef) {
+                    markerRef.remove();
+                }
+
+
+                setFromCoordinate(fromCoordinates);
+                setToCoordinate(toCoordinates);
+
+                const distance = calculateDistance(
+                    fromLatitude,
+                    fromLongitude,
+                    toLatitude,
+                    toLongitude
+                );
+
+                const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+
+                const directionsResponse = await axios.get(
+                    `https://api.mapbox.com/directions/v5/mapbox/driving/${fromLongitude},${fromLatitude};${toLongitude},${toLatitude}`,
+                    {
+                        params: {
+                            access_token: accessToken,
+                        },
+                    }
+                );
+
+                const directionsData = directionsResponse.data;
+
+                const routeCoordinates = directionsData.routes[0].geometry;
+                const decodedCoordinates = polyline.decode(routeCoordinates);
+
+                if (map && decodedCoordinates) {
+                    // Use correct data types for fromCoordinates and toCoordinates
+                    const fromCoordinates: mapboxgl.LngLatLike = [fromLongitude, fromLatitude];
+                    const toCoordinates: mapboxgl.LngLatLike = [toLongitude, toLatitude];
+
+                    const fromMarker = new mapboxgl.Marker()
+                        .setLngLat([fromLongitude, fromLatitude])
+                        .addTo(map);
+
+                    const toMarker = new mapboxgl.Marker()
+                        .setLngLat([toLongitude, toLatitude])
+                        .addTo(map);
+
+                    setFromMarker(fromMarker);
+                    setToMarker(toMarker);
+
+                    drawRoute(map, fromCoordinates, toCoordinates, decodedCoordinates);
+
+                    SetShowCabs(true);
+                    setLocation({ latitude, longitude });
+                } else {
+                    toast.error('Map not available or route not found');
+                }
+
+                if (distance) {
+                    const distanceRounded = distance.toFixed(0);
+                    SetDistance(distanceRounded);
+                    SetStandardPrice((distance * 50).toFixed(0));
+                    SetSuvdPrice((distance * 80).toFixed(0));
+                    SetPremiumPrice((distance * 100).toFixed(0));
+                }
+            } else {
+                toast.error('Location not found');
+            }
+        } catch (error) {
+            console.error('handleListCabs', error);
+            toast.error((error as Error).message);
+        }
+    };
+
+
+
 
 
     const handleFromLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,149 +405,6 @@ function UserHome() {
 
 
 
-
-
-    const handleBookRide = async () => {
-        try {
-            console.log("cab", selectedCab);
-            if (!selectedCab) {
-                toast.error("Please select the cab")
-            }
-            else {
-                if (location) {
-                    let amount
-
-                    if (selectedCab == "Standard") {
-                        amount = standardPrice
-                    } else if (selectedCab == "SUV") {
-                        amount = suvdPrice
-                    } else if (selectedCab == "Premium") {
-                        amount = premiumPrice
-                    }
-
-                    const data = {
-                        latlong: location,
-                        vehicle: selectedCab,
-                        amount: amount
-                    }
-                    const response = await userAxios.post(userApis.bookRide, data)
-                    console.log(response)
-                }
-            }
-
-        } catch (error) {
-            toast.error((error as Error).message)
-        }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const drawRoute = (map: mapboxgl.Map, fromCoordinates: mapboxgl.LngLatLike, toCoordinates: mapboxgl.LngLatLike, routeCoordinates: any[]) => {
-        // Check if the source 'route' exists
-        try {
-            if (map.getSource('route') instanceof mapboxgl.GeoJSONSource) {
-                // Update the route source with the fetched coordinates
-                (map.getSource('route') as mapboxgl.GeoJSONSource).setData({
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                        type: 'LineString',
-                        coordinates: routeCoordinates,
-                    },
-                });
-            }
-
-            // Set the map's center and zoom to fit the entire route
-            const bounds = new mapboxgl.LngLatBounds(fromCoordinates, toCoordinates);
-            map.fitBounds(bounds, { padding: 50 })
-        }
-        catch (error) {
-            console.log("drawRoute", error)
-            toast.error((error as Error).message)
-        }
-    }
-
-
-
-    const handleListCabs = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-        try {
-            if (fromLocation === toLocation) {
-                toast.error('Choose a valid location');
-                return;
-            }
-
-            const fromCoordinates = await getCoordinates(fromLocation);
-            const toCoordinates = await getCoordinates(toLocation);
-
-            if (fromCoordinates && toCoordinates) {
-                const { latitude: fromLatitude, longitude: fromLongitude } = fromCoordinates;
-                const { latitude: toLatitude, longitude: toLongitude } = toCoordinates;
-
-                const distance = calculateDistance(fromLatitude, fromLongitude, toLatitude, toLongitude);
-
-                console.log('From Location Latitude:', fromLatitude);
-                console.log('From Location Longitude:', fromLongitude);
-                console.log('To Location Latitude:', toLatitude);
-                console.log('To Location Longitude:', toLongitude);
-                console.log('Distance (in kilometers):', distance);
-                // mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-                const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-                console.log("acccess token", accessToken)
-                const directionsResponse = await axios.get(
-                    `https://api.mapbox.com/directions/v5/mapbox/driving/${fromCoordinates.longitude},${fromCoordinates.latitude};${toCoordinates.longitude},${toCoordinates.latitude}`,
-                    {
-                        params: {
-                            access_token: accessToken,
-                        },
-                    }
-                );
-                const directionsData = await directionsResponse.data
-
-
-                const routeCoordinates = directionsData.routes[0].geometry
-
-                const decodedCoordinates = polyline.decode(routeCoordinates);
-                console.log("decodedCoordinates", decodedCoordinates)
-                // Call the function to draw the route on the map using the existing 'map' instance
-                if (map && decodedCoordinates) {
-                    console.log(238);
-
-                    const fromCoordinates: mapboxgl.LngLatLike = [fromLongitude, fromLatitude];
-                    const toCoordinates: mapboxgl.LngLatLike = [toLongitude, toLatitude];
-
-                    drawRoute(map, fromCoordinates, toCoordinates, decodedCoordinates);
-                    console.log(244);
-                    SetShowcabs(true);
-                    setLocation({ latitude, longitude });
-                } else {
-                    console.log(269)
-                    toast.error('Map not available or route not found');
-                }
-
-                SetShowcabs(true);
-                setLocation({ latitude, longitude });
-
-                const diatanceRounded = distance.toFixed(0);
-                SetDistance(diatanceRounded);
-                SetStandardPrice((distance * 50).toFixed(0));
-                SetSuvdPrice((distance * 80).toFixed(0));
-                SetPremiumPrice((distance * 100).toFixed(0));
-
-
-            } else {
-                toast.error('Location not found');
-            }
-        } catch (error) {
-            console.log("handle list cab", error)
-            toast.error((error as Error).message);
-        }
-    };
-
-
-
-
-
-
     return (
         <>
             <div className="flex h-96 justify-center">
@@ -304,6 +428,7 @@ function UserHome() {
                         <form className="ms-20" onSubmit={handleListCabs}>
                             <div className="justify-start w-full ms-10 items-start flex flex-col">
                                 <div className="w-full mb-6 md:mb-0 relative">
+
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                         From
                                     </label>

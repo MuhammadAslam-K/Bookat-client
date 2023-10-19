@@ -97,7 +97,7 @@ function UserNavbar() {
                                     aria-label="toggle dropdown"
                                 >
                                     <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                                        <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                        <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
 
                                     </div>
                                 </div>
@@ -109,12 +109,12 @@ function UserNavbar() {
                                     onClick={() => setToggleIsOpen(false)}
                                     className="absolute right-0 z-20 w-48 py-2 mt-48 origin-top-right shadow-xl rounded-3xl overflow-hidden bg-white"
                                 >
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to={userEndPoints.profile}
                                         className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
                                     >
                                         Your Profile
-                                    </a>
+                                    </Link>
                                     <Link to={driverEndPoints.login}
                                         className="block px-4 py-3 text-sm text-gray-600  transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
                                     >

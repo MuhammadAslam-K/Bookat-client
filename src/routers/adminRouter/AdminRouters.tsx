@@ -8,6 +8,7 @@ import UserManagementPage from '../../pages/admin/user/UserManagementPage';
 import DriverManagementPage from '../../pages/admin/driver/DriverManagementPage';
 import DriverAndVehicleValidationPage from '../../pages/admin/driver/DriverAndVehicleValidationPage';
 import AdminLoginPage from '../../pages/admin/auth/AdminLoginPage';
+import UserWallet from '../../components/user/userWalletHistory';
 
 const AdminRoutes: React.FC = () => {
     return (
@@ -19,6 +20,8 @@ const AdminRoutes: React.FC = () => {
             <Route path="/users" element={<AdminProtectedRoute component={UserManagementPage} />} />
             <Route path="/drivers" element={<AdminProtectedRoute component={DriverManagementPage} />} />
             <Route path="/verify" element={<AdminProtectedRoute component={DriverAndVehicleValidationPage} />} />
+            <Route path="/wallet" element={<AdminProtectedRoute component={UserWallet} />} />
+
         </Routes>
     );
 };
