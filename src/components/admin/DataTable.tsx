@@ -13,7 +13,7 @@ import adminEndPoint from "../../Constraints/endPoints/adminEndPoint";
 initTE({ Modal, Ripple });
 
 
-interface ErrorResponse {
+export interface ErrorResponse {
     error: string;
 }
 
@@ -27,6 +27,10 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
     const [data, Setdata] = useState<(DriverInfo | UserInfo)[]>()
     const [block, Setblock] = useState(false)
     const [Id, SetId] = useState("")
+    const [searchTerm, setSearchTerm] = useState("");
+    const [reload, setReload] = useState(false);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,7 +61,22 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
             }
         }
         fetchData()
-    }, [dispatch, navigate, block, getData])
+    }, [dispatch, navigate, block, getData, reload])
+
+    const filterData = () => {
+        console.log(searchTerm)
+        if (searchTerm == "") {
+            setReload(!reload)
+            console.log(68)
+        }
+        const filteredData = data?.filter((item) =>
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        console.log("filteredData", filteredData)
+        Setdata(filteredData)
+    }
+
+
 
     const handleBlock = async () => {
 
@@ -150,6 +169,18 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
                 <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                     <div className="w-full ">
                         <div className="p-8">
+                            <div className="p-8">
+                                <input
+                                    type="text"
+                                    placeholder="Search by name"
+                                    value={searchTerm}
+                                    onChange={(e) => {
+                                        setSearchTerm(e.target.value);
+                                        filterData();
+                                    }}
+                                    className="w-full px-4 py-2 mb-4 border rounded-lg"
+                                />
+                            </div>
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
                                 <table className="w-full text-sm text-left text-white  dark:text-white">
                                     <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-slate-500 dark:text-white border-b-white border-4 font-bold">

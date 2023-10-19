@@ -11,6 +11,7 @@ import AddPersonlInfoPage from '../../pages/driver/addInfo/AddPersonlInfoPage';
 import AddVehicleInfoPage from '../../pages/driver/addInfo/AddVehicleInfoPage';
 import DriverVehicleInfoPage from '../../pages/driver/dashboard/DriverVehicleInfoPage';
 import DriverPasswordResetPage from '../../pages/driver/auth/DriverPasswordResetPage';
+import DriverNotificationPage from '../../pages/driver/dashboard/DriverNotificationPage';
 
 const DriverRoutes: React.FC = () => {
     return (
@@ -25,6 +26,7 @@ const DriverRoutes: React.FC = () => {
             <Route path="/dashboard" element={<DriverProtectedRoutes component={DriverDashboardPage} />} />
             <Route path="/profile" element={<DriverProtectedRoutes component={DriverProfilePage} />} />
             <Route path="/vehicle" element={<DriverProtectedRoutes component={DriverVehicleInfoPage} />} />
+            <Route path="/notification" element={<DriverProtectedRoutes component={DriverNotificationPage} />} />
         </Routes>
     );
 };

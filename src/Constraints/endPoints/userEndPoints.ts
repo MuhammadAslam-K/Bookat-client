@@ -4,4 +4,6 @@ export default {
     resetpassword: "/resetpassword",
 
     home: '/',
+    profile: '/profile',
+    rideconfirm: "/rideconfirm",
 }
