@@ -22,12 +22,16 @@ export interface signupComponentProps {
 
 interface userAuthSlice {
     loggedIn: boolean
+    userId: null | string
 }
 
 interface driverAuthSlice {
     loggedIn: boolean
     document: boolean
     vehicle: boolean
+    driverId: null | string;
+    vehicleType: null | string
+    available: boolean
 }
 
 interface adminAuthSlice {
@@ -119,6 +123,7 @@ export interface UserInfo {
 }
 
 export interface driverProfile {
+    data: SetStateAction<driverInfo | null>;
     name: string,
     email: string,
     mobile: string,
@@ -130,5 +135,13 @@ export interface driverProfile {
     vehicleVerified: string,
     driverVerified: string,
     refrel: string,
-    isAvailable: boolean
+    isAvailable: boolean,
+    totalRides: string,
+    joinedAt: string,
+    vehicleDocuments: {
+        vehicleModel: string
+        registration: {
+            registrationId: string
+        }
+    }
 }

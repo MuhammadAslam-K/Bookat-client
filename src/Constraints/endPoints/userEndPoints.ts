@@ -6,4 +6,5 @@ export default {
     home: '/',
     profile: '/profile',
     rideconfirm: "/rideconfirm",
+    payment: "/payment"
 }

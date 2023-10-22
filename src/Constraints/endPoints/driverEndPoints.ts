@@ -9,5 +9,7 @@ export default {
     addVehicleInfo: "/driver/info/vehicle",
     driverProfile: "/driver/profile",
     vehicleInfo: "/driver/vehicle",
-    notification: "/driver/notification"
+    notification: "/driver/notification",
+    rideconfirm: "/driver/rideconfirm",
+    payment: "/driver/payment"
 }

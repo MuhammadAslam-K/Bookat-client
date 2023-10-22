@@ -1,19 +1,91 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
 import { rootState } from '../../utils/interfaces';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import io, { Socket } from 'socket.io-client';
+import toast from 'react-hot-toast';
+import { driverLogout } from '../../services/redux/slices/driverAuth';
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const driver = useSelector((state: rootState) => state.driver.loggedIn);
+    const driverId = useSelector((state: rootState) => state.driver.driverId);
+    const available = useSelector((state: rootState) => state.driver.available);
+    const vehicleType = useSelector((state: rootState) => state.driver.vehicleType);
+
 
     const [toggleisOpen, setToggleIsOpen] = useState(false);
+    const [socket, setsocket] = useState<Socket | null>(null)
+    const [latitude, setLatitude] = useState<number | null>(null);
+    const [longitude, setLongitude] = useState<number | null>(null);
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+
+    useEffect(() => {
+        const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
+            transports: ["websocket"]
+        });
+        setsocket(socketClient)
+
+        if (socketClient) {
+            socketClient.on('connect', () => {
+                console.log('Connected to the Socket.IO server');
+            })
+        } else {
+            console.log("Can not connect")
+        }
+
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    setLatitude(position.coords.latitude);
+                    setLongitude(position.coords.longitude);
+                },
+            );
+        }
+
+        return () => {
+            socket?.disconnect()
+        }
+    }, [])
+
+    if (socket && latitude && longitude && available) {
+        const value = { latitude, longitude, driverId, vehicleType }
+        console.log("value", value)
+
+        socket.on('driverlocationUpdate', (data) => {
+            console.log('Received from server:', data);
+            socket.emit("getdriverlocationUpdate", value)
+        });
+
+        // socket.on("notification", (data) => {
+        //     console.log("notification data", data)
+        // })
+    }
+    if (socket) {
+        socket.on("getDriverConfirmation", (data) => {
+            console.log("getDriverConfirmation data", data)
+            if (driverId == data.driverId) {
+                toast.success("You have a notification")
+            }
+        })
+    }
+
+
+    const handleSignOut = () => {
+        try {
+            dispatch(driverLogout());
+            navigate(driverEndPoints.login)
+        } catch (error) {
+            toast.error((error as Error).message)
+        }
+    }
 
     return (
         <div className='flex justify-center'>
@@ -108,7 +180,7 @@ function Navbar() {
                                     </Link>
                                     {driver ?
                                         <p
-                                            // onClick={handleSignOut}
+                                            onClick={handleSignOut}
                                             className="block px-4 py-3 cursor-pointer text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
                                         >
                                             Sign Out
