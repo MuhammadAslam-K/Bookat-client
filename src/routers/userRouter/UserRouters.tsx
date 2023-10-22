@@ -9,6 +9,7 @@ import PasswordResetPage from '../../pages/user/auth/PasswordResetPage';
 import UserHomePage from '../../pages/user/home/UserHomePage';
 import UserRideConfirmationPage from '../../pages/user/home/UserRideConfirmationPage';
 import UserProfilePage from '../../pages/user/home/UserProfilePage';
+import UserPaymentPage from '../../pages/user/home/UserPaymentPage';
 
 
 
@@ -23,6 +24,7 @@ const UserRoutes: React.FC = () => {
             <Route path="/" element={<UserHomePage />} />
             <Route path="/rideconfirm" element={<UserProtectedRoute component={UserRideConfirmationPage} />} />
             <Route path="/profile" element={<UserProtectedRoute component={UserProfilePage} />} />
+            <Route path="/payment" element={<UserProtectedRoute component={UserPaymentPage} />} />
 
         </Routes>
     );

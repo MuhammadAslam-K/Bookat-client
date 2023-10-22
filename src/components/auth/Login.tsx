@@ -55,15 +55,16 @@ function Login(data: loginComponentProps) {
         try {
             const response = await userAxios.post(loginserver, values)
             if (person == "user") {
-                dispatch(userLogin());
-                localStorage.setItem('userToken', response.data);
+                dispatch(userLogin({ userId: response.data.userId }));
+                localStorage.setItem('userToken', response.data.token);
                 navigate(userEndPoints.home)
             }
             else if (person == "driver") {
 
                 localStorage.setItem('driverToken', response.data.token);
-                const { document, vehicle } = response.data
-                dispatch(driverLogin({ document, vehicle }))
+                console.log(response)
+                const { document, vehicle, driverId, vehicleType } = response.data
+                dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
 
                 console.log(response);
                 if (document) {
@@ -82,7 +83,7 @@ function Login(data: loginComponentProps) {
             }
             else if (person == "admin") {
                 dispatch(adminLogin())
-                localStorage.setItem('adminToken', response.data);
+                localStorage.setItem('adminToken', response.data.token);
                 navigate(adminEndPoint.dashboard)
             }
 
@@ -117,8 +118,10 @@ function Login(data: loginComponentProps) {
         try {
             const value = { displayName, email }
             const response = await userAxios.post(`/google${loginserver}`, value)
-            localStorage.setItem('userToken', response.data);
-            dispatch(userLogin());
+            localStorage.setItem('userToken', response.data.token);
+            console.log("response :", response)
+            dispatch(userLogin({ userId: response.data.userId }));
+            // dispatch(setUserId(response.data.userId))
 
             if (person == "user") {
                 navigate(userEndPoints.home)

@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 
 import driverApis from "../../Constraints/apis/driverApis";
 import { driverAxios } from "../../Constraints/axiosInterceptors/driverAxiosInterceptors";
-import { driverLogout } from "../../services/redux/slices/driverAuth";
+import { driverLogout, setDriverAvailable } from "../../services/redux/slices/driverAuth";
 import { driverProfile } from "../../utils/interfaces";
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
@@ -35,8 +35,9 @@ function Profile() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await driverAxios.get(driverApis.profie)
 
+                const response = await driverAxios.get(driverApis.profie)
+                console.log("co", response);
                 const data: driverProfile = {
                     name: response.data.name,
                     email: response.data.email,
@@ -50,8 +51,16 @@ function Profile() {
                     driverVerified: response.data.driver.driverVerified,
                     refrel: response.data.refrel,
                     isAvailable: response.data.isAvailable,
+                    totalRides: "",
+                    joinedAt: "",
+                    vehicleDocuments: {
+                        vehicleModel: "",
+                        registration: {
+                            registrationId: ""
+                        }
+                    },
+                    data: undefined
                 }
-                console.log(data);
 
                 formik.setValues(data);
             } catch (error) {
@@ -60,6 +69,7 @@ function Profile() {
                     const axiosError: AxiosError<ErrorResponse> = error;
                     if (axiosError.response?.data) {
                         toast.error(axiosError.response.data.error);
+                        dispatch(setDriverAvailable(false))
                         dispatch(driverLogout())
                         navigate(driverEndPoints.login)
 

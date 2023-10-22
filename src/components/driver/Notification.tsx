@@ -1,16 +1,119 @@
+import { useEffect, useState } from "react";
 import { Modal, Ripple, initTE } from "tw-elements";
 initTE({ Modal, Ripple });
 
+import io, { Socket } from 'socket.io-client';
+import { useSelector, useDispatch } from "react-redux";
+import { rootState } from "../../utils/interfaces";
+import { setDriverAvailable } from "../../services/redux/slices/driverAuth";
+import queryString from "query-string";
+import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
+import { useNavigate } from "react-router-dom";
 
-// interface ErrorResponse {
-//     error: string;
-// }
 
+export interface rideDetails {
+    driverId: string
+    userId: string
+    userLat: string
+    userLon: string
+}
+
+interface RideConfirmProps {
+    amount: string
+    userFromLocation: string
+    userToLocation: string
+    rideDistance: string
+    distance: string
+
+}
 
 function Notification() {
 
+    const [socket, setsocket] = useState<Socket | null>(null)
+
+    const [rideDetails, SetRideDetails] = useState<RideConfirmProps | null>(null)
+    const [countdown, setCountdown] = useState<number>(15)
+
+    const driverId = useSelector((state: rootState) => state.driver.driverId);
+    // const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
+            transports: ["websocket"]
+        });
+        setsocket(socketClient)
+
+        if (socketClient) {
+            socketClient.on('connect', () => {
+                console.log('Connected to the Socket.IO server');
+            })
+        } else {
+            console.log("Can not connect")
+        }
 
 
+        return () => {
+            socket?.disconnect()
+        }
+    }, [])
+
+    if (socket) {
+        socket.on("getDriverConfirmation", (data) => {
+            console.log("getDriverConfirmation data", data)
+            if (driverId == data.driverId) {
+                SetRideDetails(data)
+            }
+        })
+    }
+
+    const rejectRide = () => {
+        if (socket) {
+            socket.emit("rejectedRide")
+        }
+    }
+
+    const approveRide = () => {
+        if (socket) {
+            const driverid = { driverId }
+            socket.emit("approveRide", driverid)
+        }
+    }
+
+    if (socket) {
+        socket.on("sendRideDetails", (data) => {
+            console.log("ride confirm data", data)
+            if (driverId == data.driverId) {
+                // rideconfirm
+                console.log("driver ride confirm", data)
+                const queryStringData = queryString.stringify(data);
+                navigate(`${driverEndPoints.rideconfirm}?${queryStringData}`);
+                dispatch(setDriverAvailable(false))
+            }
+        })
+    }
+
+    useEffect(() => {
+        let countdownInterval: NodeJS.Timeout;
+
+        if (rideDetails) {
+            countdownInterval = setInterval(() => {
+                setCountdown(prevCountdown => prevCountdown - 1);
+            }, 1000);
+
+            setTimeout(() => {
+                SetRideDetails(null);
+            }, 15000);
+
+            return () => {
+                clearInterval(countdownInterval);
+            };
+        }
+
+        setCountdown(15);
+
+    }, [rideDetails]);
 
     return (
         <>
@@ -33,11 +136,11 @@ function Notification() {
                                                 To
                                             </th>
                                             <th scope="col" className="px-6 py-3">
-                                                Distance
+                                                Ride Distance
                                             </th>
 
                                             <th scope="col" className="px-6 py-3">
-                                                Hourse
+                                                User Distance
                                             </th>
 
                                             <th scope="col" className="px-6 py-3">
@@ -52,36 +155,41 @@ function Notification() {
                                     </thead>
                                     <tbody>
 
+                                        {rideDetails &&
+                                            <tr className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    {rideDetails.amount}
+                                                </th>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {rideDetails.userFromLocation}
+                                                </td>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {rideDetails.userToLocation}
+                                                </td>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {rideDetails.rideDistance}
+                                                </td>
 
-                                        <tr className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                200
-                                            </th>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                calicut
-                                            </td>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                Bengalore
-                                            </td>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                100km
-                                            </td>
+                                                <td className="px-6 py-4 dark:text-white" >
+                                                    {rideDetails.distance}
+                                                </td>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {countdown > 0 ? countdown + "s" : "Time's up!"}
+                                                </td>
 
-                                            <td className="px-6 py-4 dark:text-white" >
-                                                1hr
-                                            </td>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                countdown
-                                            </td>
+                                                <td className="px-6 py-4  dark:text-white">
+                                                    <button className="me-5"
+                                                        type="button"
+                                                        onClick={approveRide}
+                                                    >Approve</button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={rejectRide}
+                                                    >Reject</button>
+                                                </td>
 
-                                            <td className="px-6 py-4 dark:text-white">
-                                                <p>Approve</p>
-                                                <p>Reject</p>
-                                            </td>
-
-                                        </tr>
-
-
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>

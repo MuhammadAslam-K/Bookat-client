@@ -12,6 +12,8 @@ import AddVehicleInfoPage from '../../pages/driver/addInfo/AddVehicleInfoPage';
 import DriverVehicleInfoPage from '../../pages/driver/dashboard/DriverVehicleInfoPage';
 import DriverPasswordResetPage from '../../pages/driver/auth/DriverPasswordResetPage';
 import DriverNotificationPage from '../../pages/driver/dashboard/DriverNotificationPage';
+import DriverRideConfirmationPage from '../../pages/driver/dashboard/DriverRideConfirmationPage';
+import DriverPaymentPage from '../../pages/driver/dashboard/DriverPaymentPage';
 
 const DriverRoutes: React.FC = () => {
     return (
@@ -20,13 +22,16 @@ const DriverRoutes: React.FC = () => {
             <Route path="/signup" element={<DriverPublicRoute component={DriverSignup} />} />
             <Route path="/resetpassword" element={<DriverPasswordResetPage />} />
 
-            <Route path="/info/personal" element={<DriverProtectedRoutes component={AddPersonlInfoPage} />} />
+            <Route path="/info/personal" element={< AddPersonlInfoPage />} />
             <Route path="/info/vehicle" element={<DriverProtectedRoutes component={AddVehicleInfoPage} />} />
 
             <Route path="/dashboard" element={<DriverProtectedRoutes component={DriverDashboardPage} />} />
             <Route path="/profile" element={<DriverProtectedRoutes component={DriverProfilePage} />} />
             <Route path="/vehicle" element={<DriverProtectedRoutes component={DriverVehicleInfoPage} />} />
             <Route path="/notification" element={<DriverProtectedRoutes component={DriverNotificationPage} />} />
+
+            <Route path="/rideconfirm" element={<DriverProtectedRoutes component={DriverRideConfirmationPage} />} />
+            <Route path="/payment" element={<DriverProtectedRoutes component={DriverPaymentPage} />} />
         </Routes>
     );
 };

@@ -16,6 +16,9 @@ export default {
     updateProfile: "/driver/update/profile",
 
     vehicle: "/driver/vehicle",
-    updateVehicle: "/driver/update/vehicle"
+    updateVehicle: "/driver/update/vehicle",
+
+    getUserInfo: "/driver/getUser",
+    getRideDetails: "/getridedata"
 }
 

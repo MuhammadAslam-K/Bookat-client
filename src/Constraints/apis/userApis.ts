@@ -12,5 +12,8 @@ export default {
     profile: "/profile",
     updateProfile: "/update/profile",
 
-    bookRide: '/book/ride'
+    bookRide: '/book/ride',
+
+    getDriverData: "/getdriver",
+    getRideDetails: "/getridedata"
 }

@@ -1,103 +1,68 @@
+import { Modal, Ripple, initTE } from "tw-elements";
+initTE({ Modal, Ripple });
 
-import React, { useEffect, useState } from 'react';
-import { adminAxios } from '../../Constraints/axiosInterceptors/adminAxiosInterceptors';
-import adminApis from '../../Constraints/apis/adminApis';
-import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '../admin/DataTable';
-import toast from 'react-hot-toast';
 
-interface DataItem {
-    id: number;
-    name: string;
-    email: string;
-    // Add more properties as needed
-}
 
-const UserWallet: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [data, setData] = useState<DataItem[]>([]); // Use setData instead of SetData
-    const itemsPerPage = 10;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await adminAxios.get(adminApis.getuserData);
-                console.log(response);
 
-                const responseData: DataItem[] = response.data;
-                setData(responseData); // Use setData here
+function WalletHistory(props) {
 
-            } catch (error) {
-                console.log(error);
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
 
-                    if (axiosError.response?.data.error === "jwt expired") {
-                        toast.error("Sorry, your login session has timed out. Kindly log in again");
-                    }
-                    if (axiosError.response) {
-                        toast.error(axiosError.response.data.error);
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
-            }
-        };
 
-        fetchData();
-    }, []); // Empty dependency array ensures this effect runs once after initial render
-
-    const filteredData = data.filter((item: DataItem) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
-        <div className="container mx-auto mt-8 p-4">
-            <input
-                type="text"
-                placeholder="Search..."
-                className="w-full p-2 mb-4 rounded"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <table className="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr>
-                        <th className="py-2">ID</th>
-                        <th className="py-2">Name</th>
-                        {/* Add more table headers as needed */}
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentItems.map((item) => (
-                        <tr key={item.id}>
-                            <td className="py-2">{item.id}</td>
-                            <td className="py-2">{item.name}</td>
-                            <td className="py-2">{item.email}</td>
-                            {/* Add more table cells as needed */}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <div className="flex justify-center mt-4">
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                    <button
-                        key={pageNumber}
-                        className={`mx-2 p-2 ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                        onClick={() => setCurrentPage(pageNumber)}
-                    >
-                        {pageNumber}
-                    </button>
-                ))}
-            </div>
-        </div>
-    );
-};
+        <>
+            <div className="flex h-screen justify-center mt-9" >
+                <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
+                    <div className="w-full ">
+                        <div className="p-8">
+                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
+                                <table className="w-full text-sm text-left text-white  dark:text-white">
+                                    <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-slate-500 dark:text-white border-b-white border-4 font-bold">
 
-export default UserWallet;
+                                        <tr>
+                                            <th scope="col" className="px-6 py-3">
+                                                Date
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Amount
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Status
+                                            </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Details
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+                                        <tr className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                200
+                                            </th>
+                                            <td className="px-6 py-4 dark:text-white">
+                                                calicut
+                                            </td>
+                                            <td className="px-6 py-4 dark:text-white">
+                                                Bengalore
+                                            </td>
+                                            <td className="px-6 py-4 dark:text-white">
+                                                100km
+                                            </td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
+        </>
+    );
+}
+
+export default WalletHistory
