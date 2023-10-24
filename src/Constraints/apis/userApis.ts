@@ -12,8 +12,15 @@ export default {
     profile: "/profile",
     updateProfile: "/update/profile",
 
-    bookRide: '/book/ride',
+    // bookRide: '/book/ride',
 
     getDriverData: "/getdriver",
-    getRideDetails: "/getridedata"
+    getRideDetails: "/getridedata",
+
+    rideHistory: "/rideHistory",
+    scheduleRideHistory: "/scheduleRideHistory",
+
+    scheduleTheRide: "/scheduleTheRide",
+
+    payment: "/payment",
 }

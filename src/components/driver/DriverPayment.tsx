@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { rideDetails } from './Notification';
+import { rideDetails } from './notifications/Notification';
 import { driverAxios } from '../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import driverApis from '../../Constraints/apis/driverApis';
 import axios, { AxiosError } from 'axios';

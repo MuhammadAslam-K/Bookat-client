@@ -1,13 +1,24 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import adminEndPoint from '../../Constraints/endPoints/adminEndPoint';
+import { useDispatch } from 'react-redux';
+import { adminLogout } from '../../services/redux/slices/adminAuth';
 
 function Navbar() {
+
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+
+    const handleAdminLogout = () => {
+        dispatch(adminLogout())
+        navigate(adminEndPoint.login)
+    }
 
     return (
         <div className='flex justify-center bg-gray-100 '>
@@ -18,13 +29,7 @@ function Navbar() {
                 <div className="container px-6 py-4 mx-auto">
                     <div className="lg:flex lg:items-center lg:justify-between">
                         <div className="flex items-center justify-between">
-                            {/* <a href="#">
-                <img
-                  className="w-auto h-6 sm:h-7"
-                  src="https://merakiui.com/images/full-logo.svg"
-                  alt=""
-                />
-              </a> */}
+
                             <Link to={adminEndPoint.dashboard}>
                                 <div className="w-auto h-6 sm:h-7">Dashboard</div>
                             </Link>
@@ -87,6 +92,14 @@ function Navbar() {
                                     className="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"                               >
                                     Drivers
                                 </Link>
+
+                                <p
+                                    onClick={handleAdminLogout}
+
+                                    className="px-3 cursor-pointer py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"                               >
+                                    Signout
+                                </p>
+
                             </div>
                         </div>
                     </div>

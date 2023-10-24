@@ -10,6 +10,8 @@ import UserHomePage from '../../pages/user/home/UserHomePage';
 import UserRideConfirmationPage from '../../pages/user/home/UserRideConfirmationPage';
 import UserProfilePage from '../../pages/user/home/UserProfilePage';
 import UserPaymentPage from '../../pages/user/home/UserPaymentPage';
+import RideHistoryPage from '../../pages/user/home/RideHistoryPage';
+import ScheduledRidePage from '../../pages/user/home/ScheduledRidePage';
 
 
 
@@ -25,6 +27,9 @@ const UserRoutes: React.FC = () => {
             <Route path="/rideconfirm" element={<UserProtectedRoute component={UserRideConfirmationPage} />} />
             <Route path="/profile" element={<UserProtectedRoute component={UserProfilePage} />} />
             <Route path="/payment" element={<UserProtectedRoute component={UserPaymentPage} />} />
+
+            <Route path="/ride" element={<UserProtectedRoute component={RideHistoryPage} />} />
+            <Route path="/scheduledRide" element={<UserProtectedRoute component={ScheduledRidePage} />} />
 
         </Routes>
     );

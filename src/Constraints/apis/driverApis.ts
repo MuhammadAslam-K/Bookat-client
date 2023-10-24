@@ -19,6 +19,13 @@ export default {
     updateVehicle: "/driver/update/vehicle",
 
     getUserInfo: "/driver/getUser",
-    getRideDetails: "/getridedata"
+    getRideDetails: "/getridedata",
+
+    rideHistory: "/driver/rideHistory",
+    scheduleRideHistory: "/driver/scheduleRideHistory",
+
+    scheduleRideNotification: "/driver/scheduleRideNotification",
+
+    scheduleRideConfirmation: "/driver/scheduleRideConfirmation"
 }
 

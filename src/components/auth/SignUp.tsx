@@ -56,10 +56,8 @@ function SignUp(data: signupComponentProps) {
 
     const handleSubmit = async (values: userSignUp) => {
         try {
-            console.log("called");
             const data = { email: values.email, mobile: values.mobile }
             await userAxios.post(checkExists, data)
-
             const mobile = {
                 mobile: values.mobile
             }

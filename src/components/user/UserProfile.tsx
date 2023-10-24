@@ -149,7 +149,7 @@ function UserProfile() {
                 :
 
                 <div className="flex mt-20 justify-center" >
-                    <div className="w-9/12 overflow-hidden rounded-3xl bg-gray-100 shadow-2xl sm:flex justify-center">
+                    <div className="w-9/12 mb-40 overflow-hidden rounded-3xl bg-gray-100 shadow-2xl sm:flex justify-center">
                         <div className="w-full ">
                             <div className="p-8">
                                 {formik.values &&

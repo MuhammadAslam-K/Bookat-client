@@ -8,10 +8,12 @@ import toast from 'react-hot-toast';
 import { driverLogout } from '../../services/redux/slices/driverAuth';
 
 function Navbar() {
+
+
+
     const [isOpen, setIsOpen] = useState(false);
     const driver = useSelector((state: rootState) => state.driver.loggedIn);
     const driverId = useSelector((state: rootState) => state.driver.driverId);
-    const available = useSelector((state: rootState) => state.driver.available);
     const vehicleType = useSelector((state: rootState) => state.driver.vehicleType);
 
 
@@ -55,26 +57,17 @@ function Navbar() {
         }
     }, [])
 
-    if (socket && latitude && longitude && available) {
+    if (socket && latitude && longitude) {
         const value = { latitude, longitude, driverId, vehicleType }
         console.log("value", value)
 
         socket.on('driverlocationUpdate', (data) => {
+
             console.log('Received from server:', data);
             socket.emit("getdriverlocationUpdate", value)
         });
-
-        // socket.on("notification", (data) => {
-        //     console.log("notification data", data)
-        // })
-    }
-    if (socket) {
-        socket.on("getDriverConfirmation", (data) => {
-            console.log("getDriverConfirmation data", data)
-            if (driverId == data.driverId) {
-                toast.success("You have a notification")
-            }
-        })
+    } else {
+        console.log(71)
     }
 
 
@@ -149,10 +142,17 @@ function Navbar() {
                         >
                             <div className="flex flex-col text-xl -mx-6 lg:flex-row lg:items-center lg:mx-8">
                                 <Link
-                                    to={driverEndPoints.notification}
+                                    to={driverEndPoints.rideNotification}
                                     className="px-3 py-2 mx-3 mt-2 text-black-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-black-200 hover:text-gray-100 dark:hover:bg-blue-700"
                                 >
                                     Notification
+                                </Link>
+
+                                <Link
+                                    to={driverEndPoints.rideHistory}
+                                    className="px-3 py-2 mx-3 mt-2 text-black-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-black-200 hover:text-gray-100 dark:hover:bg-blue-700"
+                                >
+                                    Rides
                                 </Link>
 
                                 <div className="avatar placeholder"

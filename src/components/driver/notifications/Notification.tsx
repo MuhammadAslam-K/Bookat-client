@@ -4,11 +4,11 @@ initTE({ Modal, Ripple });
 
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from "react-redux";
-import { rootState } from "../../utils/interfaces";
-import { setDriverAvailable } from "../../services/redux/slices/driverAuth";
+import { rootState } from "../../../utils/interfaces";
+import { setDriverAvailable } from "../../../services/redux/slices/driverAuth";
 import queryString from "query-string";
-import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
-import { useNavigate } from "react-router-dom";
+import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export interface rideDetails {
@@ -85,7 +85,6 @@ function Notification() {
         socket.on("sendRideDetails", (data) => {
             console.log("ride confirm data", data)
             if (driverId == data.driverId) {
-                // rideconfirm
                 console.log("driver ride confirm", data)
                 const queryStringData = queryString.stringify(data);
                 navigate(`${driverEndPoints.rideconfirm}?${queryStringData}`);
@@ -121,6 +120,32 @@ function Notification() {
                 <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                     <div className="w-full ">
                         <div className="p-8">
+                            <div className="border-b border-gray-200">
+                                <ul className="flex" role="tablist">
+                                    <li className="mr-1">
+                                        <Link
+                                            to={""}
+                                            className="bg-gray-300  text-gray-700  py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
+                                            role="tab"
+                                            aria-selected="true"
+                                        >
+                                            Rides
+                                        </Link>
+                                    </li>
+
+                                    <li className="mr-1">
+                                        <Link
+                                            to={driverEndPoints.scheduleRideNotification}
+                                            className="border-gray-400 border-2  text-gray-700 hover:bg-white py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
+                                            role="tab"
+                                            aria-selected="true"
+                                        >
+                                            Scheduled Rides
+                                        </Link>
+                                    </li>
+
+                                </ul>
+                            </div>
                             <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
                                 <table className="w-full text-sm text-left text-white  dark:text-white">
                                     <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-slate-500 dark:text-white border-b-white border-4 font-bold">

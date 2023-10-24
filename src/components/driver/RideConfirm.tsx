@@ -14,7 +14,7 @@ import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosIntercep
 import { Socket, io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { driverLogout } from '../../services/redux/slices/driverAuth';
+import { driverLogout, setDriverAvailable } from '../../services/redux/slices/driverAuth';
 import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
 import queryString from 'query-string';
 
@@ -43,7 +43,6 @@ function RideConfirm(props: { rideId: string | null }) {
     const [OTP, setOTP] = useState<string>("")
 
     const [mobile, setmobile] = useState<userInfo | null>(null)
-    const [updateDriver, setupdateDriver] = useState(true)
 
     const [socket, setsocket] = useState<Socket | null>(null)
     const [map, setMap] = useState<mapboxgl.Map | undefined>(undefined);
@@ -200,7 +199,6 @@ function RideConfirm(props: { rideId: string | null }) {
             const data = { otp: OTP, mobile: mobile }
             await userAxios.post(userApis.verifyOtp, data);
             toast.success("OTP success full")
-            setupdateDriver(false)
             setOTPsuccess(true)
 
             if (socket) {
@@ -234,6 +232,7 @@ function RideConfirm(props: { rideId: string | null }) {
             console.log("query params", queryParams)
             const queryStringData = queryString.stringify(queryParams);
             navigate(`${driverEndPoints.payment}?${queryStringData}`);
+            dispatch(setDriverAvailable(true))
         }
     }
 

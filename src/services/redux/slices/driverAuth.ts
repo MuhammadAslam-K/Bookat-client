@@ -32,6 +32,7 @@ export const driverAuthSlice = createSlice({
 
         driverLogout: (state) => {
             state.loggedIn = false;
+            state.available = false
             state.driverId = null
             state.vehicleType = null
         }

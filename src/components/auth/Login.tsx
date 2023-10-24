@@ -83,7 +83,7 @@ function Login(data: loginComponentProps) {
             }
             else if (person == "admin") {
                 dispatch(adminLogin())
-                localStorage.setItem('adminToken', response.data.token);
+                localStorage.setItem('adminToken', response.data);
                 navigate(adminEndPoint.dashboard)
             }
 

@@ -19,7 +19,7 @@ interface ErrorResponse {
     error: string;
 }
 
-function AddPersonalAndVehicleInfo() {
+function AddPersonalInfo() {
     const documentValue = useSelector((state: rootState) => state.driver.document);
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -39,6 +39,7 @@ function AddPersonalAndVehicleInfo() {
 
     useEffect(() => {
         if (documentValue) {
+            console.log("document :", documentValue)
             navigate(driverEndPoints.addVehicleInfo)
         }
 
@@ -313,4 +314,4 @@ function AddPersonalAndVehicleInfo() {
     )
 }
 
-export default AddPersonalAndVehicleInfo
+export default AddPersonalInfo

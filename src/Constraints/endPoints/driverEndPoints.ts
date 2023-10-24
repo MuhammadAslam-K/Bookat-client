@@ -9,7 +9,12 @@ export default {
     addVehicleInfo: "/driver/info/vehicle",
     driverProfile: "/driver/profile",
     vehicleInfo: "/driver/vehicle",
-    notification: "/driver/notification",
     rideconfirm: "/driver/rideconfirm",
-    payment: "/driver/payment"
+    payment: "/driver/payment",
+
+    rideNotification: "/driver/notification/ride",
+    scheduleRideNotification: "/driver/notification/scheduleRide",
+
+    rideHistory: "/driver/history/rides",
+    scheduleRideHistory: "/driver/history/scheduleRide"
 }
