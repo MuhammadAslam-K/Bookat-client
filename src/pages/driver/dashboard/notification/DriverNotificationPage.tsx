@@ -1,5 +1,5 @@
-import Navbar from '../../../components/driver/Navbar'
-import Notification from '../../../components/driver/Notification'
+import Navbar from '../../../../components/driver/Navbar'
+import Notification from '../../../../components/driver/notifications/Notification'
 
 function DriverNotificationPage() {
     return (

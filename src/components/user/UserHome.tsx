@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import toast from 'react-hot-toast';
-import { calculateDistance, fetchLocationName, fetchLocationSuggestions, getCoordinates } from './Home';
+import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates } from './Home';
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
 import { rootState } from '../../utils/interfaces';
@@ -11,6 +11,13 @@ import userEndPoints from '../../Constraints/endPoints/userEndPoints';
 import { userLogout } from '../../services/redux/slices/userAuth';
 import queryString from 'query-string';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import 'react-datepicker/dist/react-datepicker.css';
+import DateTimePickerModal from './DateTimeModal'; // Make sure to import the DateTimePickerModal component
+import axios, { AxiosError, toFormData } from 'axios';
+import { ErrorResponse } from './UserProfile';
+import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import userApis from '../../Constraints/apis/userApis';
+
 
 
 export interface LocationSuggestion {
@@ -18,9 +25,8 @@ export interface LocationSuggestion {
     place_name: string;
 }
 
-
-
 function UserHome() {
+    // const UserHome: React.FC = () => {
 
     const userId = useSelector((state: rootState) => state.user.userId);
     const navigate = useNavigate()
@@ -29,6 +35,7 @@ function UserHome() {
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
     const mapContainer = useRef<HTMLDivElement | null>(null);
+
 
     const [markerRef, setmarkerRef] = useState<mapboxgl.Marker | null>(null);
 
@@ -54,6 +61,8 @@ function UserHome() {
     const [premiumPrice, SetPremiumPrice] = useState<string>("");
 
     const [distance, SetDistance] = useState<string>("");
+    const [duration, SetDuration] = useState<number>(0);
+
     const [showCabs, SetShowCabs] = useState(false);
     const [selectedCab, SetSelectedCab] = useState("");
 
@@ -64,6 +73,12 @@ function UserHome() {
     const [socket, setsocket] = useState<Socket | null>(null)
     const [modal, setmodal] = useState(false)
 
+    const [sheduledRideModal, SetSheduleRideModal] = useState(false);
+    const [selectedDateTime, setSelectedDateTime] = useState(null);
+
+    const handleDateSelect = (date) => {
+        setSelectedDateTime(date);
+    };
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -108,6 +123,8 @@ function UserHome() {
 
         };
     }, [latitude, longitude]);
+
+
 
     const drawRoute = (fromLatitude: unknown,
         fromLongitude: unknown,
@@ -196,6 +213,7 @@ function UserHome() {
                         fromLocation,
                         toLocation,
                         distance,
+                        duration,
                         fromLocationLat,
                         fromLocationLong,
                         toLocationLat,
@@ -253,11 +271,18 @@ function UserHome() {
                     toLatitude,
                     toLongitude
                 );
+
+                const duration = calculateTravelTime(distance, 40);
+                if (typeof duration == 'number') {
+                    SetDuration(duration);
+                }
+
                 drawRoute(
                     fromLatitude,
                     fromLongitude,
                     toLatitude,
-                    toLongitude)
+                    toLongitude
+                );
 
                 if (distance) {
                     const distanceRounded = distance.toFixed(0);
@@ -275,6 +300,68 @@ function UserHome() {
         }
     };
 
+    const handleScheduleBooking = async () => {
+        try {
+            const currentTime: Date = new Date();
+
+            if (selectedDateTime) {
+                console.log("selectedDateTime", selectedDateTime)
+                const dateTime = new Date(selectedDateTime);
+                console.log("dateTime", dateTime)
+                const timeDifference = dateTime.getTime() - currentTime.getTime();
+                const oneHourInMillis = 60 * 60 * 1000;
+
+                if (timeDifference < oneHourInMillis) {
+                    console.log(313)
+                    toast.error("Ride must be booked at least 1 hour in advance.")
+                    return false
+                }
+            } else {
+                toast.error("Something went wrong try again")
+                return false
+            }
+
+
+            let amount: string | undefined;
+
+            if (selectedCab == "Standard") {
+                amount = standardPrice.toString();
+            } else if (selectedCab == "SUV") {
+                amount = suvdPrice.toString();
+            } else if (selectedCab == "Prime") {
+                amount = premiumPrice.toString();
+            }
+
+
+            const data = {
+                vehicle: selectedCab,
+                amount,
+                fromLocation,
+                toLocation,
+                distance,
+                duration,
+                fromLocationLat,
+                fromLocationLong,
+                toLocationLat,
+                toLocationLong,
+                selectedDateTime
+            }
+            await userAxios.post(userApis.scheduleTheRide, data)
+            toast.success("Successfully booked the ride.");
+        } catch (error) {
+            console.log(error)
+            if (axios.isAxiosError(error)) {
+                const axiosError: AxiosError<ErrorResponse> = error;
+                if (axiosError.response?.data) {
+                    toast.error(axiosError.response.data.error);
+                    dispatch(userLogout())
+                    navigate(userEndPoints.login)
+                } else {
+                    toast.error('Network Error occurred.');
+                }
+            }
+        }
+    }
 
 
 
@@ -358,6 +445,19 @@ function UserHome() {
                             </div>
                         </div>
                     }
+                    {sheduledRideModal &&
+                        <DateTimePickerModal
+                            isOpen={sheduledRideModal}
+                            onClose={() => SetSheduleRideModal(false)}
+                            onSelectDate={handleDateSelect}
+                            handleScheduleBooking={handleScheduleBooking}
+                        />
+                    }
+                    {/* {selectedDateTime && (
+                        <div className="mt-4">
+                            <p>Selected Date and Time: {selectedDateTime.toString()}</p>
+                        </div>
+                    )} */}
                     <div className="w-full flex m-10 space-x-32">
 
                         <form className="ms-20 m-10" onSubmit={handleListCabs}>
@@ -530,8 +630,10 @@ function UserHome() {
                                                 <p className='mt-10 ms-2'>4</p>
                                             </label>
                                         </div>
+
                                     </div>
 
+                                    <button type="button" onClick={() => SetSheduleRideModal(true)} className="ms-10 w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Schedule a Ride</button>
                                     <button type="button" onClick={handleBookRide} className="w-full ms-10 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-black dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Confirm the Ride</button>
 
                                 </>

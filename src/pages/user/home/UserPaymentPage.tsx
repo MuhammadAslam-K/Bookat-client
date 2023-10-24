@@ -5,11 +5,11 @@ import queryString from 'query-string';
 
 function UserPaymentPage() {
     const location = useLocation();
-    const { userId } = queryString.parse(location.search) as {
-        userId: string | null;
+    const { rideId } = queryString.parse(location.search) as {
+        rideId: string | null;
     };
 
-    const data = { userId };
+    const data = { rideId };
     return (
         <div className='bg-gray-100'>
             <UserNavbar />

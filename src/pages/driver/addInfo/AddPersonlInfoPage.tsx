@@ -1,9 +1,9 @@
-import AddPersonalAndVehicleInfo from '../../../components/driver/AddPersonalAndVehicleInfo/AddPersonalInfo'
+import AddPersonalInfo from "../../../components/driver/AddPersonalAndVehicleInfo/AddPersonalInfo"
 
 function AddPersonlInfoPage() {
     return (
         <>
-            <AddPersonalAndVehicleInfo />
+            <AddPersonalInfo />
         </>
     )
 }

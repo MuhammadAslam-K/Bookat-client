@@ -86,8 +86,10 @@ function Profile() {
     const handleDriverAvailable = async () => {
         try {
 
-            await driverAxios.post(driverApis.available)
+            const response = await driverAxios.post(driverApis.available)
             Setreload(!reload)
+            dispatch(setDriverAvailable({ available: response.data.isAvailable }))
+
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const axiosError: AxiosError<ErrorResponse> = error;

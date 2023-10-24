@@ -88,3 +88,19 @@ export const fetchLocationName = async (latitude: number | null, longitude: numb
         throw new Error(`fetchLocationError ${error}`);
     }
 };
+
+// CALCULATE THE DURATION
+export function calculateTravelTime(distance: number | undefined, speed: number) {
+    // Ensure both distance and speed are positive numbers
+    if (distance) {
+        if (distance <= 0 || speed <= 0) {
+            return "Distance and speed must be positive numbers.";
+        }
+
+        // Calculate the time in hours
+        const timeInHours = distance / speed;
+
+        return timeInHours;
+    }
+
+}
