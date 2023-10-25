@@ -4,7 +4,7 @@ import { ErrorResponse } from "./UserProfile";
 import toast from "react-hot-toast";
 import { userAxios } from "../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../Constraints/apis/userApis";
-import { rideDetails } from "./RideConfermation";
+import { rideDetails } from "./rides/RideConfermation";
 // import Razorpay from "razorpay";
 
 function Payment(props: { rideId: string | null }) {
@@ -87,8 +87,8 @@ function Payment(props: { rideId: string | null }) {
                                                     height="1em"
                                                     viewBox="0 0 576 512"
                                                     className={`h-6 my-4 w-6 fill-current cursor-pointer ${index + 1 <= selectedRating
-                                                            ? 'text-yellow-500' // Apply the yellow color when selected
-                                                            : 'text-gray-300'    // Apply the gray color when not selected
+                                                        ? 'text-yellow-500' // Apply the yellow color when selected
+                                                        : 'text-gray-300'    // Apply the gray color when not selected
                                                         }`}
                                                     onClick={() => setSelectedRating(index + 1)}
                                                 >

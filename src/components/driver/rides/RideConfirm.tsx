@@ -3,19 +3,17 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { rideDetails } from '../user/RideConfermation';
-import driverApis from '../../Constraints/apis/driverApis';
+import { rideDetails } from '../../user/rides/RideConfermation';
+import driverApis from '../../../Constraints/apis/driverApis';
 import toast from 'react-hot-toast';
-import { ErrorResponse } from '../user/UserProfile';
+import { ErrorResponse } from '../../user/UserProfile';
 import axios, { AxiosError } from 'axios';
-import { driverAxios } from '../../Constraints/axiosInterceptors/driverAxiosInterceptors';
-import userApis from '../../Constraints/apis/userApis';
-import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import { Socket, io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { driverLogout, setDriverAvailable } from '../../services/redux/slices/driverAuth';
-import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
+import { driverLogout, setDriverAvailable } from '../../../services/redux/slices/driverAuth';
+import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import queryString from 'query-string';
 
 
@@ -54,9 +52,14 @@ function RideConfirm(props: { rideId: string | null }) {
                 const response = await driverAxios.post(driverApis.getRideDetails, { rideId })
                 setRideInfo(response.data)
                 console.log("response :", response)
-
-                setEndLong(parseInt(response.data.pickupCoordinates.longitude))
-                setEndLat(parseInt(response.data.pickupCoordinates.latitude))
+                if (response.data.otpVerifyed) {
+                    setOTPsuccess(true)
+                    setEndLong(parseInt(response.data.dropoffCoordinates.longitude))
+                    setEndLat(parseInt(response.data.dropoffCoordinates.latitude))
+                } else {
+                    setEndLong(parseInt(response.data.pickupCoordinates.longitude))
+                    setEndLat(parseInt(response.data.pickupCoordinates.latitude))
+                }
 
                 await fetchUserData(response.data.user_id)
             } catch (error) {
@@ -177,7 +180,7 @@ function RideConfirm(props: { rideId: string | null }) {
 
     const handleSendOtp = async () => {
         try {
-            const response = await driverAxios.post(userApis.sendOtp, { mobile })
+            const response = await driverAxios.post(driverApis.sendOtp, { mobile })
             console.log("otp response", response)
         } catch (error) {
             console.log("handleSendOtp", error);
@@ -196,8 +199,8 @@ function RideConfirm(props: { rideId: string | null }) {
     const handleConfirmOTP = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         try {
-            const data = { otp: OTP, mobile: mobile }
-            await userAxios.post(userApis.verifyOtp, data);
+            const data = { otp: OTP, mobile: mobile, rideId }
+            await driverAxios.post(driverEndPoints.rideOtpVerify, data);
             toast.success("OTP success full")
             setOTPsuccess(true)
 

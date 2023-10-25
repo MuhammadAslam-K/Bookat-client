@@ -8,6 +8,8 @@ export default {
     rideconfirm: "/rideconfirm",
     payment: "/payment",
 
-    rides: "/ride",
-    scheduledRide: "/scheduledRide"
+    rides: "/history/ride",
+    scheduledRide: "/history/scheduledRide",
+
+    currentRide: "/currentRide"
 }

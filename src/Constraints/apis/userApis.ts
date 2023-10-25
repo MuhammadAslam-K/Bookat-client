@@ -23,4 +23,6 @@ export default {
     scheduleTheRide: "/scheduleTheRide",
 
     payment: "/payment",
+
+    currentRide: "/currentRide",
 }

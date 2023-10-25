@@ -1,22 +1,22 @@
-import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import toast from 'react-hot-toast';
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates } from './Home';
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
-import { rootState } from '../../utils/interfaces';
+import { rootState } from '../../../utils/interfaces';
 import { useNavigate } from "react-router-dom"
-import userEndPoints from '../../Constraints/endPoints/userEndPoints';
-import { userLogout } from '../../services/redux/slices/userAuth';
+import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
+import { userLogout } from '../../../services/redux/slices/userAuth';
 import queryString from 'query-string';
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import 'react-datepicker/dist/react-datepicker.css';
-import DateTimePickerModal from './DateTimeModal'; // Make sure to import the DateTimePickerModal component
-import axios, { AxiosError, toFormData } from 'axios';
-import { ErrorResponse } from './UserProfile';
-import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
-import userApis from '../../Constraints/apis/userApis';
+import DateTimePickerModal from '../DateTimeModal'; // Make sure to import the DateTimePickerModal component
+import axios, { AxiosError } from 'axios';
+import { ErrorResponse } from '../UserProfile';
+import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import userApis from '../../../Constraints/apis/userApis';
 
 
 
@@ -26,7 +26,6 @@ export interface LocationSuggestion {
 }
 
 function UserHome() {
-    // const UserHome: React.FC = () => {
 
     const userId = useSelector((state: rootState) => state.user.userId);
     const navigate = useNavigate()
@@ -34,11 +33,8 @@ function UserHome() {
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-    const mapContainer = useRef<HTMLDivElement | null>(null);
-
-
     const [markerRef, setmarkerRef] = useState<mapboxgl.Marker | null>(null);
-
+    const mapContainer = useRef<HTMLDivElement | null>(null);
 
     const [latitude, setLatitude] = useState<number | null>(null);
     const [longitude, setLongitude] = useState<number | null>(null);
@@ -77,6 +73,7 @@ function UserHome() {
     const [selectedDateTime, setSelectedDateTime] = useState(null);
 
     const handleDateSelect = (date) => {
+        console.log("date", date)
         setSelectedDateTime(date);
     };
 
@@ -99,6 +96,7 @@ function UserHome() {
             setLatitude(12.971599);
             setLongitude(77.594566);
         }
+        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
         if (mapContainer.current && longitude && latitude) {
             const map = new mapboxgl.Map({
@@ -107,14 +105,20 @@ function UserHome() {
                 center: [longitude, latitude],
                 zoom: 10,
             });
-            const currentMarker = new mapboxgl.Marker({ draggable: true })
-                .setLngLat([longitude, latitude])
-                .addTo(map);
-
-
-            setmarkerRef(currentMarker)
             setMap(map);
+
+            map.on('load', () => {
+                // Set the map style after the map has loaded
+                map.setStyle('mapbox://styles/mapbox/streets-v11');
+
+                const currentMarker = new mapboxgl.Marker({ draggable: true })
+                    .setLngLat([longitude, latitude])
+                    .addTo(map);
+
+                setmarkerRef(currentMarker);
+            });
         }
+
 
         return () => {
             if (map) {
@@ -131,7 +135,7 @@ function UserHome() {
         toLatitude: unknown,
         toLongitude: unknown) => {
 
-        // Add map directions control
+
         const directions = new MapboxDirections({
             accessToken: mapboxgl.accessToken,
             unit: 'metric',
@@ -303,16 +307,16 @@ function UserHome() {
     const handleScheduleBooking = async () => {
         try {
             const currentTime: Date = new Date();
+            if (!selectedCab) {
+                toast.error("Please select cab.")
+            }
 
             if (selectedDateTime) {
-                console.log("selectedDateTime", selectedDateTime)
                 const dateTime = new Date(selectedDateTime);
-                console.log("dateTime", dateTime)
                 const timeDifference = dateTime.getTime() - currentTime.getTime();
                 const oneHourInMillis = 60 * 60 * 1000;
 
                 if (timeDifference < oneHourInMillis) {
-                    console.log(313)
                     toast.error("Ride must be booked at least 1 hour in advance.")
                     return false
                 }
@@ -453,11 +457,7 @@ function UserHome() {
                             handleScheduleBooking={handleScheduleBooking}
                         />
                     }
-                    {/* {selectedDateTime && (
-                        <div className="mt-4">
-                            <p>Selected Date and Time: {selectedDateTime.toString()}</p>
-                        </div>
-                    )} */}
+
                     <div className="w-full flex m-10 space-x-32">
 
                         <form className="ms-20 m-10" onSubmit={handleListCabs}>

@@ -1,13 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import driverApis from "../../../Constraints/apis/driverApis";
 import { ErrorResponse } from "../../user/UserProfile";
 import { driverLogout } from "../../../services/redux/slices/driverAuth";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
+import { rootState } from "../../../utils/interfaces";
 
 interface rideDetails {
     _id: string;
@@ -23,10 +24,13 @@ interface rideDetails {
 
 function ScheduledRideNotification() {
 
+    const driverVehicle = useSelector((state: rootState) => state.driver.vehicleType)
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [rideDetails, setRideDetails] = useState<rideDetails[]>()
+    const [reload, setReload] = useState(false)
 
     useEffect(() => {
         const fetchRideDetails = async () => {
@@ -49,7 +53,7 @@ function ScheduledRideNotification() {
             }
         }
         fetchRideDetails()
-    }, [])
+    }, [reload])
 
     function formatDate(dateString: string | number | Date) {
         const options: Intl.DateTimeFormatOptions = {
@@ -69,14 +73,14 @@ function ScheduledRideNotification() {
         try {
             const response = await driverAxios.post(driverApis.scheduleRideConfirmation, { rideId })
             console.log("response", response)
+            setReload(!reload)
+            toast.success("Accepted the ride Successfully")
         } catch (error) {
             console.log(error)
             if (axios.isAxiosError(error)) {
                 const axiosError: AxiosError<ErrorResponse> = error;
                 if (axiosError.response?.data) {
                     toast.error(axiosError.response.data.error);
-                    dispatch(driverLogout())
-                    navigate(driverEndPoints.login)
                 } else {
                     toast.error('Network Error occurred.');
                 }
@@ -141,42 +145,40 @@ function ScheduledRideNotification() {
                                                 Date and Time
                                             </th>
                                             <th scope="col" className="px-6 py-3">
-                                                Vehicle Type
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
                                                 Action
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {rideDetails && rideDetails.map((items) => (
-
-                                            <tr key={items._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {items.pickupLocation}
-                                                </th>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    {items.dropoffLocation}
-                                                </td>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    ₹ {items.price}
-                                                </td>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    {items.distance} km
-                                                </td>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    {formatDate(items.pickUpDate)}
-                                                </td>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    {items.vehicleType}
-                                                </td>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    <p className="p-2 bg-green-500 rounded-xl mb-2 cursor-pointer"
-                                                        onClick={() => handleAcceptScheduledRide(items._id)}
-                                                    >Accept</p>
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        {rideDetails && rideDetails.map((items) => {
+                                            const isSameVehicle = items.vehicleType === driverVehicle;
+                                            if (isSameVehicle) {
+                                                return (
+                                                    <tr key={items._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
+                                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                            {items.pickupLocation}
+                                                        </th>
+                                                        <td className="px-6 py-4 dark:text-white">
+                                                            {items.dropoffLocation}
+                                                        </td>
+                                                        <td className="px-6 py-4 dark:text-white">
+                                                            ₹ {items.price}
+                                                        </td>
+                                                        <td className="px-6 py-4 dark:text-white">
+                                                            {items.distance} km
+                                                        </td>
+                                                        <td className="px-6 py-4 dark:text-white">
+                                                            {formatDate(items.pickUpDate)}
+                                                        </td>
+                                                        <td className="px-6 py-4 dark:text-white">
+                                                            <p className="p-2 bg-green-500 rounded-xl mb-2 cursor-pointer"
+                                                                onClick={() => handleAcceptScheduledRide(items._id)}
+                                                            >Accept</p>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }
+                                        })}
                                     </tbody>
                                 </table>
                             </div>

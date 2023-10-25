@@ -276,7 +276,7 @@ function UserProfile() {
                                                     value={formik.values.totalRides}
                                                     className="pl-2 outline-none rounded-lg bg-gray-100 p-2.5 sm:text-sm block  text-gray-700  mb-3 leading-tight"
                                                 />
-                                                <p>Ride History</p>
+                                                <p className='cursor-pointer' onClick={() => navigate(userEndPoints.rides)}>Ride History</p>
                                             </div>
 
                                             <div className='mb-4 w-full'>
