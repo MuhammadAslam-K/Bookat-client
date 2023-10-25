@@ -149,10 +149,10 @@ function Navbar() {
                                 </Link>
 
                                 <Link
-                                    to={driverEndPoints.rideHistory}
+                                    to={driverEndPoints.currentRide}
                                     className="px-3 py-2 mx-3 mt-2 text-black-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-black-200 hover:text-gray-100 dark:hover:bg-blue-700"
                                 >
-                                    Rides
+                                    Ride
                                 </Link>
 
                                 <div className="avatar placeholder"
@@ -177,6 +177,12 @@ function Navbar() {
                                         className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
                                     >
                                         Your Profile
+                                    </Link>
+                                    <Link
+                                        to={driverEndPoints.rideHistory}
+                                        className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
+                                    >
+                                        Ride History
                                     </Link>
                                     {driver ?
                                         <p

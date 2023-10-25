@@ -1,4 +1,4 @@
-import UserHome from '../../../components/user/UserHome'
+import UserHome from '../../../components/user/home/UserHome'
 import UserNavbar from '../../../components/user/UserNavbar'
 
 function UserHomePage() {

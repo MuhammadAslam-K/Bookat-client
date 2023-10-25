@@ -16,5 +16,9 @@ export default {
     scheduleRideNotification: "/driver/notification/scheduleRide",
 
     rideHistory: "/driver/history/rides",
-    scheduleRideHistory: "/driver/history/scheduleRide"
+    scheduleRideHistory: "/driver/history/scheduleRide",
+
+    currentRide: "/driver/currentRide",
+    rideOtpVerify: "/driver/rideOtpVerify"
+
 }

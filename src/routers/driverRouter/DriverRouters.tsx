@@ -17,6 +17,7 @@ import DriverPaymentPage from '../../pages/driver/dashboard/DriverPaymentPage';
 import DriverRideHistoryPage from '../../pages/driver/dashboard/history/DriverRideHistoryPage';
 import DriverScheduleRideHistoryPages from '../../pages/driver/dashboard/history/DriverScheduleRidePages';
 import DriverScheduleRideNotificationPage from '../../pages/driver/dashboard/notification/DriverScheduleRideNotificationPage';
+import DriverCurrentRidePage from '../../pages/driver/dashboard/DriverCurrentRidePage';
 
 const DriverRoutes: React.FC = () => {
     return (
@@ -42,6 +43,7 @@ const DriverRoutes: React.FC = () => {
             <Route path="/notification/ride" element={<DriverProtectedRoutes component={DriverNotificationPage} />} />
             <Route path="/notification/scheduleRide" element={<DriverProtectedRoutes component={DriverScheduleRideNotificationPage} />} />
 
+            <Route path="/currentRide" element={<DriverProtectedRoutes component={DriverCurrentRidePage} />} />
 
         </Routes>
     );

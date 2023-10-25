@@ -5,13 +5,13 @@ import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import { toast } from 'react-hot-toast';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import axios, { AxiosError } from 'axios';
-import { userLogout } from '../../services/redux/slices/userAuth';
-import userEndPoints from '../../Constraints/endPoints/userEndPoints';
+import { userLogout } from '../../../services/redux/slices/userAuth';
+import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ErrorResponse } from './UserProfile';
-import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
-import userApis from '../../Constraints/apis/userApis';
+import { ErrorResponse } from '../UserProfile';
+import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import userApis from '../../../Constraints/apis/userApis';
 import { Socket, io } from 'socket.io-client';
 import queryString from 'query-string';
 
@@ -50,7 +50,8 @@ export interface rideDetails {
     dropoffLocation: string;
     pickupLocation: string;
     price: string;
-    distance: string
+    distance: string;
+    otpVerifyed: boolean
 }
 
 
@@ -82,8 +83,14 @@ function RideConfermation(props: { rideId: string | null }) {
                 const response = await userAxios.post(userApis.getRideDetails, { rideId })
                 setRideInfo(response.data)
 
-                setEndLong(parseInt(response.data.driverCoordinates.longitude))
-                setEndLat(parseInt(response.data.driverCoordinates.latitude))
+                if (response.data.otpVerifyed) {
+                    setEndLat(parseInt(response.data.dropoffCoordinates.latitude))
+                    setEndLong(parseInt(response.data.dropoffCoordinates.longitude))
+                }
+                else {
+                    setEndLong(parseInt(response.data.driverCoordinates.longitude))
+                    setEndLat(parseInt(response.data.driverCoordinates.latitude))
+                }
 
                 fetchDriverData(response.data.driver_id)
                 console.log("response :", response)
@@ -181,14 +188,6 @@ function RideConfermation(props: { rideId: string | null }) {
     }, [])
 
     if (socket && rideInfo) {
-
-        // socket.on("driverUpdatedLocationToUser", (data) => {
-        //     if (rideInfo.user_id == data.userId) {
-        //         console.log("driverUpdatedLocationToUser", data)
-        //         setEndLat(data.startLat)
-        //         setEndLong(data.startLong)
-        //     }
-        // })payment
 
         socket.on("startRideNotifyUser", (data) => {
             console.log("startRideNotifyUser", data)
