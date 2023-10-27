@@ -1,5 +1,5 @@
-import Navbar from '../../../components/driver/Navbar'
-import DriverCurrentRides from '../../../components/driver/rides/DriverCurrentRides'
+import Navbar from '../../../../components/driver/Navbar'
+import DriverCurrentRides from '../../../../components/driver/rides/DriverCurrentRides'
 
 function DriverCurrentRidePage() {
     return (

@@ -9,6 +9,7 @@ import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosIntercep
 import userApis from '../../Constraints/apis/userApis';
 import { useFormik } from 'formik';
 import * as Yup from "yup"
+import displayRazorpay from '../razorPay';
 
 const WalletComponent = lazy(() => import("./userWalletHistory"))
 // import io from 'socket.io-client';

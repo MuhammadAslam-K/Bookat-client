@@ -11,5 +11,6 @@ export default {
     rides: "/history/ride",
     scheduledRide: "/history/scheduledRide",
 
-    currentRide: "/currentRide"
+    currentRide: "/currentRide",
+    scheduledPendingRides: "/sheduledRide"
 }

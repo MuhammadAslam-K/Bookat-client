@@ -29,6 +29,7 @@ function Navbar() {
         setIsOpen(!isOpen);
     };
 
+    // SOCKET
     useEffect(() => {
         const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
             transports: ["websocket"]
@@ -53,8 +54,11 @@ function Navbar() {
         }
 
         return () => {
-            socket?.disconnect()
-        }
+            if (socket) {
+                socket.disconnect();
+                console.log('Disconnected from the Socket.IO server');
+            }
+        };
     }, [])
 
     if (socket && latitude && longitude) {
@@ -66,8 +70,14 @@ function Navbar() {
             console.log('Received from server:', data);
             socket.emit("getdriverlocationUpdate", value)
         });
-    } else {
-        console.log(71)
+
+        socket.on("getDriverLocation", (data) => {
+            console.log("getDriverLocation data", data)
+            if (data.driverId == driverId) {
+                const data = { latitude, longitude, driverId }
+                socket.emit("locationUpdateFromDriver", data)
+            }
+        })
     }
 
 

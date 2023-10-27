@@ -5,11 +5,33 @@ import toast from "react-hot-toast";
 import { userAxios } from "../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../Constraints/apis/userApis";
 import { rideDetails } from "./rides/RideConfermation";
+// import displayRazorpay from "../razorPay";
+import { useNavigate } from "react-router-dom";
+import userEndPoints from "../../Constraints/endPoints/userEndPoints";
 // import Razorpay from "razorpay";
+
+declare global {
+    interface Window {
+        Razorpay: any;
+    }
+}
+
+interface RazorpayOptions {
+    key: string;
+    currency: string;
+    amount: number;
+    name: string;
+    prefill: {
+        name: string;
+    };
+    handler?: (response: { razorpay_payment_id: unknown }) => void;
+}
+
 
 function Payment(props: { rideId: string | null }) {
 
     const { rideId } = props
+    const navigate = useNavigate()
 
     const [rideInfo, setRideInfo] = useState<rideDetails | null>(null);
     const [modal, setModal] = useState(false)
@@ -40,14 +62,20 @@ function Payment(props: { rideId: string | null }) {
 
     const handlePayment = async () => {
         try {
-            const value = {
-                driverId: rideInfo?.driver_id,
-                rideId: rideId,
-                rating: selectedRating,
-                review,
+            if (rideInfo) {
+                const value = {
+                    driverId: rideInfo?.driver_id,
+                    rideId: rideId,
+                    rating: selectedRating,
+                    review,
+                }
+                const response = await userAxios.post(userApis.payment, value)
+                console.log("response", response)
+                const price = parseInt(rideInfo.price)
+                const result = await DisplayRazorpay(500)
+                console.log("resukt ;", result)
+                navigate(userEndPoints.home)
             }
-            const response = await userAxios.post(userApis.payment, value)
-            console.log("response", response)
         } catch (error) {
             console.log("handleConfirmOTP", error);
             if (axios.isAxiosError(error)) {
@@ -60,6 +88,45 @@ function Payment(props: { rideId: string | null }) {
             }
         }
     }
+
+
+    const DisplayRazorpay = async (amount: number) => {
+
+        // const navigate = useNavigate()
+
+        const options: RazorpayOptions = {
+            key: "rzp_test_G2uFOSlScJa8TV",
+            currency: "INR",
+            amount: amount * 100,
+            name: "BOOKAT",
+            prefill: {
+                name: "BOOKAT",
+            },
+            handler: function (response: { razorpay_payment_id: unknown }) {
+                if (response.razorpay_payment_id) {
+                    console.log('Payment successful', response.razorpay_payment_id);
+                    navigate(userEndPoints.home)
+                } else {
+                    console.log('Payment failed');
+                }
+            },
+        };
+
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const paymentPromise = new Promise((resolve, reject) => {
+                const paymentObject = new window.Razorpay(options);
+                paymentObject.open();
+            });
+
+            const paymentId = await paymentPromise;
+            return paymentId;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    };
+
 
 
     return (
@@ -152,57 +219,3 @@ function Payment(props: { rideId: string | null }) {
 }
 
 export default Payment
-
-
-// const initializeRazorpay = () => {
-//     if (rideInfo) {
-//         const priceInPaise: number = (rideInfo.price as unknown as number) * 100;
-
-//         const options = {
-//             key_id: 'YOUR_RAZORPAY_API_KEY', // Replace with your actual Razorpay API key
-//             amount: priceInPaise,
-//             currency: 'INR',
-//             name: 'Your Company Name',
-//             description: 'Payment for Ride',
-//             image: 'https://your-logo-url.png',
-//             order_id: rideInfo.razorpayOrderId,
-//             handler: function (response: unknown) {
-//                 // Handle successful payment here
-//                 console.log(response);
-//                 // You can trigger other actions here, e.g., submit a form to your server
-//             },
-//             prefill: {
-//                 name: 'User Name',
-//                 email: 'user@example.com',
-//                 contact: '1234567890',
-//             },
-//             theme: {
-//                 color: '#F37254',
-//             },
-//         };
-
-
-//         interface RazorpayOptions {
-//             key_id: string;
-//             amount: number;
-//             currency: string;
-//             name: string;
-//             description: string;
-//             image: string;
-//             order_id: string;
-//             handler: (response: unknown) => void;
-//             prefill: {
-//                 name: string;
-//                 email: string;
-//                 contact: string;
-//             };
-//             theme: {
-//                 color: string;
-//             };
-//         }
-
-//         const razorpay = new Razorpay(options as RazorpayOptions);
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         (razorpay as any).open();
-//     }
-// };

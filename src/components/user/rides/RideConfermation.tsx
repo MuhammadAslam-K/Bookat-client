@@ -31,7 +31,6 @@ interface driverData {
 }
 
 export interface rideDetails {
-    razorpayOrderId: any;
     _id: string;
     driver_id: string;
     user_id: string;
@@ -78,11 +77,14 @@ function RideConfermation(props: { rideId: string | null }) {
 
 
     useEffect(() => {
+
         const fetchRideDetails = async () => {
             try {
+                console.log("rideId", rideId)
                 const response = await userAxios.post(userApis.getRideDetails, { rideId })
+                console.log("response", response)
                 setRideInfo(response.data)
-
+                socketConnection()
                 if (response.data.otpVerifyed) {
                     setEndLat(parseInt(response.data.dropoffCoordinates.latitude))
                     setEndLong(parseInt(response.data.dropoffCoordinates.longitude))
@@ -93,7 +95,6 @@ function RideConfermation(props: { rideId: string | null }) {
                 }
 
                 fetchDriverData(response.data.driver_id)
-                console.log("response :", response)
             } catch (error) {
                 console.log(error)
                 if (axios.isAxiosError(error)) {
@@ -109,9 +110,12 @@ function RideConfermation(props: { rideId: string | null }) {
             }
         }
         fetchRideDetails()
+
+
     }, [])
 
 
+    // MAP
     useEffect(() => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
@@ -170,8 +174,39 @@ function RideConfermation(props: { rideId: string | null }) {
 
 
     // SOCKET
-    useEffect(() => {
+    // useEffect(() => {
 
+    //     const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
+    //         transports: ["websocket"]
+    //     });
+    //     setsocket(socketClient)
+
+    //     if (socketClient) {
+    //         socketClient.on('connect', () => {
+    //             console.log('Connected to the Socket.IO server');
+    //         })
+    //     } else {
+    //         console.log("Can not connect")
+    //     }
+
+    //     const interval = setInterval(() => {
+    //         getDriverLiveLocation()
+    //         console.log('Function called every 5 seconds');
+
+    //         // setCounter(prevCounter => prevCounter + 1);'
+    //     }, 10000);
+
+    //     return () => {
+    //         if (socket) {
+    //             socket.disconnect();
+    //             console.log('Disconnected from the Socket.IO server');
+    //         }
+    //         clearInterval(interval);
+
+    //     };
+    // }, [])
+
+    const socketConnection = () => {
         const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
             transports: ["websocket"]
         });
@@ -185,14 +220,21 @@ function RideConfermation(props: { rideId: string | null }) {
             console.log("Can not connect")
         }
 
-    }, [])
+        // const interval = setInterval(() => {
+        //     getDriverLiveLocation()
+        //     console.log('Function called every 5 seconds');
+
+        //     // setCounter(prevCounter => prevCounter + 1);'
+        // }, 10000);
+    }
 
     if (socket && rideInfo) {
-
+        let otp = false
         socket.on("startRideNotifyUser", (data) => {
             console.log("startRideNotifyUser", data)
-            setEndLat(parseInt(rideInfo.dropoffCoordinates.latitude))
-            setEndLong(parseInt(rideInfo.dropoffCoordinates.longitude))
+            otp = true
+            setEndLat(parseFloat(rideInfo.dropoffCoordinates.latitude))
+            setEndLong(parseFloat(rideInfo.dropoffCoordinates.longitude))
         })
 
         socket.on("endRideNotifyUser", (data) => {
@@ -204,12 +246,30 @@ function RideConfermation(props: { rideId: string | null }) {
                 navigate(`${userEndPoints.payment}?${queryStringData}`);
             }
         })
+
+
+        socket.on("driverLoacationUpdateToUser", (data) => {
+            console.log("driverLoacationUpdateToUser data", data)
+            if (data.driverId == rideInfo.driver_id && !otp) {
+                setEndLat(parseFloat(data.latitude))
+                setEndLong(parseFloat(data.longitude))
+            }
+        })
     }
 
+    // const getDriverLiveLocation = () => {
+    //     if (socket && rideInfo) {
+    //         const value = { driverId: rideInfo.driver_id }
+    //         socket.emit("getDriverLocation", (value))
+    //     } else {
+    //         console.log(242)
+    //     }
+    // }
 
 
     const fetchDriverData = async (driverId: string) => {
         try {
+            console.log("driverId", driverId)
             const response = await userAxios.post(userApis.getDriverData, { driverId })
             setDriverInfo(response.data)
             console.log("fetch driver data :", response)

@@ -19,7 +19,6 @@ import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInter
 import userApis from '../../../Constraints/apis/userApis';
 
 
-
 export interface LocationSuggestion {
     text: string;
     place_name: string;
@@ -87,15 +86,13 @@ function UserHome() {
                 function (error) {
                     toast.error("Error getting location");
                     console.error('Error getting location:', error.message);
-                    setLatitude(12.971599);
-                    setLongitude(77.594566);
                 }
             );
         } else {
             toast.error("Geolocation is not supported in this browser.");
-            setLatitude(12.971599);
-            setLongitude(77.594566);
         }
+
+
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
         if (mapContainer.current && longitude && latitude) {
@@ -406,23 +403,28 @@ function UserHome() {
         setSuggestions([]);
     };
 
+    const backgroundImageUrl = "../../../../public/images/pexels-cottonbro-studio-4606338.jpg"
+    const containerStyle: React.CSSProperties = {
+        width: '100%',
+        height: '32rem',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundImage: `url(${backgroundImageUrl})`
+    };
 
 
     return (
         <>
-            <div className="flex h-96 justify-center">
-                <div className="w-full h-96 overflow-hidden sm:flex">
-                    <div className="w-full h-screen">
-                        <img
-                            className='w-full h-full object-cover'
-                            src='https://images.pexels.com/photos/4429463/pexels-photo-4429463.jpeg?auto=compress&cs=tinysrgb&w=600'
-                            alt=""
-                        />
+
+            <div className="w-full bg-cover bg-center" style={containerStyle}>
+                <div className="flex items-center justify-center h-full w-full bg-gray-900 bg-opacity-50">
+                    <div className="text-center">
+                        {/* <h1 className="text-white text-2xl font-semibold uppercase md:text-3xl">Find Your Nearest Salon Through */}
+                        {/* <p className="underline text-white">Marke-Barber</p> */}
+                        {/* </h1> */}
                     </div>
                 </div>
             </div>
-
-
 
             <h1 className="text-3xl font-bold text-blue-800 justify-center flex mt-10 mb-3">Book a safe ride!</h1>
             <div className="flex justify-center">
@@ -463,8 +465,6 @@ function UserHome() {
                         <form className="ms-20 m-10" onSubmit={handleListCabs}>
                             <div className="justify-start w-full ms-10 items-start flex flex-col">
                                 <div className="w-full mb-6 md:mb-0 relative">
-
-
 
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                                         From

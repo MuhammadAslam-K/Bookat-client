@@ -25,11 +25,12 @@ export default {
     scheduleRideHistory: "/driver/scheduleRideHistory",
 
     currentRide: "/driver/currentRide",
+    scheduleRidePending: "/driver/scheduleRidePending",
 
     scheduleRideNotification: "/driver/scheduleRideNotification",
     scheduleRideConfirmation: "/driver/scheduleRideConfirmation",
 
     sendOtpForStartingRide: "/driver/startingRideOtp",
-
+    startScheduledRide: "/driver/startScheduledRide"
 }
 

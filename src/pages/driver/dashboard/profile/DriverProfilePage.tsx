@@ -1,5 +1,5 @@
-import Navbar from "../../../components/driver/Navbar"
-import Profile from "../../../components/driver/Profile"
+import Navbar from "../../../../components/driver/Navbar"
+import Profile from "../../../../components/driver/Profile"
 
 function DriverProfilePage() {
     return (

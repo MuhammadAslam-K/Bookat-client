@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { driverLogout, setDriverAvailable } from '../../../services/redux/slices/driverAuth';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
-import queryString from 'query-string';
 
 
 interface userInfo {
@@ -44,6 +43,8 @@ function RideConfirm(props: { rideId: string | null }) {
 
     const [socket, setsocket] = useState<Socket | null>(null)
     const [map, setMap] = useState<mapboxgl.Map | undefined>(undefined);
+
+    const [paymentModal, SetPaymentModal] = useState(false)
 
 
     useEffect(() => {
@@ -230,13 +231,13 @@ function RideConfirm(props: { rideId: string | null }) {
         if (socket && rideInfo) {
             const data = { userId: rideInfo.user_id }
             socket.emit("endRide", data)
-
-            const queryParams = rideId ? { rideId } : {};
-            console.log("query params", queryParams)
-            const queryStringData = queryString.stringify(queryParams);
-            navigate(`${driverEndPoints.payment}?${queryStringData}`);
             dispatch(setDriverAvailable(true))
+            SetPaymentModal(true)
         }
+    }
+
+    const handleCompletedPayment = () => {
+        navigate(driverEndPoints.dashboard)
     }
 
     return (
@@ -244,6 +245,19 @@ function RideConfirm(props: { rideId: string | null }) {
 
             <div className="w-10/12 space-y-4">
                 <div className='rounded-3xl shadow-2xl'>
+                    {paymentModal &&
+                        <div className="fixed inset-0 flex items-center justify-center z-50">
+                            <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
+                            <div className="modal-content bg-white p-6 rounded-lg shadow-lg z-50">
+                                <h1 className='text-center font-semibold text-2xl'>Payment</h1>
+                                <p className='text-center my-3 font-semibold'>Amount: {rideInfo?.price}</p>
+                                <p className='max-w-sm'>Your professionalism and friendly demeanor make our riders' experiences memorable. We appreciate your hard work and the important role you play in our community.</p>
+
+                                <button type='button' onClick={handleCompletedPayment} className='p-2 px-3 border border-slate-600 rounded-lg text-center ms-24 m-2'>Completed the Payment</button>
+
+                            </div>
+                        </div>
+                    }
                     {/* {driverData && */}
                     <div className="flex">
                         <div className="w-9/12 m-10">
