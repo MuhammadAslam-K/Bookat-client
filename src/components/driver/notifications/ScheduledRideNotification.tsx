@@ -32,6 +32,9 @@ function ScheduledRideNotification() {
     const [rideDetails, setRideDetails] = useState<rideDetails[]>()
     const [reload, setReload] = useState(false)
 
+    const [latitude, setLatitude] = useState<number | null>(null)
+    const [longitude, setLongitude] = useState<number | null>(null)
+
     useEffect(() => {
         const fetchRideDetails = async () => {
             try {
@@ -55,6 +58,17 @@ function ScheduledRideNotification() {
         fetchRideDetails()
     }, [reload])
 
+    useEffect(() => {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    setLatitude(position.coords.latitude)
+                    setLongitude(position.coords.longitude)
+                },
+            );
+        }
+    }, [])
+
     function formatDate(dateString: string | number | Date) {
         const options: Intl.DateTimeFormatOptions = {
             year: 'numeric',
@@ -70,11 +84,18 @@ function ScheduledRideNotification() {
     }
 
     const handleAcceptScheduledRide = async (rideId: string) => {
+        console.log("called")
         try {
-            const response = await driverAxios.post(driverApis.scheduleRideConfirmation, { rideId })
-            console.log("response", response)
-            setReload(!reload)
-            toast.success("Accepted the ride Successfully")
+            if (latitude && longitude) {
+                const data = { rideId, latitude, longitude }
+                const response = await driverAxios.post(driverApis.scheduleRideConfirmation, data)
+                console.log("response", response)
+                setReload(!reload)
+                toast.success("Accepted the ride Successfully")
+            }
+            else {
+                console.log(92)
+            }
         } catch (error) {
             console.log(error)
             if (axios.isAxiosError(error)) {

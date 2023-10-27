@@ -12,7 +12,6 @@ export default {
     profile: "/profile",
     updateProfile: "/update/profile",
 
-    // bookRide: '/book/ride',
 
     getDriverData: "/getdriver",
     getRideDetails: "/getridedata",
@@ -25,4 +24,5 @@ export default {
     payment: "/payment",
 
     currentRide: "/currentRide",
+    scheduledRides: "/scheduledRides",
 }

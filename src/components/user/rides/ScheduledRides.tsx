@@ -1,16 +1,16 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
+import { ErrorResponse } from "../UserProfile";
+import { userLogout } from "../../../services/redux/slices/userAuth";
+import userEndPoints from "../../../Constraints/endPoints/userEndPoints";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import queryString from "query-string";
-import driverApis from "../../../Constraints/apis/driverApis";
-import { driverLogout, setDriverAvailable } from "../../../services/redux/slices/driverAuth";
-import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
-import { ErrorResponse } from "../../user/UserProfile";
-import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
+import { userAxios } from "../../../Constraints/axiosInterceptors/userAxiosInterceptors";
+import userApis from "../../../Constraints/apis/userApis";
 
 interface rideDetail {
+    driverAccepted: string;
     _id: string;
     pickupLocation: string,
     dropoffLocation: string,
@@ -20,7 +20,7 @@ interface rideDetail {
     driver_id: string,
 }
 
-function DriverCurrentRides() {
+function ScheduledRides() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function DriverCurrentRides() {
     useEffect(() => {
         const fetchRideDetails = async () => {
             try {
-                const response = await driverAxios.get(driverApis.currentRide)
+                const response = await userAxios.get(userApis.scheduledRides)
                 console.log("response", response)
                 setRideDetails(response.data[0])
             } catch (error) {
@@ -39,8 +39,8 @@ function DriverCurrentRides() {
                     const axiosError: AxiosError<ErrorResponse> = error;
                     if (axiosError.response?.data) {
                         toast.error(axiosError.response.data.error);
-                        dispatch(driverLogout())
-                        navigate(driverEndPoints.login)
+                        dispatch(userLogout())
+                        navigate(userEndPoints.login)
                     } else {
                         toast.error('Network Error occurred.');
                     }
@@ -51,19 +51,9 @@ function DriverCurrentRides() {
     }, [])
 
 
-    const handleNavigateToMap = () => {
-        if (rideDetails) {
-            const data = {
-                rideId: rideDetails._id,
-            }
-            const queryStringData = queryString.stringify(data);
-            navigate(`${driverEndPoints.rideconfirm}?${queryStringData}`);
-            dispatch(setDriverAvailable(false))
-        }
-    }
-
     return (
         <>
+
             <div className="flex h-screen justify-center mt-9" >
                 <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                     <div className="w-full ">
@@ -74,9 +64,9 @@ function DriverCurrentRides() {
                                 <ul className="flex" role="tablist">
                                     <li className="mr-1">
                                         <Link
-                                            to={driverEndPoints.currentRide}
+                                            to={userEndPoints.currentRide}
                                             role="tab"
-                                            className="bg-gray-300  text-gray-700  py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
+                                            className="border-gray-400 border-2  text-gray-700 hover:bg-white py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
                                             aria-selected="true"
                                         >
                                             Rides
@@ -85,9 +75,9 @@ function DriverCurrentRides() {
 
                                     <li className="mr-1">
                                         <Link
-                                            to={driverEndPoints.pendingScheduledRides}
-                                            className="border-gray-400 border-2  text-gray-700 hover:bg-white py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
+                                            to={userEndPoints.scheduledPendingRides}
                                             role="tab"
+                                            className="bg-gray-300  text-gray-700  py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
                                             aria-selected="true"
                                         >
                                             Scheduled Rides
@@ -117,7 +107,7 @@ function DriverCurrentRides() {
                                                 status
                                             </th>
                                             <th scope="col" className="px-6 py-3">
-                                                Map
+                                                Driver Status
                                             </th>
                                         </tr>
                                     </thead>
@@ -140,8 +130,9 @@ function DriverCurrentRides() {
                                                     {rideDetails.status}
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    <p className="cursor-pointer" onClick={() => handleNavigateToMap()}>Navigation</p>
+                                                    {rideDetails.driverAccepted}
                                                 </td>
+
                                             </tr>
                                         }
                                     </tbody>
@@ -157,5 +148,4 @@ function DriverCurrentRides() {
     )
 }
 
-
-export default DriverCurrentRides
+export default ScheduledRides

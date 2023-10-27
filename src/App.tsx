@@ -25,7 +25,7 @@ function App() {
           <Route path="/driver/*" element={<DriverRoutes />} />
           <Route path="/*" element={<UserRoutes />} />
         </Routes>
-      </Router>
+      </Router >
     </>
   );
 }

@@ -3,12 +3,12 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import queryString from "query-string";
 import driverApis from "../../../Constraints/apis/driverApis";
 import { driverLogout, setDriverAvailable } from "../../../services/redux/slices/driverAuth";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
 import { ErrorResponse } from "../../user/UserProfile";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
+import queryString from "query-string";
 
 interface rideDetail {
     _id: string;
@@ -20,7 +20,7 @@ interface rideDetail {
     driver_id: string,
 }
 
-function DriverCurrentRides() {
+function ScheduledRides() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function DriverCurrentRides() {
     useEffect(() => {
         const fetchRideDetails = async () => {
             try {
-                const response = await driverAxios.get(driverApis.currentRide)
+                const response = await driverAxios.get(driverApis.scheduleRidePending)
                 console.log("response", response)
                 setRideDetails(response.data[0])
             } catch (error) {
@@ -51,14 +51,30 @@ function DriverCurrentRides() {
     }, [])
 
 
-    const handleNavigateToMap = () => {
-        if (rideDetails) {
-            const data = {
-                rideId: rideDetails._id,
+    const handleStartRide = async (rideId: string) => {
+        try {
+            await driverAxios.patch(driverApis.startScheduledRide, { rideId })
+
+            if (rideDetails) {
+                const data = {
+                    rideId: rideDetails._id,
+                }
+                const queryStringData = queryString.stringify(data);
+                navigate(`${driverEndPoints.rideconfirm}?${queryStringData}`);
+                dispatch(setDriverAvailable(false))
             }
-            const queryStringData = queryString.stringify(data);
-            navigate(`${driverEndPoints.rideconfirm}?${queryStringData}`);
-            dispatch(setDriverAvailable(false))
+        } catch (error) {
+            console.log(error)
+            if (axios.isAxiosError(error)) {
+                const axiosError: AxiosError<ErrorResponse> = error;
+                if (axiosError.response?.data) {
+                    toast.error(axiosError.response.data.error);
+                    dispatch(driverLogout())
+                    navigate(driverEndPoints.login)
+                } else {
+                    toast.error('Network Error occurred.');
+                }
+            }
         }
     }
 
@@ -76,7 +92,7 @@ function DriverCurrentRides() {
                                         <Link
                                             to={driverEndPoints.currentRide}
                                             role="tab"
-                                            className="bg-gray-300  text-gray-700  py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
+                                            className="border-gray-400 border-2  text-gray-700 hover:bg-white py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
                                             aria-selected="true"
                                         >
                                             Rides
@@ -86,7 +102,7 @@ function DriverCurrentRides() {
                                     <li className="mr-1">
                                         <Link
                                             to={driverEndPoints.pendingScheduledRides}
-                                            className="border-gray-400 border-2  text-gray-700 hover:bg-white py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
+                                            className="bg-gray-300  text-gray-700  py-2 px-4 rounded-t-lg active:bg-white focus:outline-none focus:ring focus:ring-indigo-300"
                                             role="tab"
                                             aria-selected="true"
                                         >
@@ -117,7 +133,7 @@ function DriverCurrentRides() {
                                                 status
                                             </th>
                                             <th scope="col" className="px-6 py-3">
-                                                Map
+                                                Action
                                             </th>
                                         </tr>
                                     </thead>
@@ -140,7 +156,7 @@ function DriverCurrentRides() {
                                                     {rideDetails.status}
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    <p className="cursor-pointer" onClick={() => handleNavigateToMap()}>Navigation</p>
+                                                    <p className="cursor-pointer" onClick={() => handleStartRide(rideDetails._id)}>Start</p>
                                                 </td>
                                             </tr>
                                         }
@@ -153,9 +169,11 @@ function DriverCurrentRides() {
             </div >
 
 
+
+
         </>
     )
 }
 
 
-export default DriverCurrentRides
+export default ScheduledRides

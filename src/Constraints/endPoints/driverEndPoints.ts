@@ -10,7 +10,6 @@ export default {
     driverProfile: "/driver/profile",
     vehicleInfo: "/driver/vehicle",
     rideconfirm: "/driver/rideconfirm",
-    payment: "/driver/payment",
 
     rideNotification: "/driver/notification/ride",
     scheduleRideNotification: "/driver/notification/scheduleRide",
@@ -19,6 +18,7 @@ export default {
     scheduleRideHistory: "/driver/history/scheduleRide",
 
     currentRide: "/driver/currentRide",
-    rideOtpVerify: "/driver/rideOtpVerify"
+    rideOtpVerify: "/driver/rideOtpVerify",
+    pendingScheduledRides: "/driver/scheduledRides",
 
 }

@@ -144,6 +144,7 @@ function AddPersonalInfo() {
 
                 } catch (error) {
                     console.log(error);
+                    toast.dismiss()
                     if (axios.isAxiosError(error)) {
                         const axiosError: AxiosError<ErrorResponse> = error;
                         if (axiosError.response) {
