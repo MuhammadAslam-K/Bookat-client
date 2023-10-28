@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import driverApis from "../../../Constraints/apis/driverApis";
-import { ErrorResponse } from "../../user/UserProfile";
+import { ErrorResponse } from "../../user/profile/UserProfile";
 import { driverLogout } from "../../../services/redux/slices/driverAuth";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
 import { rootState } from "../../../utils/interfaces";

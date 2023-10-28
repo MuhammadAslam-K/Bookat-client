@@ -29,7 +29,6 @@ function Login(data: loginComponentProps) {
 
     const { loginserver, signup, person, resetpassword } = data
     const [showPassword, setShowPassword] = useState(false)
-    const provider = new GoogleAuthProvider()
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
@@ -55,7 +54,7 @@ function Login(data: loginComponentProps) {
         try {
             const response = await userAxios.post(loginserver, values)
             if (person == "user") {
-                dispatch(userLogin({ userId: response.data.userId }));
+                dispatch(userLogin({ userId: response.data.userId, mobile: response.data.mobile }));
                 localStorage.setItem('userToken', response.data.token);
                 navigate(userEndPoints.home)
             }
@@ -71,13 +70,16 @@ function Login(data: loginComponentProps) {
                     if (vehicle) {
                         console.log("Navigating to driver dashboard");
                         navigate(driverEndPoints.dashboard);
+                        return
                     } else {
                         console.log("Navigating to driver vehicle info");
                         navigate(driverEndPoints.addVehicleInfo);
+                        return
                     }
                 } else {
                     console.log("Navigating to driver personal info");
                     navigate(driverEndPoints.addPersonalInfo);
+                    return
                 }
 
             }
@@ -100,19 +102,26 @@ function Login(data: loginComponentProps) {
         }
     };
 
-    const signIpWithGoogle = () => {
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const { displayName, email } = result.user;
 
-                if (displayName && email) {
-                    submitSignInWithGoogle(displayName, email)
-                }
 
-            }).catch((error) => {
-                toast.error((error as Error).message);
-            });
-    }
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+        prompt: 'select_account'
+    });
+
+    const signIpWithGoogle = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const { displayName, email } = result.user;
+
+            if (displayName && email) {
+                submitSignInWithGoogle(displayName, email);
+            }
+        } catch (error) {
+            toast.error((error as Error).message);
+        }
+    };
+
 
     const submitSignInWithGoogle = async (displayName: string, email: string) => {
         try {
@@ -120,7 +129,7 @@ function Login(data: loginComponentProps) {
             const response = await userAxios.post(`/google${loginserver}`, value)
             localStorage.setItem('userToken', response.data.token);
             console.log("response :", response)
-            dispatch(userLogin({ userId: response.data.userId }));
+            dispatch(userLogin({ userId: response.data.userId, mobile: response.data.mobile }));
             // dispatch(setUserId(response.data.userId))
 
             if (person == "user") {

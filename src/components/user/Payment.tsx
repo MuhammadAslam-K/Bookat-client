@@ -1,17 +1,17 @@
-import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
-import { ErrorResponse } from "./UserProfile";
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
+
+import { ErrorResponse } from "./profile/UserProfile";
 import { userAxios } from "../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../Constraints/apis/userApis";
-import { rideDetails } from "./rides/RideConfermation";
-// import displayRazorpay from "../razorPay";
+import { rideDetails } from "./rides/CurrentRideInfo";
 import { useNavigate } from "react-router-dom";
 import userEndPoints from "../../Constraints/endPoints/userEndPoints";
-// import Razorpay from "razorpay";
 
 declare global {
     interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Razorpay: any;
     }
 }
@@ -68,10 +68,11 @@ function Payment(props: { rideId: string | null }) {
                     rideId: rideId,
                     rating: selectedRating,
                     review,
+                    price: rideInfo.price
                 }
                 const response = await userAxios.post(userApis.payment, value)
                 console.log("response", response)
-                const price = parseInt(rideInfo.price)
+                // const price = parseInt(rideInfo.price)
                 const result = await DisplayRazorpay(500)
                 console.log("resukt ;", result)
                 navigate(userEndPoints.home)
@@ -91,8 +92,6 @@ function Payment(props: { rideId: string | null }) {
 
 
     const DisplayRazorpay = async (amount: number) => {
-
-        // const navigate = useNavigate()
 
         const options: RazorpayOptions = {
             key: "rzp_test_G2uFOSlScJa8TV",

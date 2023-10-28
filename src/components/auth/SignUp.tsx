@@ -26,7 +26,6 @@ function SignUp(data: signupComponentProps) {
     const [otp, setOtp] = useState(false)
 
 
-    const provider = new GoogleAuthProvider()
     const navigate = useNavigate()
 
     const formik = useFormik({
@@ -98,6 +97,10 @@ function SignUp(data: signupComponentProps) {
         }
     }
 
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+        prompt: 'select_account'
+    });
 
     const signUpWithGoogle = () => {
 

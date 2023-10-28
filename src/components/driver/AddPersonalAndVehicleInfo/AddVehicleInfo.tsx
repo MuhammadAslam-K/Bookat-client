@@ -1,13 +1,12 @@
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { uploadImageToStorage } from '../../../services/firebase/storage';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from 'react-redux';
-import { setVehicle } from '../../../services/redux/slices/driverAuth';
+import { useDispatch } from 'react-redux';
+import { driverLogin, setVehicle } from '../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
-import { rootState } from '../../../utils/interfaces';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import driverApis from '../../../Constraints/apis/driverApis';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
@@ -19,8 +18,6 @@ interface ErrorResponse {
 }
 
 function AddVehicleInfo() {
-    const documentValue = useSelector((state: rootState) => state.driver.document);
-    const vehicleValue = useSelector((state: rootState) => state.driver.vehicle);
     const dispatch = useDispatch();
 
 
@@ -39,16 +36,7 @@ function AddVehicleInfo() {
     const with_error_class = "pl-2 outline-none border-2 border-red-400 w-full rounded-lg p-2.5 sm:text-sm  placeholder:text-red-500";
 
 
-    useEffect(() => {
 
-        if (!documentValue) {
-            navigate(driverEndPoints.addPersonalInfo)
-        }
-
-        if (vehicleValue) {
-            navigate(driverEndPoints.dashboard)
-        }
-    }, [documentValue, navigate, vehicleValue])
 
 
 
@@ -143,7 +131,9 @@ function AddVehicleInfo() {
                     };
 
 
-                    await driverAxios.post(driverApis.addVehicleInfo, formData);
+                    const response = await driverAxios.post(driverApis.addVehicleInfo, formData);
+                    const { document, vehicle, driverId, vehicleType } = response.data
+                    dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
                     dispatch(setVehicle())
                     toast.dismiss()
                     toast.success("Submitted the form successfully")

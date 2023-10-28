@@ -14,7 +14,6 @@ import DriverPasswordResetPage from '../../pages/driver/auth/DriverPasswordReset
 import DriverNotificationPage from '../../pages/driver/dashboard/notification/DriverNotificationPage';
 import DriverRideConfirmationPage from '../../pages/driver/dashboard/rides/DriverRideConfirmationPage';
 import DriverRideHistoryPage from '../../pages/driver/dashboard/history/DriverRideHistoryPage';
-import DriverScheduleRideHistoryPages from '../../pages/driver/dashboard/history/DriverScheduleRidePages';
 import DriverScheduleRideNotificationPage from '../../pages/driver/dashboard/notification/DriverScheduleRideNotificationPage';
 import DriverCurrentRidePage from '../../pages/driver/dashboard/rides/DriverCurrentRidePage';
 import DriverScheduledRidePage from '../../pages/driver/dashboard/rides/DriverScheduledRidePage';
@@ -26,7 +25,7 @@ const DriverRoutes: React.FC = () => {
             <Route path="/signup" element={<DriverPublicRoute component={DriverSignup} />} />
             <Route path="/resetpassword" element={<DriverPasswordResetPage />} />
 
-            <Route path="/info/personal" element={< AddPersonlInfoPage />} />
+            <Route path="/info/personal" element={<AddPersonlInfoPage />} />
             <Route path="/info/vehicle" element={<AddVehicleInfoPage />} />
 
             <Route path="/dashboard" element={<DriverProtectedRoutes component={DriverDashboardPage} />} />
@@ -36,8 +35,7 @@ const DriverRoutes: React.FC = () => {
 
             <Route path="/rideconfirm" element={<DriverProtectedRoutes component={DriverRideConfirmationPage} />} />
 
-            <Route path="/history/rides" element={<DriverProtectedRoutes component={DriverRideHistoryPage} />} />
-            <Route path="/history/scheduleRide" element={<DriverProtectedRoutes component={DriverScheduleRideHistoryPages} />} />
+            <Route path="/history" element={<DriverProtectedRoutes component={DriverRideHistoryPage} />} />
 
             <Route path="/notification/ride" element={<DriverProtectedRoutes component={DriverNotificationPage} />} />
             <Route path="/notification/scheduleRide" element={<DriverProtectedRoutes component={DriverScheduleRideNotificationPage} />} />

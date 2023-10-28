@@ -22,7 +22,8 @@ export interface signupComponentProps {
 
 interface userAuthSlice {
     loggedIn: boolean
-    userId: null | string
+    userId: null | string,
+    mobile: null | string
 }
 
 interface driverAuthSlice {
@@ -57,8 +58,10 @@ export interface DriverInfo {
     isAvailable: boolean;
     joiningAt: string;
     driverImageUrl: string;
-    totalRides: string;
-
+    // totalRides: string;
+    RideDetails: {
+        completedRides: string;
+    };
     driver: {
         driverVerified: boolean;
         driverDocuments: boolean;
@@ -106,7 +109,7 @@ export interface UserInfo {
     refrel: string;
     block: boolean;
     joiningAt: string;
-    totalRides: number;
+    // totalRides: number;
     wallet: {
         balance: number;
         transactions: {
@@ -117,8 +120,7 @@ export interface UserInfo {
         }[];
     };
     RideDetails: {
-        completedRides: number;
-        cancelledRides: number;
+        completedRides: string;
     };
 }
 

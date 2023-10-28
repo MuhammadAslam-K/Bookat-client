@@ -1,5 +1,5 @@
 import UserNavbar from "../../../components/user/UserNavbar"
-import UserProfile from "../../../components/user/UserProfile"
+import UserProfile from "../../../components/user/profile/UserProfile"
 
 function UserProfilePage() {
     return (

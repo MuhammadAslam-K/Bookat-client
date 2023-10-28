@@ -5,10 +5,23 @@ initTE({ Modal, Ripple });
 
 
 
-function WalletHistory(props) {
+function WalletHistory(props: { transactions: []; }) {
 
+    const { transactions } = props
 
+    function formatDate(dateString: string | number | Date) {
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        };
+        const date = new Date(dateString);
 
+        const formattedDate = date.toLocaleDateString('en-US', options);
+        const formattedTime = date.toLocaleTimeString('en-US');
+
+        return `${formattedDate} ${formattedTime}`;
+    }
 
     return (
         <>
@@ -37,23 +50,25 @@ function WalletHistory(props) {
                                     </thead>
                                     <tbody>
 
-
-                                        <tr className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                200
-                                            </th>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                calicut
-                                            </td>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                Bengalore
-                                            </td>
-                                            <td className="px-6 py-4 dark:text-white">
-                                                100km
-                                            </td>
-                                        </tr>
+                                        {transactions.map((items: { date: string; amount: string; status: string; details: string }) => (
 
 
+                                            <tr className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
+                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                    {formatDate(items.date)}
+                                                </th>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {items.amount}
+                                                </td>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {items.status}
+                                                </td>
+                                                <td className="px-6 py-4 dark:text-white">
+                                                    {items.details}
+                                                </td>
+                                            </tr>
+
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>

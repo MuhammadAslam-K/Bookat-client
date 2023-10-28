@@ -3,10 +3,10 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { rideDetails } from '../../user/rides/RideConfermation';
+import { rideDetails } from '../../user/rides/CurrentRideInfo';
 import driverApis from '../../../Constraints/apis/driverApis';
 import toast from 'react-hot-toast';
-import { ErrorResponse } from '../../user/UserProfile';
+import { ErrorResponse } from '../../user/profile/UserProfile';
 import axios, { AxiosError } from 'axios';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import { Socket, io } from 'socket.io-client';

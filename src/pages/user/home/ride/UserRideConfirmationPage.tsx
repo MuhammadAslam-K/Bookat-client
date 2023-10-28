@@ -1,5 +1,5 @@
 import UserNavbar from '../../../../components/user/UserNavbar'
-import RideConfermation from '../../../../components/user/rides/RideConfermation'
+import RideConfermation from '../../../../components/user/rides/CurrentRideInfo'
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
