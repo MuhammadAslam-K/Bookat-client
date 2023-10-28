@@ -8,7 +8,7 @@ import UserManagementPage from '../../pages/admin/user/UserManagementPage';
 import DriverManagementPage from '../../pages/admin/driver/DriverManagementPage';
 import DriverAndVehicleValidationPage from '../../pages/admin/driver/DriverAndVehicleValidationPage';
 import AdminLoginPage from '../../pages/admin/auth/AdminLoginPage';
-import UserWallet from '../../components/user/userWalletHistory';
+import UserWallet from '../../components/user/profile/userWalletHistory';
 
 const AdminRoutes: React.FC = () => {
     return (

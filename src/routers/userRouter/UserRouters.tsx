@@ -10,10 +10,10 @@ import UserHomePage from '../../pages/user/home/UserHomePage';
 import UserRideConfirmationPage from '../../pages/user/home/ride/UserRideConfirmationPage';
 import UserProfilePage from '../../pages/user/home/UserProfilePage';
 import UserPaymentPage from '../../pages/user/home/UserPaymentPage';
-import RideHistoryPage from '../../pages/user/history/RideHistoryPage';
-import ScheduledRidePage from '../../pages/user/history/ScheduledRidePage';
+import RideHistoryPage from '../../pages/user/history/UserRideHistoryPage';
 import CurrentRidePage from '../../pages/user/home/ride/CurrentRidePage';
 import SheduledRidePage from '../../pages/user/home/ride/SheduledRide';
+import UserSideDriverInfoPage from '../../pages/user/home/ride/UserSideDriverInfoPage';
 
 
 
@@ -30,11 +30,11 @@ const UserRoutes: React.FC = () => {
             <Route path="/profile" element={<UserProtectedRoute component={UserProfilePage} />} />
             <Route path="/payment" element={<UserProtectedRoute component={UserPaymentPage} />} />
 
-            <Route path="/history/ride" element={<UserProtectedRoute component={RideHistoryPage} />} />
-            <Route path="/history/scheduledRide" element={<UserProtectedRoute component={ScheduledRidePage} />} />
+            <Route path="/history" element={<UserProtectedRoute component={RideHistoryPage} />} />
 
             <Route path="/currentRide" element={<UserProtectedRoute component={CurrentRidePage} />} />
             <Route path="/sheduledRide" element={<UserProtectedRoute component={SheduledRidePage} />} />
+            <Route path="/driverInfo" element={<UserProtectedRoute component={UserSideDriverInfoPage} />} />
         </Routes>
     );
 };

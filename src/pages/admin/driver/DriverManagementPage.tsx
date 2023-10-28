@@ -1,17 +1,12 @@
 import Navbar from "../../../components/admin/AdminNavbar"
-import DataTable from "../../../components/admin/DataTable"
-import adminApis from "../../../Constraints/apis/adminApis"
+import DriverDataTable from "../../../components/admin/driver/DriverDataTable"
 
 function DriverManagementPage() {
-    const data = {
-        blockEndpoint: adminApis.blockDriver,
-        getData: adminApis.getDriversData,
-        role: "driver"
-    }
+
     return (
         <div className="bg-gray-100">
             <Navbar />
-            <DataTable {...data} />
+            <DriverDataTable />
         </div>
     )
 }

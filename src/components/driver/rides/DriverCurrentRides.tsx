@@ -7,7 +7,7 @@ import queryString from "query-string";
 import driverApis from "../../../Constraints/apis/driverApis";
 import { driverLogout, setDriverAvailable } from "../../../services/redux/slices/driverAuth";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
-import { ErrorResponse } from "../../user/UserProfile";
+import { ErrorResponse } from "../../user/profile/UserProfile";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 
 interface rideDetail {

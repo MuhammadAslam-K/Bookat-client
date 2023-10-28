@@ -1,20 +1,17 @@
 import { useEffect, useState, Suspense, lazy } from 'react';
-import userEndPoints from '../../Constraints/endPoints/userEndPoints';
 import axios, { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { userLogout } from '../../services/redux/slices/userAuth';
-import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
-import userApis from '../../Constraints/apis/userApis';
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import displayRazorpay from '../razorPay';
+
+import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
+import { userLogin, userLogout } from '../../../services/redux/slices/userAuth';
+import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import userApis from '../../../Constraints/apis/userApis';
 
 const WalletComponent = lazy(() => import("./userWalletHistory"))
-// import io from 'socket.io-client';
-
-
 
 export interface ErrorResponse {
     error: string;
@@ -30,6 +27,7 @@ interface UserProfileData {
     wallet: {
         balance: string;
     };
+
 }
 
 function UserProfile() {
@@ -56,12 +54,13 @@ function UserProfile() {
                     mobile: response.data.mobile,
                     refrel: response.data.refrel,
                     joinedAt: response.data.joinedAt,
-                    totalRides: response.data.totalRides,
+                    totalRides: response.data.RideDetails.completedRides,
                     wallet: {
                         balance: response.data.wallet.balance,
                     },
                 }
                 setWalletData(response.data.wallet)
+                console.log(response.data.wallet)
                 console.log(response)
                 formik.setValues(data);
 
@@ -119,7 +118,8 @@ function UserProfile() {
             const response = await userAxios.post(userApis.updateProfile, values)
             SetReload(!reload)
             setReadOnly(!readOnly)
-            console.log(response)
+
+            dispatch(userLogin({ userId: response.data._id, mobile: response.data.mobile }));
         } catch (error) {
             console.log(error);
             SetReload(!reload)
@@ -144,7 +144,7 @@ function UserProfile() {
             {wallet ?
                 <div>
                     <Suspense fallback={<div>Loading...</div>}>
-                        <WalletComponent {...walletData} />
+                        <WalletComponent transactions={[]} {...walletData} />
                     </Suspense>
                 </div>
                 :
@@ -271,13 +271,12 @@ function UserProfile() {
                                                 <input
                                                     type="text"
                                                     name="totalRides"
-                                                    placeholder="name"
                                                     required
                                                     readOnly
                                                     value={formik.values.totalRides}
                                                     className="pl-2 outline-none rounded-lg bg-gray-100 p-2.5 sm:text-sm block  text-gray-700  mb-3 leading-tight"
                                                 />
-                                                <p className='cursor-pointer' onClick={() => navigate(userEndPoints.rides)}>Ride History</p>
+                                                <p className='cursor-pointer' onClick={() => navigate(userEndPoints.rideHistory)}>Ride History</p>
                                             </div>
 
                                             <div className='mb-4 w-full'>

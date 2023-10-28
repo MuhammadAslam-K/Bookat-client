@@ -26,8 +26,8 @@ const DateTimePickerModal: React.FC<DateTimePickerModalProps> = ({ isOpen, onClo
 
     const handleConfirm = () => {
         onSelectDate(selectedDate);
-        onClose();
         handleScheduleBooking()
+        onClose();
     };
 
     return (

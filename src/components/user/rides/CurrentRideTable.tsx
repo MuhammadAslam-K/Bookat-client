@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
-import { ErrorResponse } from "../UserProfile";
+import { ErrorResponse } from "../profile/UserProfile";
 import { userLogout } from "../../../services/redux/slices/userAuth";
 import userEndPoints from "../../../Constraints/endPoints/userEndPoints";
 import { useDispatch } from "react-redux";

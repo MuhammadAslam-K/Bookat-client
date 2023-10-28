@@ -1,14 +1,13 @@
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
 
 import { uploadImageToStorage } from '../../../services/firebase/storage';
-import { useDispatch, useSelector } from 'react-redux';
-import { setDocument } from '../../../services/redux/slices/driverAuth';
+import { useDispatch } from 'react-redux';
+import { driverLogin, setDocument } from '../../../services/redux/slices/driverAuth';
 import axios, { AxiosError } from 'axios';
-import { rootState } from '../../../utils/interfaces';
 import driverApis from '../../../Constraints/apis/driverApis';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
@@ -20,7 +19,6 @@ interface ErrorResponse {
 }
 
 function AddPersonalInfo() {
-    const documentValue = useSelector((state: rootState) => state.driver.document);
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
@@ -37,13 +35,6 @@ function AddPersonalInfo() {
     const without_error_class = "pl-2 outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm";
     const with_error_class = "pl-2 outline-none border-2 border-red-400 w-full rounded-lg p-2.5 sm:text-sm";
 
-    useEffect(() => {
-        if (documentValue) {
-            console.log("document :", documentValue)
-            navigate(driverEndPoints.addVehicleInfo)
-        }
-
-    }, [documentValue, navigate])
 
 
     const handleAadharImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +127,9 @@ function AddPersonalInfo() {
                         driverImageUrl
                     };
 
-                    await driverAxios.post(driverApis.addPersonalInfo, formData);
+                    const response = await driverAxios.post(driverApis.addPersonalInfo, formData);
+                    const { document, vehicle, driverId, vehicleType } = response.data
+                    dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
                     dispatch(setDocument())
                     toast.dismiss()
                     toast.success("Form submitted successfully")

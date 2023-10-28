@@ -1,17 +1,12 @@
 import Navbar from "../../../components/admin/AdminNavbar"
-import DataTable from "../../../components/admin/DataTable"
-import adminApis from "../../../Constraints/apis/adminApis"
+import UserDataTable from "../../../components/admin/user/UserDataTable"
 
 function UserManagementPage() {
-    const data = {
-        blockEndpoint: adminApis.blockUser,
-        getData: adminApis.getuserData,
-        role: "user"
-    }
+
     return (
         <div className="bg-gray-100">
             <Navbar />
-            <DataTable {...data} />
+            <UserDataTable />
         </div>
     )
 }

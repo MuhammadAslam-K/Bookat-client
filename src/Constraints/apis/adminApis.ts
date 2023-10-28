@@ -2,19 +2,26 @@ export default {
     login: "/admin/login",
 
     // USER
-    getuserData: "/admin/getuser",
+    getAllUsers: "/admin/getuser",
     blockUser: "/admin/block/user",
 
     // DRIVER
     blockDriver: "/admin/block/driver",
-    getDriversData: "/admin/getdrivers",
+    getDrivers: "/admin/getdrivers",
     getDriverInfo: "/admin/getdriver",
 
     rejectDriver: "/admin/reject/driver",
     approveDriver: "/admin/approve/driver",
 
     rejectVehicle: "/admin/reject/vehicle",
-    approveVehicle: "/admin/approve/vehicle"
+    approveVehicle: "/admin/approve/vehicle",
+
+    // DASHBOARD
+    dashboard: "/admin/dashboard",
+
+    // HISTORY
+    getDriverRideHistory: "/admin/history/driver",
+    getUserRideHistory: "/admin/history/user",
 
 }
 

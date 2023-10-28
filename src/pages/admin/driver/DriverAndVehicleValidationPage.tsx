@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../../components/admin/AdminNavbar'
-import DriverAndVehicleValidation from '../../../components/admin/DriverAndVehicleValidation'
+import DriverAndVehicleValidation from '../../../components/admin/driver/DriverAndVehicleValidation'
 
 function DriverAndVehicleValidationPage() {
 

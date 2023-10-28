@@ -9,17 +9,21 @@ import { userLogout } from '../../../services/redux/slices/userAuth';
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ErrorResponse } from '../UserProfile';
+import { ErrorResponse } from '../profile/UserProfile';
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
 import { Socket, io } from 'socket.io-client';
 import queryString from 'query-string';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
 
 
 interface driverData {
     name: string
-    totalRides: string
+    // totalRides: string,
+    RideDetails: {
+        completedRides: string
+    },
     vehicleDocuments: {
         vehicleModel: string
         registration: {
@@ -53,8 +57,12 @@ export interface rideDetails {
     otpVerifyed: boolean
 }
 
+interface commnet {
+    feedback: string
+    rating: string
+}
 
-function RideConfermation(props: { rideId: string | null }) {
+function CurrentRideInfo(props: { rideId: string | null }) {
 
     const { rideId } = props
 
@@ -68,6 +76,7 @@ function RideConfermation(props: { rideId: string | null }) {
     const [map, setMap] = useState<mapboxgl.Map | undefined>(undefined);
     const [driverInfo, setDriverInfo] = useState<driverData | null>(null);
     const [rideInfo, setRideInfo] = useState<rideDetails | null>(null);
+    const [feedback, setFeedback] = useState<commnet[] | null>(null);
 
     const [socket, setsocket] = useState<Socket | null>(null)
 
@@ -95,6 +104,7 @@ function RideConfermation(props: { rideId: string | null }) {
                 }
 
                 fetchDriverData(response.data.driver_id)
+                // fetchComments(response.data.driver_id)
             } catch (error) {
                 console.log(error)
                 if (axios.isAxiosError(error)) {
@@ -270,25 +280,43 @@ function RideConfermation(props: { rideId: string | null }) {
     const fetchDriverData = async (driverId: string) => {
         try {
             console.log("driverId", driverId)
-            const response = await userAxios.post(userApis.getDriverData, { driverId })
-            setDriverInfo(response.data)
+            const response = await userAxios.get(`${userApis.getDriverData}?driverId=${driverId}`)
+            setDriverInfo(response.data.driverData)
+            setFeedback(response.data.feedBacks)
             console.log("fetch driver data :", response)
         } catch (error) {
-            console.log(error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response?.data) {
-                    toast.error(axiosError.response.data.error);
-                    dispatch(userLogout())
-                    navigate(userEndPoints.login)
-
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            console.log("error in fetchDriverData", error)
+            handleErrors(error)
         }
     }
 
+    // const fetchComments = async (driverId: string) => {
+    //     try {
+    //         const response = await userAxios.post(userApis.getFeedbacks, { driverId })
+    //         // setDriverInfo(response.data)
+    //         setFeedback(response.data)
+    //         console.log("Comment data :", response)
+    //     } catch (error) {
+    //         console.log("error in fetchComments", error)
+    //         if (axios.isAxiosError(error)) {
+    //             const axiosError: AxiosError<ErrorResponse> = error;
+    //             if (axiosError.response?.data) {
+    //                 toast.error(axiosError.response.data.error);
+    //             } else {
+    //                 toast.error('Network Error occurred.');
+    //             }
+    //         }
+    //     }
+    // }
+
+    const renderStars = (rating: string) => {
+        const numberOfStars = parseInt(rating);
+        if (numberOfStars >= 1 && numberOfStars <= 5) {
+            return '⭐️'.repeat(numberOfStars);
+        } else {
+            return 'Invalid Rating';
+        }
+    }
 
     return (
         <div className="flex my-10 justify-center space-x-4">
@@ -306,7 +334,7 @@ function RideConfermation(props: { rideId: string | null }) {
                             </div>
                             <div className="p-5">
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Name : {driverInfo?.name}</p>
-                                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Total Rides : {driverInfo?.totalRides}</p>
+                                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Total Rides : {driverInfo?.RideDetails?.completedRides}</p>
 
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Vehicle : {driverInfo?.vehicleDocuments.vehicleModel}</p>
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Registration no : {driverInfo?.vehicleDocuments.registration.registrationId}</p>
@@ -324,34 +352,12 @@ function RideConfermation(props: { rideId: string | null }) {
                     <div className="overflow-x-auto p-5 scrollbar-hide" style={{ maxWidth: '100%' }}>
                         <div className="flex space-x-4">
                             {/* Review divs */}
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
-                            <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
-                                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">Noteworthy technology acquisitions 2021</h5>
-                                <p className="font-normal text-gray-700">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-                            </div>
+                            {feedback?.map((item) => (
+                                <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
+                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{renderStars(item.rating)}</h5>
+                                    <p className="font-normal text-gray-700">{item.feedback}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -364,4 +370,4 @@ function RideConfermation(props: { rideId: string | null }) {
     );
 }
 
-export default RideConfermation;
+export default CurrentRideInfo

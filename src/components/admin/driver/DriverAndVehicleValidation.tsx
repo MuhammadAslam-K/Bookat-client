@@ -1,12 +1,12 @@
 import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-import { adminAxios } from '../../Constraints/axiosInterceptors/adminAxiosInterceptors';
-import adminApis from '../../Constraints/apis/adminApis';
-import { DriverInfo } from '../../utils/interfaces';
+import { adminAxios } from '../../../Constraints/axiosInterceptors/adminAxiosInterceptors';
+import adminApis from '../../../Constraints/apis/adminApis';
+import { DriverInfo } from '../../../utils/interfaces';
 
 import { Modal, Ripple, initTE } from "tw-elements";
-import { customLoadingStyle } from '../../Constraints/customizeLoaderStyle';
+import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
 initTE({ Modal, Ripple });
 
 interface ErrorResponse {

@@ -14,7 +14,7 @@ import queryString from 'query-string';
 import 'react-datepicker/dist/react-datepicker.css';
 import DateTimePickerModal from '../DateTimeModal'; // Make sure to import the DateTimePickerModal component
 import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '../UserProfile';
+import { ErrorResponse } from '../profile/UserProfile';
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
 
@@ -27,6 +27,7 @@ export interface LocationSuggestion {
 function UserHome() {
 
     const userId = useSelector((state: rootState) => state.user.userId);
+    const mobile = useSelector((state: rootState) => state.user.mobile);
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -76,6 +77,7 @@ function UserHome() {
         setSelectedDateTime(date);
     };
 
+    // MAP BOX
     useEffect(() => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
@@ -170,6 +172,11 @@ function UserHome() {
         } else {
             console.log("Can not connect")
         }
+        return () => {
+            if (socket) {
+                socket.disconnect()
+            }
+        }
 
     }, [])
 
@@ -187,9 +194,8 @@ function UserHome() {
     })
 
 
-    const handleBookRide = async () => {
+    const handleQuickRide = async () => {
         try {
-            console.log("cab", selectedCab);
             if (!selectedCab) {
                 toast.error("Please select the cab")
             }
@@ -203,6 +209,10 @@ function UserHome() {
                         amount = suvdPrice
                     } else if (selectedCab == "Prime") {
                         amount = premiumPrice
+                    }
+                    if (!mobile) {
+                        toast.error("Update Your Mobile No for Booking Ride")
+                        return
                     }
 
                     const data = {
@@ -303,20 +313,23 @@ function UserHome() {
 
     const handleScheduleBooking = async () => {
         try {
-            const currentTime: Date = new Date();
             if (!selectedCab) {
                 toast.error("Please select cab.")
             }
 
             if (selectedDateTime) {
                 const dateTime = new Date(selectedDateTime);
+                const currentTime = new Date();
                 const timeDifference = dateTime.getTime() - currentTime.getTime();
                 const oneHourInMillis = 60 * 60 * 1000;
+                console.log("timeDifference", timeDifference)
+                console.log("oneHourInMillis", oneHourInMillis)
 
                 if (timeDifference < oneHourInMillis) {
                     toast.error("Ride must be booked at least 1 hour in advance.")
                     return false
                 }
+
             } else {
                 toast.error("Something went wrong try again")
                 return false
@@ -380,7 +393,6 @@ function UserHome() {
         }, 2000);
     };
 
-
     const handleToLocationChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setToLocation(value);
@@ -403,7 +415,7 @@ function UserHome() {
         setSuggestions([]);
     };
 
-    const backgroundImageUrl = "../../../../public/images/pexels-cottonbro-studio-4606338.jpg"
+    const backgroundImageUrl = "/images/pexels-cottonbro-studio-4606338.jpg"
     const containerStyle: React.CSSProperties = {
         width: '100%',
         height: '32rem',
@@ -634,7 +646,7 @@ function UserHome() {
                                     </div>
 
                                     <button type="button" onClick={() => SetSheduleRideModal(true)} className="ms-10 w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Schedule a Ride</button>
-                                    <button type="button" onClick={handleBookRide} className="w-full ms-10 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-black dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Confirm the Ride</button>
+                                    <button type="button" onClick={handleQuickRide} className="w-full ms-10 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-black dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Confirm the Ride</button>
 
                                 </>
 

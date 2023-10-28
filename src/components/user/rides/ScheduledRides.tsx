@@ -1,13 +1,14 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
-import { ErrorResponse } from "../UserProfile";
+import { ErrorResponse } from "../profile/UserProfile";
 import { userLogout } from "../../../services/redux/slices/userAuth";
 import userEndPoints from "../../../Constraints/endPoints/userEndPoints";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { userAxios } from "../../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../../Constraints/apis/userApis";
+import queryString from "query-string";
 
 interface rideDetail {
     driverAccepted: string;
@@ -25,14 +26,14 @@ function ScheduledRides() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [rideDetails, setRideDetails] = useState<rideDetail>()
+    const [rideDetails, setRideDetails] = useState<rideDetail[]>()
 
     useEffect(() => {
         const fetchRideDetails = async () => {
             try {
                 const response = await userAxios.get(userApis.scheduledRides)
                 console.log("response", response)
-                setRideDetails(response.data[0])
+                setRideDetails(response.data)
             } catch (error) {
                 console.log(error)
                 if (axios.isAxiosError(error)) {
@@ -50,6 +51,14 @@ function ScheduledRides() {
         fetchRideDetails()
     }, [])
 
+    const handleShowTheDriverInfo = (driverId: string, rideId: string) => {
+        const data = {
+            driverId,
+            rideId,
+        }
+        const queryStringData = queryString.stringify(data);
+        navigate(`${userEndPoints.driverInfo}?${queryStringData}`);
+    }
 
     return (
         <>
@@ -112,29 +121,39 @@ function ScheduledRides() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {rideDetails &&
-                                            <tr key={rideDetails._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    {rideDetails.pickupLocation}
+                                        {rideDetails && rideDetails.map((item) => (
+                                            <tr key={item._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
+                                                <th scope="row"
+                                                    className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap overflow-hidden overflow-ellipsis dark:text-white"
+                                                    title={item.pickupLocation}
+                                                >
+                                                    {item.pickupLocation}
+                                                </th>
+                                                <th scope="row"
+                                                    className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap overflow-hidden overflow-ellipsis dark:text-white"
+                                                    title={item.dropoffLocation}
+                                                >
+                                                    {item.dropoffLocation}
                                                 </th>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    {rideDetails.dropoffLocation}
+                                                    ₹ {item.price}
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    ₹ {rideDetails.price}
+                                                    {item.distance} km
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    {rideDetails.distance} km
+                                                    {item.status}
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    {rideDetails.status}
-                                                </td>
-                                                <td className="px-6 py-4 dark:text-white">
-                                                    {rideDetails.driverAccepted}
+                                                    {item.driverAccepted}
+                                                    {item.driverAccepted == "Accepted" &&
+                                                        <p className="cursor-pointer mt-1"
+                                                            onClick={() => handleShowTheDriverInfo(item.driver_id, item._id)}>Driver Info</p>
+                                                    }
                                                 </td>
 
                                             </tr>
-                                        }
+                                        ))}
                                     </tbody>
                                 </table>
                             </div>

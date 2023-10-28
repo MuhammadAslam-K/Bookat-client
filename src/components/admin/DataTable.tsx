@@ -227,7 +227,7 @@ function DataTable(props: { blockEndpoint: string, getData: string, role: string
                                                     {items.mobile}
                                                 </td>
                                                 <td className="px-6 py-4 dark:text-white">
-                                                    {items.totalRides}
+                                                    {items.RideDetails.completedRides}
                                                 </td>
                                                 {role === "driver" &&
                                                     "driver" in items && (

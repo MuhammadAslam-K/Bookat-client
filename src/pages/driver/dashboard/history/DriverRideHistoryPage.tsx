@@ -1,11 +1,11 @@
 import Navbar from "../../../../components/driver/Navbar"
-import RideHistory from "../../../../components/driver/history/RideHistory"
+import DriverRideHistory from "../../../../components/driver/history/DriverRideHistory"
 
 function DriverRideHistoryPage() {
     return (
         <div className=" bg-gray-100">
             <Navbar />
-            <RideHistory />
+            <DriverRideHistory />
         </div>
     )
 }

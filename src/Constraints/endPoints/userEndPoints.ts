@@ -1,16 +1,22 @@
 export default {
+    // AUTH
     login: "/login",
     signup: '/signup',
     resetpassword: "/resetpassword",
 
+    // HOME
     home: '/',
     profile: '/profile',
+
     rideconfirm: "/rideconfirm",
     payment: "/payment",
 
-    rides: "/history/ride",
-    scheduledRide: "/history/scheduledRide",
+    // HISTORY
+    rideHistory: "/history",
 
+    // RIDES
     currentRide: "/currentRide",
-    scheduledPendingRides: "/sheduledRide"
+    scheduledPendingRides: "/sheduledRide",
+
+    driverInfo: "/driverInfo",
 }
