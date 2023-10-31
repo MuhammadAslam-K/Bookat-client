@@ -1,4 +1,3 @@
-import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { adminAxios } from '../../../Constraints/axiosInterceptors/adminAxiosInterceptors';
@@ -7,11 +6,8 @@ import { DriverInfo } from '../../../utils/interfaces';
 
 import { Modal, Ripple, initTE } from "tw-elements";
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
 initTE({ Modal, Ripple });
-
-interface ErrorResponse {
-    error: string;
-}
 
 
 function DriverAndVehicleValidation(props: { id: string | null }) {
@@ -20,6 +16,9 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
     const [data, Setdata] = useState<DriverInfo>()
     const [personal, setPersonal] = useState<string>("");
     const [vehicle, setVehicle] = useState<string>("");
+
+    const [personaInfoModal, SetPerssonalInfoModal] = useState(false)
+    const [vehicleInfoModal, SetVehicleInfoModal] = useState(false)
 
 
     useEffect(() => {
@@ -30,14 +29,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
                 Setdata(response.data)
 
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response) {
-                        toast.error(axiosError.response.data.error);
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchData()
@@ -48,24 +40,19 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
         try {
             const value = {
                 email: data?.email,
-                reason: personal
+                reason: personal,
+                id: id
             }
             toast.loading('Rejecting...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminApis.rejectDriver, value)
+            await adminAxios.patch(adminApis.rejectDriver, value)
             toast.dismiss()
             toast.success("Rejected Successfully")
             setPersonal("")
+            SetPerssonalInfoModal(false)
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -73,25 +60,20 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
         try {
             const value = {
                 email: data?.email,
-                reason: vehicle
+                reason: vehicle,
+                id: id
             }
             toast.loading('Rejecting...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminApis.rejectVehicle, value)
+            await adminAxios.patch(adminApis.rejectVehicle, value)
             toast.dismiss()
             toast.success("Rejected Successfully")
+            SetVehicleInfoModal(false)
             setVehicle("")
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -104,18 +86,11 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Approving...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminApis.approveDriver, value)
+            await adminAxios.patch(adminApis.approveDriver, value)
             toast.dismiss()
             toast.success("Approved Successfully")
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -128,89 +103,41 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Approving...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.post(adminApis.approveVehicle, value)
+            await adminAxios.patch(adminApis.approveVehicle, value)
             toast.dismiss()
             toast.success("Approved Successfully")
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
     return (
         <>
-            {/* PERSONAL INFO  MODAL*/}
 
-            <div
-                data-te-modal-init
-                className="fixed left-0 top-0 z-[1055] hidden  w-full h-full overflow-y-auto overflow-x-hidden outline-none"
-                id="exampleModal"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-            >
-                <div
-                    data-te-modal-dialog-ref
-                    className="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]"
-                >
-                    <div
-                        className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col border-none bg-white bg-clip-padding text-current shadow-lg outline-none rounded-lg"
-                    >
-                        <div
-                            className="flex flex-shrink-0 items-center justify-between border-neutral-100 border-opacity-100 p-4 dark:border-opacity-100"
-                        >
-                            <button
-                                type="button"
-                                className="box-content mt-2 rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                                data-te-modal-dismiss
-                                aria-label="Close"
-                            >
-                            </button>
-                        </div>
-                        <h5
-                            className="text-xl font-medium text-center leading-normal text-neutral-800 dark:text-neutral-500"
-                            id="staticBackdropLabel">
-                            Please Enter the Reason
-                        </h5>
-                        {/* <!--Modal body--> */}
+            {personaInfoModal &&
+
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
+                    <div className="modal-content bg-white p-6 rounded-lg shadow-lg z-50">
+                        <h1 className='text-center font-semibold text-2xl'>Enter the Reason</h1>
+
                         <div className="relative flex-auto text-center p-4" data-te-modal-body-ref>
                             <textarea name="reason"
                                 placeholder='  Enter here...'
                                 required
                                 onChange={(e) => setPersonal(e.target.value)}
-                                className='w-3/4 bg-white text-blue rounded-lg shadow-lg border border-blue' ></textarea>
+                                className='w-11/12 bg-white text-blue rounded-lg shadow-lg border border-blue' ></textarea>
                         </div>
 
-                        {/* <!--Modal footer--> */}
-                        <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-                            <button
-                                type="button"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                data-te-modal-dismiss
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
-                            >
-                                Close
-                            </button>
-                            <button
-                                type="submit"
-                                className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
-                                onClick={() => handleRejectPersonalInfo()}
-                                data-te-modal-dismiss
-                            >
-                                Confirm
-                            </button>
+                        <div className="flex ms-10 w-96">
+                            <button type='button' className='p-2 px-3 border border-slate-600 rounded-lg m-2' onClick={() => handleRejectPersonalInfo()}>submit</button>
+                            <button type='button' className='p-2 px-3 border border-slate-600 rounded-lg m-2' onClick={() => SetPerssonalInfoModal(false)}>Close</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
+
+
             {/* PERSONAL INFO */}
 
             {data &&
@@ -268,11 +195,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
                                             onClick={handleApprovePersonalInfo}
                                         >Approve</button>
                                         <button type="button"
-                                            data-te-toggle="modal"
-                                            data-te-target="#exampleModal"
-                                            data-te-ripple-init
-                                            data-te-ripple-color="light"
-                                            className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Reject</button>
+                                            className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" onClick={() => SetPerssonalInfoModal(true)}>Reject</button>
 
                                     </div>
 
@@ -285,70 +208,29 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
 
             {/* VEHICLE INFO  MODAL*/}
 
-            <div
-                data-te-modal-init
-                className="fixed left-0 top-0 z-[1055] hidden  w-full h-full overflow-y-auto overflow-x-hidden outline-none"
-                id="exampleModal"
-                aria-labelledby="exampleModalLabel"
-                aria-hidden="true"
-            >
-                <div
-                    data-te-modal-dialog-ref
-                    className="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]"
-                >
-                    <div
-                        className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col border-none bg-white bg-clip-padding text-current shadow-lg outline-none rounded-lg"
-                    >
-                        <div
-                            className="flex flex-shrink-0 items-center justify-between border-neutral-100 border-opacity-100 p-4 dark:border-opacity-100"
-                        >
-                            <button
-                                type="button"
-                                className="box-content mt-2 rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                                data-te-modal-dismiss
-                                aria-label="Close"
-                            >
-                            </button>
-                        </div>
-                        <h5
-                            className="text-xl font-medium text-center leading-normal text-neutral-800 dark:text-neutral-500"
-                            id="staticBackdropLabel">
-                            Please Enter the Reason
-                        </h5>
-                        {/* <!--Modal body--> */}
+
+
+            {vehicleInfoModal &&
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
+                    <div className="modal-content bg-white p-6 rounded-lg shadow-lg z-50">
+                        <h1 className='text-center font-semibold text-2xl'>Enter the Reason</h1>
+
                         <div className="relative flex-auto text-center p-4" data-te-modal-body-ref>
                             <textarea name="reason"
                                 placeholder='  Enter here...'
                                 required
                                 onChange={(e) => setVehicle(e.target.value)}
-                                className='w-3/4 bg-white text-blue rounded-lg shadow-lg border border-blue' ></textarea>
+                                className='w-11/12 bg-white text-blue rounded-lg shadow-lg border border-blue' ></textarea>
                         </div>
 
-                        {/* <!--Modal footer--> */}
-                        <div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-                            <button
-                                type="button"
-                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                data-te-modal-dismiss
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
-                            >
-                                Close
-                            </button>
-                            <button
-                                type="submit"
-                                className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                                data-te-ripple-init
-                                data-te-ripple-color="light"
-                                onClick={() => handleRejectVehicleInfo()}
-                                data-te-modal-dismiss
-                            >
-                                Confirm
-                            </button>
+                        <div className="flex ms-10 w-96">
+                            <button type='button' className='p-2 px-3 border border-slate-600 rounded-lg m-2' onClick={() => handleRejectVehicleInfo()}>submit</button>
+                            <button type='button' className='p-2 px-3 border border-slate-600 rounded-lg m-2' onClick={() => SetVehicleInfoModal(false)}>Close</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
 
             {/* VEHICLE INFO  */}
 
@@ -399,10 +281,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
                                             onClick={handleApproveVehicleInfo}
                                             className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Approve</button>
                                         <button type="button"
-                                            data-te-toggle="modal"
-                                            data-te-target="#exampleModal"
-                                            data-te-ripple-init
-                                            data-te-ripple-color="light"
+                                            onClick={() => SetVehicleInfoModal(true)}
                                             className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Reject</button>
 
                                     </div>

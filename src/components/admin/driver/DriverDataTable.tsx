@@ -67,7 +67,7 @@ function DriverDataTable() {
     const handleBlock = async () => {
         try {
             const value = { id: Id }
-            await adminAxios.post(adminApis.blockDriver, value)
+            await adminAxios.patch(adminApis.blockDriver, value)
             setReload(!reload)
             setModal(!modal)
 
