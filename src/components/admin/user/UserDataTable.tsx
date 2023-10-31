@@ -6,7 +6,7 @@ import adminApis from "../../../Constraints/apis/adminApis";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
 initTE({ Modal, Ripple });
 
-const UserDetails = lazy(() => import("./userDetails"))
+const UserDetails = lazy(() => import("./UserDetails"))
 
 
 export interface ErrorResponse {
@@ -61,7 +61,7 @@ function UserDataTable() {
 
         try {
             const value = { id: Id }
-            await adminAxios.post(adminApis.blockUser, value)
+            await adminAxios.patch(adminApis.blockUser, value)
             setModal(!modal)
             setReload(!reload)
         } catch (error) {

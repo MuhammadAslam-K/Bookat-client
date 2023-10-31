@@ -29,7 +29,7 @@ function Dashboard() {
             }
         }
         fetchAdminDashboardData()
-    })
+    }, [])
 
     return (
         <div>

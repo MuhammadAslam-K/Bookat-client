@@ -1,24 +1,20 @@
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import * as Yup from "yup"
-import axios, { AxiosError } from "axios"
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 
 import driverApis from "../../Constraints/apis/driverApis";
 import { driverAxios } from "../../Constraints/axiosInterceptors/driverAxiosInterceptors";
-import { driverLogout, setDriverAvailable } from "../../services/redux/slices/driverAuth";
+import { setDriverAvailable } from "../../services/redux/slices/driverAuth";
 import { driverProfile } from "../../utils/interfaces";
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
 import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
+import { handleErrors } from "../../Constraints/apiErrorHandling";
 
 
-interface ErrorResponse {
-    error: string;
-}
 function Profile() {
 
     const [readOnly, SetReadOnly] = useState(true)
@@ -30,7 +26,6 @@ function Profile() {
     const without_error_class = "pl-2 border-b-4 w-full outline-none rounded-lg p-2.5 sm:text-sm appearance-none block  bg-gray-200 text-gray-700 border mb-3 leading-tight";
 
     const dispatch = useDispatch();
-    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,19 +59,7 @@ function Profile() {
 
                 formik.setValues(data);
             } catch (error) {
-                console.log(error);
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(setDriverAvailable(false))
-                        dispatch(driverLogout())
-                        navigate(driverEndPoints.login)
-
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchData()
@@ -86,19 +69,12 @@ function Profile() {
     const handleDriverAvailable = async () => {
         try {
 
-            const response = await driverAxios.post(driverApis.available)
+            const response = await driverAxios.patch(driverApis.available)
             Setreload(!reload)
             dispatch(setDriverAvailable({ available: response.data.isAvailable }))
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -169,22 +145,14 @@ function Profile() {
                     formik.setFieldValue('driverImageUrl', driverImageUrl);
                 }
 
-                await driverAxios.post(driverApis.updateProfile, values);
+                await driverAxios.patch(driverApis.updateProfile, values);
                 toast.dismiss();
                 SetReadOnly(!readOnly)
                 toast.success("Updated profile successfully");
                 Setreload(!reload)
 
             } catch (error) {
-                console.log(error);
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response) {
-                        toast.error(axiosError.response.data.error);
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             } finally {
                 formikHelpers.setSubmitting(false);
             }

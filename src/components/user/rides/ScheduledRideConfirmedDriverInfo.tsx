@@ -94,7 +94,7 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
     const handleCancelTheRide = async () => {
         try {
             const data = { driverId, rideId }
-            await userAxios.post(userApis.cancelTheRide, data)
+            await userAxios.patch(userApis.cancelTheRide, data)
             toast.success("Cancelled the Ride SuccessFully")
             navigator(userEndPoints.home)
 

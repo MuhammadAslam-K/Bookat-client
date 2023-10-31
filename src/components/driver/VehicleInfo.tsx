@@ -1,20 +1,14 @@
 import { useEffect, useState } from "react";
 import { driverAxios } from "../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import driverApis from "../../Constraints/apis/driverApis";
-import axios, { AxiosError } from "axios";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { driverLogout } from "../../services/redux/slices/driverAuth";
 import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import * as Yup from "yup"
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
-import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
+import { handleErrors } from "../../Constraints/apiErrorHandling";
 
-interface ErrorResponse {
-    error: string;
-}
+
 interface vehicleDocuments {
     registrationId: string,
     rcImageUrl: string,
@@ -33,8 +27,6 @@ function VehicleInfo() {
     const [vehicleImageName1, SetVehicleImageName1] = useState<string | null>(null);
     const [vehicleImageName2, setvehicleImageName2] = useState<string | null>(null);
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate()
     const without_error_class = "pl-2 border-b-4 w-full outline-none rounded-lg p-2.5 sm:text-sm appearance-none block  bg-gray-200 text-gray-700 border mb-3 leading-tight";
 
 
@@ -58,17 +50,7 @@ function VehicleInfo() {
 
                 formik.setValues(data);
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(driverLogout())
-                        navigate(driverEndPoints.login)
-
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchData()
@@ -134,22 +116,14 @@ function VehicleInfo() {
                 }
 
                 console.log("values", values)
-                await driverAxios.post(driverApis.updateVehicle, values);
+                await driverAxios.patch(driverApis.updateVehicle, values);
                 toast.dismiss();
                 SetReadOnly(!readOnly);
                 toast.success("Updated profile successfully");
                 Setreload(!reload)
 
             } catch (error) {
-                console.log(error);
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response) {
-                        toast.error(axiosError.response.data.error);
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             } finally {
                 formikHelpers.setSubmitting(false);
             }

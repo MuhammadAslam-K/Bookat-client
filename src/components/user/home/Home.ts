@@ -104,3 +104,11 @@ export function calculateTravelTime(distance: number | undefined, speed: number)
     }
 
 }
+
+// CHECK THE DATEA AND TIME IS ONE HOURES LESS THAN THE CURRENT DATE AND TIME
+export function isOneHourLessThanCurrent(dateTime: Date): boolean {
+    const currentDateTime = new Date();
+    const oneHourAgo = new Date(currentDateTime.getTime() - 3600000);
+
+    return dateTime.getTime() > oneHourAgo.getTime();
+}

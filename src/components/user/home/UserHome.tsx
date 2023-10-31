@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import toast from 'react-hot-toast';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates } from './Home';
+import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates, isOneHourLessThanCurrent } from './Home';
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
 import { rootState } from '../../../utils/interfaces';
@@ -210,10 +210,10 @@ function UserHome() {
                     } else if (selectedCab == "Prime") {
                         amount = premiumPrice
                     }
-                    if (!mobile) {
-                        toast.error("Update Your Mobile No for Booking Ride")
-                        return
-                    }
+                    // if (!mobile) {
+                    //     toast.error("Update Your Mobile No for Booking Ride")
+                    //     return
+                    // }
 
                     const data = {
                         latitude,
@@ -318,18 +318,23 @@ function UserHome() {
             }
 
             if (selectedDateTime) {
-                const dateTime = new Date(selectedDateTime);
-                const currentTime = new Date();
-                const timeDifference = dateTime.getTime() - currentTime.getTime();
-                const oneHourInMillis = 60 * 60 * 1000;
-                console.log("timeDifference", timeDifference)
-                console.log("oneHourInMillis", oneHourInMillis)
+                // const dateTime = new Date(selectedDateTime);
+                // const currentTime = new Date();
+                // const timeDifference = dateTime.getTime() - currentTime.getTime();
+                // const oneHourInMillis = 60 * 60 * 1000;
+                // console.log("timeDifference", timeDifference)
+                // console.log("oneHourInMillis", oneHourInMillis)
 
-                if (timeDifference < oneHourInMillis) {
+                // if (timeDifference < oneHourInMillis) {
+                //     toast.error("Ride must be booked at least 1 hour in advance.")
+                //     return false
+                // }
+
+                const result = isOneHourLessThanCurrent(selectedDateTime)
+                if (!result) {
                     toast.error("Ride must be booked at least 1 hour in advance.")
                     return false
                 }
-
             } else {
                 toast.error("Something went wrong try again")
                 return false
