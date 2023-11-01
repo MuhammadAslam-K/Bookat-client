@@ -13,3 +13,5 @@ declare module 'razorpay' {
         open(): void;
     }
 }
+
+declare module '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';

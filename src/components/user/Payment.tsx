@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
-import axios, { AxiosError } from "axios";
-import toast from "react-hot-toast";
 
-import { ErrorResponse } from "./profile/UserProfile";
 import { userAxios } from "../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../Constraints/apis/userApis";
 import { rideDetails } from "./rides/CurrentRideInfo";
 import { useNavigate } from "react-router-dom";
 import userEndPoints from "../../Constraints/endPoints/userEndPoints";
+import { handleErrors } from "../../Constraints/apiErrorHandling";
 
 declare global {
     interface Window {
@@ -42,19 +40,12 @@ function Payment(props: { rideId: string | null }) {
     useEffect(() => {
         const fetchRideInfo = async () => {
             try {
-                const response = await userAxios.post(userApis.getRideDetails, { rideId })
+                const response = await userAxios.patch(`${userApis.getRideDetails}?id=${rideId}`)
                 console.log("response ", response)
                 setRideInfo(response.data)
             } catch (error) {
-                console.log("handleConfirmOTP", error);
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response) {
-                        toast.error(axiosError.response.data.error);
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                console.log(error);
+                handleErrors(error)
             }
         }
         fetchRideInfo()
@@ -78,15 +69,8 @@ function Payment(props: { rideId: string | null }) {
                 navigate(userEndPoints.home)
             }
         } catch (error) {
-            console.log("handleConfirmOTP", error);
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            console.log(error);
+            handleErrors(error)
         }
     }
 

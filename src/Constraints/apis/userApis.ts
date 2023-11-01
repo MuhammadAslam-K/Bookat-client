@@ -18,18 +18,23 @@ export default {
 
     getDriverData: "/details/driver",
     getRideDetails: "/getridedata",
-    // getFeedbacks: "/getFeedbacks",
 
     // HISTORY,
-
     getRideHistory: "/history",
+    addToFavourite: "/favourite",
 
+    quickRideInfo: "/favourite/quickRide",
+    reScheduleTheRide: "/favourite/reScheduleRide",
+
+    // RIDE //
     scheduleTheRide: "/scheduleTheRide",
 
     payment: "/payment",
 
     currentRide: "/currentRide",
     scheduledRides: "/scheduledRides",
+
+    // FAVOURITE
 
     cancelTheRide: "/cancelride",
 
