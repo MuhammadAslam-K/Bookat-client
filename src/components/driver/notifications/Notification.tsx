@@ -70,6 +70,7 @@ function Notification() {
 
     const rejectRide = () => {
         if (socket) {
+            SetRideDetails(null)
             socket.emit("rejectedRide")
         }
     }

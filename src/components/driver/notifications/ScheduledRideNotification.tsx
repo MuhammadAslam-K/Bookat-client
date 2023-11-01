@@ -1,14 +1,12 @@
-import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import driverApis from "../../../Constraints/apis/driverApis";
-import { ErrorResponse } from "../../user/profile/UserProfile";
-import { driverLogout } from "../../../services/redux/slices/driverAuth";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
 import { rootState } from "../../../utils/interfaces";
+import { handleErrors } from "../../../Constraints/apiErrorHandling";
 
 interface rideDetails {
     _id: string;
@@ -26,8 +24,6 @@ function ScheduledRideNotification() {
 
     const driverVehicle = useSelector((state: rootState) => state.driver.vehicleType)
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const [rideDetails, setRideDetails] = useState<rideDetails[]>()
     const [reload, setReload] = useState(false)
@@ -43,16 +39,7 @@ function ScheduledRideNotification() {
                 setRideDetails(response.data)
             } catch (error) {
                 console.log(error)
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(driverLogout())
-                        navigate(driverEndPoints.login)
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchRideDetails()
@@ -98,14 +85,7 @@ function ScheduledRideNotification() {
             }
         } catch (error) {
             console.log(error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response?.data) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 

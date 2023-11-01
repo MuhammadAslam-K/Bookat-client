@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import toast from 'react-hot-toast';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates, handlePrice, isOneHourGreater } from './Home';
 import io, { Socket } from 'socket.io-client';
@@ -13,8 +15,6 @@ import { userLogout } from '../../../services/redux/slices/userAuth';
 import queryString from 'query-string';
 import 'react-datepicker/dist/react-datepicker.css';
 import DateTimePickerModal from '../DateTimeModal'; // Make sure to import the DateTimePickerModal component
-import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '../profile/UserProfile';
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
@@ -62,9 +62,6 @@ function UserHome() {
 
     const [amount, SetAmount] = useState<string>('')
     const [carData, SetCarData] = useState<carData[]>()
-    // const [standardPrice, SetStandardPrice] = useState<string>("");
-    // const [suvdPrice, SetSuvdPrice] = useState<string>("");
-    // const [premiumPrice, SetPremiumPrice] = useState<string>("");
 
 
     const [distance, SetDistance] = useState<string>("");
@@ -81,9 +78,9 @@ function UserHome() {
     const [modal, setmodal] = useState(false)
 
     const [sheduledRideModal, SetSheduleRideModal] = useState(false);
-    const [selectedDateTime, setSelectedDateTime] = useState(null);
+    const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(null);
 
-    const handleDateSelect = (date) => {
+    const handleDateSelect = (date: Date) => {
         console.log("date", date)
         setSelectedDateTime(date);
     };
@@ -136,6 +133,7 @@ function UserHome() {
             }
 
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [latitude, longitude]);
 
 
@@ -189,6 +187,7 @@ function UserHome() {
             }
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleCancleRide = () => {
@@ -227,21 +226,7 @@ function UserHome() {
             else {
                 if (location) {
 
-                    const data = {
-                        latitude,
-                        longitude,
-                        vehicle: selectedCab,
-                        amount,
-                        userId,
-                        fromLocation,
-                        toLocation,
-                        distance,
-                        duration,
-                        fromLocationLat,
-                        fromLocationLong,
-                        toLocationLat,
-                        toLocationLong,
-                    }
+                    const data = { latitude, longitude, vehicle: selectedCab, amount, userId, fromLocation, toLocation, distance, duration, fromLocationLat, fromLocationLong, toLocationLat, toLocationLong, }
                     if (userId) {
                         setmodal(true)
                         socket?.emit("confirmRide", data)
@@ -310,9 +295,6 @@ function UserHome() {
                 if (distance) {
                     const distanceRounded = distance.toFixed(0);
                     SetDistance(distanceRounded);
-                    // SetStandardPrice((distance * 50).toFixed(0));
-                    // SetSuvdPrice((distance * 80).toFixed(0));
-                    // SetPremiumPrice((distance * 100).toFixed(0));
                 }
             } else {
                 toast.error('Location not found');
@@ -330,20 +312,7 @@ function UserHome() {
             }
 
             if (selectedDateTime) {
-                // const dateTime = new Date(selectedDateTime);
-                // const currentTime = new Date();
-                // const timeDifference = dateTime.getTime() - currentTime.getTime();
-                // const oneHourInMillis = 60 * 60 * 1000;
-                // console.log("timeDifference", timeDifference)
-                // console.log("oneHourInMillis", oneHourInMillis)
-
-                // if (timeDifference < oneHourInMillis) {
-                //     toast.error("Ride must be booked at least 1 hour in advance.")
-                //     return false
-                // }
-
                 const result = isOneHourGreater(selectedDateTime)
-                console.log(result)
                 if (!result) {
                     toast.error("Ride must be booked at least 1 hour in advance.")
                     return false
@@ -371,16 +340,7 @@ function UserHome() {
             toast.success("Successfully booked the ride.");
         } catch (error) {
             console.log(error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response?.data) {
-                    toast.error(axiosError.response.data.error);
-                    dispatch(userLogout())
-                    navigate(userEndPoints.login)
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -564,7 +524,6 @@ function UserHome() {
                                                 d="M256 0c17.7 0 32 14.3 32 32V66.7C368.4 80.1 431.9 143.6 445.3 224H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H445.3C431.9 368.4 368.4 431.9 288 445.3V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.3C143.6 431.9 80.1 368.4 66.7 288H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H66.7C80.1 143.6 143.6 80.1 224 66.7V32c0-17.7 14.3-32 32-32zM128 256a128 128 0 1 0 256 0 128 128 0 1 0 -256 0zm128-80a80 80 0 1 1 0 160 80 80 0 1 1 0-160z"
                                             />
                                         </svg>
-
 
                                     </div>
                                     <ul className="text-xs absolute left-0 right-0 z-10  rounded-xl bg-gray-100 shadow-2xl w-full overflow-hidden">

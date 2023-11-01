@@ -21,7 +21,7 @@ interface Ride {
 function UserDetails(props: { userId: string }) {
 
     const { userId } = props
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>()
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>([])
     const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[] | null>(null)
     const [quickRides, SetQuickRides] = useState(true)
 

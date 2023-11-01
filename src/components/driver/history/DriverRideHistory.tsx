@@ -20,7 +20,7 @@ interface Ride {
 function DriverRideHistory() {
 
 
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>()
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>([])
     const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[] | null>(null)
     const [quickRides, SetQuickRides] = useState(true)
 

@@ -21,7 +21,7 @@ interface Ride {
 function DriverRideHistory(props: { driverId: string }) {
 
     const { driverId } = props
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>()
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>([])
     const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[]>()
     const [quickRides, SetQuickRides] = useState(true)
 
