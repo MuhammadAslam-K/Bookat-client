@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { handleErrors } from '../../../Constraints/apiErrorHandling'
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import driverApis from '../../../Constraints/apis/driverApis';
 
+import DataTable from "react-data-table-component"
 
 interface Ride {
     _id: string;
@@ -19,7 +20,7 @@ interface Ride {
 function DriverRideHistory() {
 
 
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[] | null>(null)
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>()
     const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[] | null>(null)
     const [quickRides, SetQuickRides] = useState(true)
 
@@ -42,129 +43,85 @@ function DriverRideHistory() {
         }
     }
 
+    const columns = [
+
+        {
+            name: 'From',
+            selector: (row: Ride) => row.pickupLocation,
+        },
+        {
+            name: 'To',
+            selector: (row: Ride) => row.dropoffLocation,
+        },
+        {
+            name: 'Amount',
+            selector: (row: Ride) => row.price,
+        },
+        {
+            name: 'Distance',
+            selector: (row: Ride) => row.distance,
+        },
+        {
+            name: 'Status',
+            selector: (row: Ride) => row.status,
+        },
+
+    ]
+
     return (
-        <div>
-            <div className="flex h-screen justify-center mt-9" >
+        <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+            <div className="border-b border-gray-200">
+                <ul className="flex" role="tablist">
+                    <li className="mr-1">
+                        <p
+                            onClick={() => SetQuickRides(true)}
+                            className={quickRides ? current_tab : pre_tab}
+                            role="tab"
+                            aria-selected="true"
+                        >
+                            Quick Rides
+                        </p>
+                    </li>
 
-                <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
-                    <div className="w-full ">
-                        <div className="p-8">
-                            <div className="p-8">
-                            </div>
-                            <div className="border-b border-gray-200">
-                                <ul className="flex" role="tablist">
-                                    <li className="mr-1">
-                                        <p
-                                            onClick={() => SetQuickRides(true)}
-                                            className={quickRides ? current_tab : pre_tab}
-                                            role="tab"
-                                            aria-selected="true"
-                                        >
-                                            Quick Rides
-                                        </p>
-                                    </li>
+                    <li className="mr-1">
+                        <p onClick={() => SetQuickRides(false)}
+                            className={quickRides ? pre_tab : current_tab}
+                            role="tab"
+                            aria-selected="true"
+                        >
+                            Scheduled Rides
+                        </p>
+                    </li>
 
-                                    <li className="mr-1">
-                                        <p onClick={() => SetQuickRides(false)}
-                                            className={quickRides ? pre_tab : current_tab}
-                                            role="tab"
-                                            aria-selected="true"
-                                        >
-                                            Scheduled Rides
-                                        </p>
-                                    </li>
+                </ul>
+            </div>
 
-                                </ul>
-                            </div>
+            {quickRides ?
+                <Suspense>
+                    <DataTable
+                        style={{ zIndex: '-1' }}
+                        columns={columns}
+                        data={quickRidesInfo}
+                        fixedHeader
+                        highlightOnHover
+                        pagination
+                    />
+                </Suspense>
+                :
 
-                            <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
-                                <table className="w-full text-sm text-left text-white  dark:text-white">
-                                    <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-slate-500 dark:text-white border-b-white border-4 font-bold">
-
-                                        <tr>
-                                            <th scope="col" className="px-6 py-3">
-                                                From
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                To
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Amount
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                Distance
-                                            </th>
-                                            <th scope="col" className="px-6 py-3">
-                                                status
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    {quickRides ?
-                                        <tbody>
-                                            {quickRidesInfo && quickRidesInfo.map((items) => (
-
-                                                <tr key={items._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                                    <th scope="row"
-                                                        className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap overflow-hidden overflow-ellipsis dark:text-white"
-                                                        title={items.pickupLocation}
-                                                    >
-                                                        {items.pickupLocation}
-                                                    </th>
-                                                    <th scope="row"
-                                                        className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap overflow-hidden overflow-ellipsis dark:text-white"
-                                                        title={items.dropoffLocation}
-                                                    >
-                                                        {items.dropoffLocation}
-                                                    </th>
-                                                    <td className="px-6 py-4 dark:text-white">
-                                                        ₹ {items.price}
-                                                    </td>
-                                                    <td className="px-6 py-4 dark:text-white">
-                                                        {items.distance} km
-                                                    </td>
-                                                    <td className="px-6 py-4 dark:text-white">
-                                                        {items.status}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                        :
-                                        <tbody>
-                                            {scheduledRidesInfo && scheduledRidesInfo.map((items) => (
-
-                                                <tr key={items._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                                    <th scope="row"
-                                                        className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap overflow-hidden overflow-ellipsis dark:text-white"
-                                                        title={items.pickupLocation}
-                                                    >
-                                                        {items.pickupLocation}
-                                                    </th>
-                                                    <th scope="row"
-                                                        className="px-6 py-4 max-w-xs font-medium text-gray-900 whitespace-nowrap overflow-hidden overflow-ellipsis dark:text-white"
-                                                        title={items.dropoffLocation}
-                                                    >
-                                                        {items.dropoffLocation}
-                                                    </th>
-                                                    <td className="px-6 py-4 dark:text-white">
-                                                        ₹ {items.price}
-                                                    </td>
-                                                    <td className="px-6 py-4 dark:text-white">
-                                                        {items.distance} km
-                                                    </td>
-                                                    <td className="px-6 py-4 dark:text-white">
-                                                        {items.status}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    }
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div >
+                <Suspense>
+                    {scheduledRidesInfo &&
+                        <DataTable
+                            style={{ zIndex: '-1' }}
+                            columns={columns}
+                            data={scheduledRidesInfo}
+                            fixedHeader
+                            highlightOnHover
+                            pagination
+                        />
+                    }
+                </Suspense>
+            }
         </div>
     )
 }

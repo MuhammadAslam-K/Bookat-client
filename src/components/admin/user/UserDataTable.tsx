@@ -1,10 +1,10 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { Modal, Ripple, initTE } from "tw-elements";
-import { UserInfo } from "../../../utils/interfaces";
 import { adminAxios } from "../../../Constraints/axiosInterceptors/adminAxiosInterceptors";
 import adminApis from "../../../Constraints/apis/adminApis";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
 initTE({ Modal, Ripple });
+import DataTable from "react-data-table-component"
 
 const UserDetails = lazy(() => import("./UserDetails"))
 
@@ -13,16 +13,26 @@ export interface ErrorResponse {
     error: string;
 }
 
+interface user {
+    _id: string;
+    name: string;
+    email: string;
+    mobile: string;
+    block: boolean;
+    RideDetails: {
+        completedRides: number;
+    }
+}
+
 
 function UserDataTable() {
 
-    const [data, Setdata] = useState<(UserInfo)[]>()
-    const [Id, SetId] = useState("")
+    const [data, Setdata] = useState<(user)[]>()
+
     const [searchTerm, setSearchTerm] = useState("");
     const [userId, SetUserId] = useState("");
 
     const [reload, setReload] = useState(false);
-    const [modal, setModal] = useState(false);
     const [userDetails, setUserDetails] = useState(false);
 
 
@@ -34,7 +44,7 @@ function UserDataTable() {
                 const response = await adminAxios.get(adminApis.getAllUsers)
                 console.log(response);
 
-                const Data: UserInfo[] = response.data;
+                const Data: user[] = response.data;
                 Setdata(Data)
             } catch (error) {
                 handleErrors(error)
@@ -43,32 +53,74 @@ function UserDataTable() {
         fetchData()
     }, [reload])
 
-    const filterData = () => {
-        console.log(searchTerm)
-        if (searchTerm == "") {
-            setReload(!reload)
-        }
-        const filteredData = data?.filter((item) =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        console.log("filteredData", filteredData)
-        Setdata(filteredData)
-    }
+
+
+    const filteredData = data?.filter((item) =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
 
 
-    const handleBlock = async () => {
+    const handleBlock = async (id: user) => {
 
         try {
-            const value = { id: Id }
-            await adminAxios.patch(adminApis.blockUser, value)
-            setModal(!modal)
+            await adminAxios.patch(`${adminApis.blockUser}?id=${id._id}`)
+
             setReload(!reload)
         } catch (error) {
+            console.log(error)
             handleErrors(error)
         }
     }
 
+    const getButtonColor = (user: user) => {
+        const red = "text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  m-2"
+        const blue = "text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  m-2"
+        return user.block ? red : blue;
+    };
+
+
+    const columns = [
+
+        {
+            name: 'Name',
+            selector: (row: user) => row.name,
+        },
+        {
+            name: 'Email',
+            selector: (row: user) => row.email,
+        },
+        {
+            name: 'Mobile',
+            selector: (row: user) => row.mobile,
+        },
+        {
+            name: 'Status',
+            cell: (row: user) => (
+                <button
+                    className={getButtonColor(row)}
+                    onClick={() => handleBlock(row)}
+                >
+                    {row.block ? 'Unblock' : 'Block'}
+                </button>
+
+            ),
+        },
+        {
+            name: 'Completed Rides',
+            selector: (row: user) => row.RideDetails.completedRides,
+        },
+        {
+            name: 'View Details',
+            cell: (row: user) => (
+                <p className="cursor-pointer"
+                    onClick={() => { setUserDetails(true), SetUserId(row._id) }}
+                >
+                    Ride History
+                </p>
+            ),
+        },
+    ]
 
     return (
         <>
@@ -79,109 +131,29 @@ function UserDataTable() {
                     </Suspense>
                 </div>
                 :
+                <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
 
-                <div className="flex h-screen justify-center mt-9" >
+                    <input
+                        type="text"
+                        placeholder=" Search by Name"
+                        value={searchTerm}
+                        className="border-2 border-gray-400 rounded-lg p-0.5"
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
 
-                    {modal &&
-
-                        <div className="fixed inset-0 flex items-center justify-center z-50">
-                            <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
-                            <div className="modal-content bg-white p-6 rounded-lg shadow-lg z-50">
-                                <h1 className='text-center font-semibold text-2xl'>Are You Sure</h1>
-
-                                <div className="mt-5 w-60 flex justify-center">
-                                    <button type='button' className='p-2 px-3 border border-slate-600 rounded-lg m-2' onClick={() => handleBlock()}>Confirm</button>
-                                    <button type='button' className='p-2 px-3 border border-slate-600 rounded-lg m-2' onClick={() => setModal(!modal)} >cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-
-                    <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
-                        <div className="w-full ">
-                            <div className="p-8">
-                                <div className="p-8">
-                                    <input
-                                        type="text"
-                                        placeholder="Search by name"
-                                        value={searchTerm}
-                                        onChange={(e) => {
-                                            setSearchTerm(e.target.value);
-                                            filterData();
-                                        }}
-                                        className="w-full px-4 py-2 mb-4 border rounded-lg"
-                                    />
-                                </div>
-                                <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
-                                    <table className="w-full text-sm text-left text-white  dark:text-white">
-                                        <thead className="text-xs text-white uppercase bg-gray-700 dark:bg-slate-500 dark:text-white border-b-white border-4 font-bold">
-
-                                            <tr>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Name
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Email Id
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Phone No
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Total Rides
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Block
-                                                </th>
-
-                                                <th scope="col" className="px-6 py-3">
-                                                    View Details
-                                                </th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            {data && data.map((items) => (
-                                                <tr key={items._id} className=" bg-gray-700 dark:bg-slate-400 border-b  dark:border-gray-900  dark:hover:bg-gray-500">
-                                                    <th scope="row" className="ps-4 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                        {items.name}
-                                                    </th>
-                                                    <td className="ps-4 py-1 dark:text-white">
-                                                        {items.email}
-                                                    </td>
-                                                    <td className="ps-4 py-1 dark:text-white">
-                                                        {items.mobile}
-                                                    </td>
-                                                    <td className="ps-4 py-1 dark:text-white">
-                                                        {items.RideDetails.completedRides}
-                                                    </td>
-
-                                                    <td className="ps-4 py-1 dark:text-white" onClick={() => { SetId(items._id); setModal(!modal) }}>
-                                                        {items.block ?
-                                                            <button type="button"
-                                                                className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Unblock</button>
-                                                            :
-                                                            <button type="button"
-                                                                className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Block</button>
-                                                        }
-                                                    </td>
-                                                    <td className="ps-4 py-1 dark:text-white cursor-pointer"
-                                                        onClick={() => { SetUserId(items._id), setUserDetails(true) }}
-                                                    >
-                                                        Ride History
-                                                    </td>
-
-                                                </tr>
-                                            ))}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div >
+                    <Suspense>
+                        {filteredData && filteredData.length > 0 && (
+                            <DataTable
+                                style={{ zIndex: '-1' }}
+                                columns={columns}
+                                data={filteredData}
+                                fixedHeader
+                                highlightOnHover
+                                pagination
+                            />
+                        )}
+                    </Suspense>
+                </div>
             }
         </>
     );

@@ -142,7 +142,7 @@ function UserProfile() {
         <>
 
             {wallet ?
-                <div>
+                <div className='bg-gray-100 h-screen'>
                     <Suspense fallback={<div>Loading...</div>}>
                         <WalletComponent transactions={[]} {...walletData} />
                     </Suspense>

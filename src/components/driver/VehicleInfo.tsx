@@ -19,10 +19,16 @@ interface vehicleDocuments {
     vehicleImageUrl2: string,
 }
 
+interface cab {
+    cabType: string
+}
+
 function VehicleInfo() {
 
     const [readOnly, SetReadOnly] = useState(true)
     const [reload, Setreload] = useState(true)
+
+    const [cabData, SetCabData] = useState<cab[]>()
     const [rcImagesName, setRcImagesName] = useState<string | null>(null);
     const [vehicleImageName1, SetVehicleImageName1] = useState<string | null>(null);
     const [vehicleImageName2, setvehicleImageName2] = useState<string | null>(null);
@@ -36,7 +42,8 @@ function VehicleInfo() {
                 const response = await driverAxios.get(driverApis.vehicle)
 
                 console.log(response)
-                const responseData = response.data.vehicleDocuments
+                SetCabData(response.data.cabs)
+                const responseData = response.data.vehicle.vehicleDocuments
 
                 const data: vehicleDocuments = {
                     registrationId: responseData.registration.registrationId,
@@ -116,13 +123,14 @@ function VehicleInfo() {
                 }
 
                 console.log("values", values)
-                await driverAxios.patch(driverApis.updateVehicle, values);
+                await driverAxios.post(driverApis.updateVehicle, values);
                 toast.dismiss();
                 SetReadOnly(!readOnly);
                 toast.success("Updated profile successfully");
                 Setreload(!reload)
 
             } catch (error) {
+                console.log(error)
                 handleErrors(error)
             } finally {
                 formikHelpers.setSubmitting(false);
@@ -132,7 +140,7 @@ function VehicleInfo() {
     });
 
 
-    // EDIT USER
+
     const handleRcImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files && e.target.files[0];
 
@@ -254,51 +262,24 @@ function VehicleInfo() {
                                     </label>
                                     <div className="pl-2 flex outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm">
                                         <div className="flex">
-                                            <div className="flex items-center mr-4">
-                                                <input
-                                                    id="inline-radio-mini"
-                                                    type="radio"
-                                                    name="vehicleType"
-                                                    value="mini"
-                                                    disabled={readOnly}
-                                                    checked={formik.values.vehicleType === "mini"}
-                                                    onChange={formik.handleChange}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                                <label htmlFor="inline-radio-mini" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">
-                                                    Mini
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center mr-4">
-                                                <input
-                                                    id="inline-radio-suv"
-                                                    type="radio"
-                                                    name="vehicleType"
-                                                    value="SUV"
-                                                    disabled={readOnly}
-                                                    checked={formik.values.vehicleType === "SUV"}
-                                                    onChange={formik.handleChange}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                                <label htmlFor="inline-radio-suv" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">
-                                                    SUV
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center mr-4">
-                                                <input
-                                                    id="inline-radio-prime"
-                                                    type="radio"
-                                                    name="vehicleType"
-                                                    value="Prime"
-                                                    disabled={readOnly}
-                                                    checked={formik.values.vehicleType === "Prime"}
-                                                    onChange={formik.handleChange}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                                <label htmlFor="inline-radio-prime" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">
-                                                    Prime
-                                                </label>
-                                            </div>
+                                            {cabData && cabData.map((items) => (
+
+                                                <div className="flex items-center mr-4">
+                                                    <input
+                                                        id={`inline-radio-${items.cabType}`}
+                                                        type="radio"
+                                                        name="vehicleType"
+                                                        value={items.cabType}
+                                                        disabled={readOnly}
+                                                        checked={formik.values.vehicleType == items.cabType}
+                                                        onChange={formik.handleChange}
+                                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    />
+                                                    <label htmlFor={`inline-radio-${items.cabType}`} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">
+                                                        {items.cabType}
+                                                    </label>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>

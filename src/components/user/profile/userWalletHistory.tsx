@@ -1,9 +1,13 @@
-import { Modal, Ripple, initTE } from "tw-elements";
-initTE({ Modal, Ripple });
+import { Suspense } from "react";
+import DataTable from "react-data-table-component"
 
 
-
-
+interface wallet {
+    date: Date,
+    amount: string,
+    status: string,
+    details: string,
+}
 
 function WalletHistory(props: { transactions: []; }) {
 
@@ -23,9 +27,45 @@ function WalletHistory(props: { transactions: []; }) {
         return `${formattedDate} ${formattedTime}`;
     }
 
+    const columns = [
+
+        {
+            name: 'Date',
+            selector: (row: wallet) => formatDate(row.date),
+        },
+        {
+            name: 'Amount',
+            selector: (row: wallet) => row.amount,
+        },
+        {
+            name: 'Status',
+            selector: (row: wallet) => (
+                <p
+                    className={row.status == "Credited" ? 'text-green-600' : 'text-red-600'}
+                >
+                    {row.status}
+                </p>
+            ),
+        },
+        {
+            name: 'Details',
+            selector: (row: wallet) => row.details,
+        },
+    ]
+
     return (
-        <>
-            <div className="flex h-screen justify-center mt-9" >
+        <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+            <Suspense>
+                <DataTable
+                    style={{ zIndex: '-1' }}
+                    columns={columns}
+                    data={transactions}
+                    fixedHeader
+                    highlightOnHover
+                    pagination
+                />
+            </Suspense>
+            {/* <div className="flex h-screen justify-center mt-9" >
                 <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                     <div className="w-full ">
                         <div className="p-8">
@@ -75,8 +115,8 @@ function WalletHistory(props: { transactions: []; }) {
                         </div>
                     </div>
                 </div>
-            </div >
-        </>
+            </div > */}
+        </div>
     );
 }
 

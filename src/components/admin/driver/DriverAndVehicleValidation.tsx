@@ -24,8 +24,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-
-                const response: DriverInfo = await adminAxios.post(adminApis.getDriverInfo, { id: id })
+                const response: DriverInfo = await adminAxios.get(`${adminApis.getDriverInfo}/?id=${id}`)
                 Setdata(response.data)
 
             } catch (error) {
@@ -46,7 +45,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Rejecting...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.patch(adminApis.rejectDriver, value)
+            await adminAxios.post(adminApis.rejectDriver, value)
             toast.dismiss()
             toast.success("Rejected Successfully")
             setPersonal("")
@@ -66,7 +65,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Rejecting...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.patch(adminApis.rejectVehicle, value)
+            await adminAxios.post(adminApis.rejectVehicle, value)
             toast.dismiss()
             toast.success("Rejected Successfully")
             SetVehicleInfoModal(false)
@@ -86,7 +85,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Approving...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.patch(adminApis.approveDriver, value)
+            await adminAxios.post(adminApis.approveDriver, value)
             toast.dismiss()
             toast.success("Approved Successfully")
         } catch (error) {
@@ -103,7 +102,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             toast.loading('Approving...', {
                 style: customLoadingStyle,
             });
-            await adminAxios.patch(adminApis.approveVehicle, value)
+            await adminAxios.post(adminApis.approveVehicle, value)
             toast.dismiss()
             toast.success("Approved Successfully")
         } catch (error) {
