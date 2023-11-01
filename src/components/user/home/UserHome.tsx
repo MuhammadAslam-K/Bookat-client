@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import toast from 'react-hot-toast';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates, isOneHourLessThanCurrent } from './Home';
+import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates, handlePrice, isOneHourGreater } from './Home';
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
 import { rootState } from '../../../utils/interfaces';
@@ -17,6 +17,7 @@ import axios, { AxiosError } from 'axios';
 import { ErrorResponse } from '../profile/UserProfile';
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
 
 export interface LocationSuggestion {
@@ -24,10 +25,17 @@ export interface LocationSuggestion {
     place_name: string;
 }
 
+interface carData {
+    cabType: string,
+    maxPersons: string,
+    price: string,
+    image: string,
+    drivers: []
+}
+
 function UserHome() {
 
     const userId = useSelector((state: rootState) => state.user.userId);
-    const mobile = useSelector((state: rootState) => state.user.mobile);
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -52,9 +60,12 @@ function UserHome() {
     const [fromLocationSuggestions, setFromLocationSuggestions] = useState<LocationSuggestion[]>([]);
     const [toLocationSuggestions, setToLocationSuggestions] = useState<LocationSuggestion[]>([]);
 
-    const [standardPrice, SetStandardPrice] = useState<string>("");
-    const [suvdPrice, SetSuvdPrice] = useState<string>("");
-    const [premiumPrice, SetPremiumPrice] = useState<string>("");
+    const [amount, SetAmount] = useState<string>('')
+    const [carData, SetCarData] = useState<carData[]>()
+    // const [standardPrice, SetStandardPrice] = useState<string>("");
+    // const [suvdPrice, SetSuvdPrice] = useState<string>("");
+    // const [premiumPrice, SetPremiumPrice] = useState<string>("");
+
 
     const [distance, SetDistance] = useState<string>("");
     const [duration, SetDuration] = useState<number>(0);
@@ -193,6 +204,20 @@ function UserHome() {
         }
     })
 
+    // CAR DATA
+    useEffect(() => {
+        const fetchCabData = async () => {
+            try {
+                const response = await userAxios.get(userApis.getCabData)
+                console.log(response.data)
+                SetCarData(response.data)
+            } catch (error) {
+                handleErrors(error)
+            }
+        }
+        fetchCabData()
+    }, [])
+
 
     const handleQuickRide = async () => {
         try {
@@ -201,19 +226,6 @@ function UserHome() {
             }
             else {
                 if (location) {
-                    let amount
-
-                    if (selectedCab == "Standard") {
-                        amount = standardPrice
-                    } else if (selectedCab == "SUV") {
-                        amount = suvdPrice
-                    } else if (selectedCab == "Prime") {
-                        amount = premiumPrice
-                    }
-                    // if (!mobile) {
-                    //     toast.error("Update Your Mobile No for Booking Ride")
-                    //     return
-                    // }
 
                     const data = {
                         latitude,
@@ -298,9 +310,9 @@ function UserHome() {
                 if (distance) {
                     const distanceRounded = distance.toFixed(0);
                     SetDistance(distanceRounded);
-                    SetStandardPrice((distance * 50).toFixed(0));
-                    SetSuvdPrice((distance * 80).toFixed(0));
-                    SetPremiumPrice((distance * 100).toFixed(0));
+                    // SetStandardPrice((distance * 50).toFixed(0));
+                    // SetSuvdPrice((distance * 80).toFixed(0));
+                    // SetPremiumPrice((distance * 100).toFixed(0));
                 }
             } else {
                 toast.error('Location not found');
@@ -330,7 +342,8 @@ function UserHome() {
                 //     return false
                 // }
 
-                const result = isOneHourLessThanCurrent(selectedDateTime)
+                const result = isOneHourGreater(selectedDateTime)
+                console.log(result)
                 if (!result) {
                     toast.error("Ride must be booked at least 1 hour in advance.")
                     return false
@@ -338,17 +351,6 @@ function UserHome() {
             } else {
                 toast.error("Something went wrong try again")
                 return false
-            }
-
-
-            let amount: string | undefined;
-
-            if (selectedCab == "Standard") {
-                amount = standardPrice.toString();
-            } else if (selectedCab == "SUV") {
-                amount = suvdPrice.toString();
-            } else if (selectedCab == "Prime") {
-                amount = premiumPrice.toString();
             }
 
 
@@ -420,7 +422,11 @@ function UserHome() {
         setSuggestions([]);
     };
 
-    const backgroundImageUrl = "/images/pexels-cottonbro-studio-4606338.jpg"
+    const backgroundImageUrl = "../../../../public/images/pexels-ketut-subiyanto-4429505.jpg"
+    const backgroundImageUrl1 = "../../../../public/images/pexels-jeshootscom-13861.jpg"
+    const backgroundImageUrl2 = "../../../../public/images/pexels-yan-krukau-8867434.jpg"
+    const backgroundImageUrl3 = "../../../../public/images/pexels-cottonbro-studio-4606338.jpg"
+
     const containerStyle: React.CSSProperties = {
         width: '100%',
         height: '32rem',
@@ -436,16 +442,16 @@ function UserHome() {
             <div className="w-full bg-cover bg-center" style={containerStyle}>
                 <div className="flex items-center justify-center h-full w-full bg-gray-900 bg-opacity-50">
                     <div className="text-center">
-                        {/* <h1 className="text-white text-2xl font-semibold uppercase md:text-3xl">Find Your Nearest Salon Through */}
-                        {/* <p className="underline text-white">Marke-Barber</p> */}
-                        {/* </h1> */}
+                        <h1 className="text-white text-2xl font-semibold uppercase md:text-3xl">Your Journey, Our Destination Where Every Mile Matters
+                            <p className="underline text-white">Book@</p>
+                        </h1>
                     </div>
                 </div>
             </div>
 
             <h1 className="text-3xl font-bold text-blue-800 justify-center flex mt-10 mb-3">Book a safe ride!</h1>
             <div className="flex justify-center">
-                <div className="flex w-10/12 h-fit mb-44  justify-center items-center rounded-3xl overflow-hidden shadow-2xl">
+                <div className="flex w-10/12 h-fit justify-center items-center rounded-3xl overflow-hidden shadow-2xl">
                     {modal &&
                         <div className="fixed inset-0 flex items-center justify-center z-50">
                             <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
@@ -479,7 +485,7 @@ function UserHome() {
 
                     <div className="w-full flex m-10 space-x-32">
 
-                        <form className="ms-20 m-10" onSubmit={handleListCabs}>
+                        <form className="ms-20 m-10" onSubmit={handleListCabs} style={{ maxWidth: "270px" }}>
                             <div className="justify-start w-full ms-10 items-start flex flex-col">
                                 <div className="w-full mb-6 md:mb-0 relative">
 
@@ -590,64 +596,37 @@ function UserHome() {
                             {showCabs &&
                                 <>
                                     <div className="shadow-inner h-10 ms-10 mt-5 p-2 border border-slate-500 w-full rounded-2xl justify-center text-center my-5">Distance :{distance}km</div>
-                                    <div className="flex ms-6 w-full flex-col overflow-y-scroll max-h-32 mt-5 scrollbar-hide">
-                                        <div className="max-h-28 p-4 mx-4 border rounded-lg mb-4">
-                                            <div className="flex">
-                                                <input type="radio" name="Standard" value="Standard" id="cab1" onClick={() => SetSelectedCab("Standard")} />
-                                                <p className="felx ms-3">Standard</p>
-                                                <p className='flex ms-6'>₹ {standardPrice}</p>
-                                            </div>
-                                            <label htmlFor="cab1" className="cursor-pointer flex">
-                                                <img src="https://www.svgrepo.com/show/408292/car-white.svg" alt="Cab 1" className="w-32 h-24" />
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    height="1.5em"
-                                                    viewBox="0 0 320 512"
-                                                    className='mt-9'
-                                                >
-                                                    <path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z" />
-                                                </svg>
-                                                <p className='mt-10 ms-2'>4</p>
-                                            </label>
-                                        </div>
 
-                                        <div className="max-h-28 p-4 mx-4 border rounded-lg mb-4">
-                                            <div className="flex">
-                                                <input type="radio" name="SUV" value="SUV" id="cab2" onClick={() => SetSelectedCab("SUV")} />
-                                                <p className="text-center ms-3">SUV</p>
-                                                <p className='flex ms-14'>₹ {suvdPrice}</p>
-                                            </div>
-                                            <label htmlFor="cab2 " className="cursor-pointer flex">
-                                                <img src="https://www.svgrepo.com/show/408290/car-white.svg" alt="Cab 2" className="w-32 h-20" />
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    height="1.5em"
-                                                    viewBox="0 0 320 512"
-                                                    className='mt-9'
-                                                >
-                                                    <path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z" />
-                                                </svg>
-                                                <p className='mt-10 ms-2'>7</p>
-                                            </label>
-                                        </div>
+                                    <div className="flex ms-6 w-full max-w-xs overflow-x-scroll mt-5 scrollbar-hide" >
+                                        {carData?.filter(item => item.drivers?.length != 0).map(item => (
+                                            <div className="max-h-28 border ms-3 rounded-lg mb-4 bg-white" style={{ minWidth: "270px" }}>
+                                                <div className="flex">
+                                                    <div className="flex">
+                                                        <input type="radio" name="Standard" className='-mt-16' value="Standard" id="cab1" onClick={() => {
+                                                            SetSelectedCab(item.cabType)
+                                                            const Price = handlePrice(item.price, distance)
+                                                            SetAmount(Price)
+                                                        }} />
+                                                        <img src={item.image} alt="Cab 1" className="w-32 h-24" />
+                                                    </div>
+                                                    <div className="m-3 ms-5">
+                                                        <p>{item.cabType}</p>
+                                                        <p>₹ {handlePrice(item.price, distance)}</p>
+                                                        <label htmlFor="cab1" className="cursor-pointer flex">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                height="1.5em"
+                                                                viewBox="0 0 320 512"
+                                                                className=''
+                                                            >
+                                                                <path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z" />
+                                                            </svg>
+                                                            <p className=' ms-2'>{item.maxPersons}</p>
+                                                        </label>
+                                                    </div>
+                                                </div>
 
-                                        <div className="max-h-28 p-4 mx-4 border rounded-lg mb-4">
-                                            <div className="flex">
-                                                <input type="radio" name="Prime" value="Prime" id="cab3" onClick={() => SetSelectedCab("Prime")} />
-                                                <p className="text-center ms-3">Prime</p>
-                                                <p className='flex ms-6'>₹ {premiumPrice}</p>
                                             </div>
-                                            <label htmlFor="cab3" className="cursor-pointer flex">
-                                                <img src="https://www.svgrepo.com/show/408291/car-white.svg" alt="Cab 3" className="w-32 h-24" />
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    height="1.5em"
-                                                    viewBox="0 0 320 512"
-                                                    className='mt-9'
-                                                >
-                                                    <path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm40 304V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9L59.4 304.5c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352H152z" />
-                                                </svg>
-                                                <p className='mt-10 ms-2'>4</p>
-                                            </label>
-                                        </div>
-
+                                        ))}
                                     </div>
 
                                     <button type="button" onClick={() => SetSheduleRideModal(true)} className="ms-10 w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Schedule a Ride</button>
@@ -658,7 +637,6 @@ function UserHome() {
                             }
                         </form>
 
-
                         <div className="w-7/12 h-96 flex my-10 justify-center items-center">
                             <div className='rounded-3xl'
                                 ref={mapContainer} style={{ width: '100%', height: '100vh' }} />;
@@ -666,6 +644,39 @@ function UserHome() {
                     </div>
                 </div>
             </div>
+            <div className="text-center flex justify-center  my-5 mt-16">
+                <p className='font-bold flex text-blue-800 text-4xl'>Why Book@ ?</p>
+            </div>
+
+            <div className="flex flex-wrap justify-center w-10/12 mx-auto">
+                <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4 relative">
+                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg" style={{ backgroundImage: `url(${backgroundImageUrl3})` }}>
+                        <div className="absolute bottom-0 text-white p-4">
+                            <h1 className="font-bold text-xl mb-5">Safty</h1>
+                            <p>At Book@, we prioritize your safety above all else. Our cab booking service is designed to provide you with a secure and comfortable travel experience</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4 relative">
+                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg" style={{ backgroundImage: `url(${backgroundImageUrl1})` }}>
+                        <div className="absolute bottom-0 text-white p-4">
+                            <h1 className="font-bold text-xl mb-5">Unmatched Convenience</h1>
+                            <p>Experience the ultimate convenience with Book@. All our drivers undergo strict background checks. We offer a range of services tailored to meet the diverse needs of modern women on the move.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4 relative">
+                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg" style={{ backgroundImage: `url(${backgroundImageUrl2})` }}>
+                        <div className="absolute bottom-0 text-white p-4">
+                            <h1 className="font-bold text-xl mb-5">Dedicated Assistance</h1>
+                            <p>At Book@, we are committed to providing exceptional customer support. Our dedicated team is available round-the-clock to assist you with any queries or concerns you may have.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
 
         </>

@@ -69,7 +69,7 @@ function Profile() {
     const handleDriverAvailable = async () => {
         try {
 
-            const response = await driverAxios.patch(driverApis.available)
+            const response = await driverAxios.patch(`${driverApis.available}`)
             Setreload(!reload)
             dispatch(setDriverAvailable({ available: response.data.isAvailable }))
 

@@ -31,5 +31,8 @@ export default {
     currentRide: "/currentRide",
     scheduledRides: "/scheduledRides",
 
-    cancelTheRide: "/cancelride"
+    cancelTheRide: "/cancelride",
+
+    // HOME
+    getCabData: "/getCabs"
 }

@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as Yup from "yup"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { uploadImageToStorage } from '../../../services/firebase/storage';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
@@ -11,15 +11,19 @@ import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosI
 import driverApis from '../../../Constraints/apis/driverApis';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
 
 interface ErrorResponse {
     error: string;
 }
 
+interface cab {
+    cabType: string
+}
+
 function AddVehicleInfo() {
     const dispatch = useDispatch();
-
 
     const navigate = useNavigate()
 
@@ -32,11 +36,24 @@ function AddVehicleInfo() {
     const [vehicleImage2, setVehicleImage2] = useState<string | null>(null);
     const [vehicleImageName2, setVehicleImageName2] = useState<string | null>(null);
 
+    const [cabData, SetCabData] = useState<cab[]>()
+
     const without_error_class = "pl-2 outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm";
     const with_error_class = "pl-2 outline-none border-2 border-red-400 w-full rounded-lg p-2.5 sm:text-sm  placeholder:text-red-500";
 
 
-
+    useEffect(() => {
+        const fetchCabs = async () => {
+            try {
+                const response = await driverAxios.get(driverApis.getCabs)
+                console.log(response)
+                SetCabData(response.data)
+            } catch (error) {
+                handleErrors(error)
+            }
+        }
+        fetchCabs()
+    }, [])
 
 
 
@@ -184,42 +201,21 @@ function AddVehicleInfo() {
 
                                     <div className="pl-2 flex outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm">
                                         <div className="flex">
-                                            <div className="flex items-center mr-4">
-                                                <input
-                                                    id="inline-radio"
-                                                    type="radio"
-                                                    name="vehicleType"
-                                                    value="mini"
-                                                    checked={formik.values.vehicleType === "mini"}
-                                                    onChange={formik.handleChange}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Mini</label>
-                                            </div>
-                                            <div className="flex items-center mr-4">
-                                                <input
-                                                    id="inline-2-radio"
-                                                    type="radio"
-                                                    name="vehicleType"
-                                                    value="SUV"
-                                                    checked={formik.values.vehicleType === "SUV"}
-                                                    onChange={formik.handleChange}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-wtext-gray-700 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">SUV</label>
-                                            </div>
-                                            <div className="flex items-center mr-4">
-                                                <input
-                                                    id="inline-2-radio"
-                                                    type="radio"
-                                                    name="vehicleType"
-                                                    value="Prime"
-                                                    checked={formik.values.vehicleType === "Prime"}
-                                                    onChange={formik.handleChange}
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-wtext-gray-700 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                />
-                                                <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">Prime</label>
-                                            </div>
+                                            {cabData && cabData.map((item) => (
+                                                <div className="flex items-center mr-4">
+                                                    <input
+                                                        id={`cabType-${item.cabType}`}
+                                                        type="radio"
+                                                        name="vehicleType"
+                                                        value={item.cabType}
+                                                        checked={formik.values.vehicleType === item.cabType}
+                                                        onChange={formik.handleChange}
+                                                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    />
+                                                    <label htmlFor={`cabType-${item.cabType}`} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-700">{item.cabType}</label>
+                                                </div>
+                                            ))}
+
                                         </div>
                                     </div>
 

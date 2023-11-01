@@ -12,6 +12,7 @@ export default {
     // ADD DOCUMNETS
     addPersonalInfo: "/driver/info/personal",
     addVehicleInfo: "/driver/info/vehicle",
+    getCabs: "/driver/getCabs",
 
     // PROFILE
     available: "/driver/available",

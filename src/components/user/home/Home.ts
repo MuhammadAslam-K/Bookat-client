@@ -105,10 +105,23 @@ export function calculateTravelTime(distance: number | undefined, speed: number)
 
 }
 
-// CHECK THE DATEA AND TIME IS ONE HOURES LESS THAN THE CURRENT DATE AND TIME
-export function isOneHourLessThanCurrent(dateTime: Date): boolean {
+// CHECK THE DATEA AND TIME IS ONE HOURES GREATER THAN THE CURRENT DATE AND TIME
+export function isOneHourGreater(dateTime: string | number | Date) {
     const currentDateTime = new Date();
-    const oneHourAgo = new Date(currentDateTime.getTime() - 3600000);
+    const oneHourLater = new Date(currentDateTime);
+    oneHourLater.setHours(currentDateTime.getHours() + 1);
 
-    return dateTime.getTime() > oneHourAgo.getTime();
+    // Convert the input dateTime to a Date object if it's not already
+    if (!(dateTime instanceof Date)) {
+        dateTime = new Date(dateTime);
+    }
+
+    return dateTime > oneHourLater;
 }
+
+// HANDLE PRICE
+export const handlePrice = (price: string, distance: string) => {
+    const priceInt = parseInt(price)
+    const distanceInt = parseInt(distance)
+    return (priceInt * distanceInt).toFixed(0)
+} 

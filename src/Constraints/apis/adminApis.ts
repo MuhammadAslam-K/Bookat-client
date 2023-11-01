@@ -23,5 +23,11 @@ export default {
     getDriverRideHistory: "/admin/history/driver",
     getUserRideHistory: "/admin/history/user",
 
+    // CABS
+    cabs: "/admin/cabs",
+    addCab: "/admin/cabs/add",
+    getCabWithId: "/admin/cabs/getById",
+    editCab: "/admin/cabs/edit",
+
 }
 

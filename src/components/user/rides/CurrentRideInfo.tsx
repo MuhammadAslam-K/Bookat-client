@@ -89,8 +89,7 @@ function CurrentRideInfo(props: { rideId: string | null }) {
 
         const fetchRideDetails = async () => {
             try {
-                console.log("rideId", rideId)
-                const response = await userAxios.post(userApis.getRideDetails, { rideId })
+                const response = await userAxios.patch(`${userApis.getRideDetails}?id=${rideId}`)
                 console.log("response", response)
                 setRideInfo(response.data)
                 socketConnection()
@@ -104,7 +103,6 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                 }
 
                 fetchDriverData(response.data.driver_id)
-                // fetchComments(response.data.driver_id)
             } catch (error) {
                 console.log(error)
                 if (axios.isAxiosError(error)) {
@@ -352,8 +350,8 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                     <div className="overflow-x-auto p-5 scrollbar-hide" style={{ maxWidth: '100%' }}>
                         <div className="flex space-x-4">
                             {/* Review divs */}
-                            {feedback?.map((item) => (
-                                <div className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
+                            {feedback?.map((item, index) => (
+                                <div key={index} className="my-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
                                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{renderStars(item.rating)}</h5>
                                     <p className="font-normal text-gray-700">{item.feedback}</p>
                                 </div>

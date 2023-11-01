@@ -6,14 +6,13 @@ import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import { rideDetails } from '../../user/rides/CurrentRideInfo';
 import driverApis from '../../../Constraints/apis/driverApis';
 import toast from 'react-hot-toast';
-import { ErrorResponse } from '../../user/profile/UserProfile';
-import axios, { AxiosError } from 'axios';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import { Socket, io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { driverLogout, setDriverAvailable } from '../../../services/redux/slices/driverAuth';
+import { setDriverAvailable } from '../../../services/redux/slices/driverAuth';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
 
 interface userInfo {
@@ -50,7 +49,7 @@ function RideConfirm(props: { rideId: string | null }) {
     useEffect(() => {
         const fetchRideDetails = async () => {
             try {
-                const response = await driverAxios.post(driverApis.getRideDetails, { rideId })
+                const response = await driverAxios.patch(`${driverApis.getRideDetails}?id=${rideId}`)
                 setRideInfo(response.data)
                 console.log("response :", response)
                 if (response.data.otpVerifyed) {
@@ -65,39 +64,21 @@ function RideConfirm(props: { rideId: string | null }) {
                 await fetchUserData(response.data.user_id)
             } catch (error) {
                 console.log(error)
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(driverLogout())
-                        navigate(driverEndPoints.login)
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchRideDetails()
     }, [])
 
 
-    const fetchUserData = async (userId: string) => {
+    const fetchUserData = async (id: string) => {
         try {
-            const response = await driverAxios.post(driverApis.getUserInfo, { id: userId });
+            const response = await driverAxios.patch(`${driverApis.getUserInfo}?id=${id}`);
             console.log("user data", response)
             setmobile(response.data.mobile)
         } catch (error) {
             console.log(error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response?.data) {
-                    toast.error(axiosError.response.data.error);
-                    dispatch(driverLogout())
-                    navigate(driverEndPoints.login)
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -185,14 +166,7 @@ function RideConfirm(props: { rideId: string | null }) {
             console.log("otp response", response)
         } catch (error) {
             console.log("handleSendOtp", error);
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -216,14 +190,7 @@ function RideConfirm(props: { rideId: string | null }) {
 
         } catch (error) {
             console.log("handleConfirmOTP", error);
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
