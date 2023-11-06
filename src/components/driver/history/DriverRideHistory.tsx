@@ -12,7 +12,7 @@ interface Ride {
     distance: string;
     dropoffLocation: string;
     pickupLocation: string;
-    price: number;
+    driverRevenu: number;
     rating: number;
 }
 
@@ -55,7 +55,7 @@ function DriverRideHistory() {
         },
         {
             name: 'Amount',
-            selector: (row: Ride) => row.price,
+            selector: (row: Ride) => row.driverRevenu.toFixed(0),
         },
         {
             name: 'Distance',

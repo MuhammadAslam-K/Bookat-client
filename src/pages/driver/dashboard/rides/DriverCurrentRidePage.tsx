@@ -1,3 +1,4 @@
+import DriverFooter from '../../../../components/driver/DriverFooter'
 import Navbar from '../../../../components/driver/Navbar'
 import DriverCurrentRides from '../../../../components/driver/rides/DriverCurrentRides'
 
@@ -6,6 +7,9 @@ function DriverCurrentRidePage() {
         <>
             <Navbar />
             <DriverCurrentRides />
+            <div className="mt-20">
+                <DriverFooter />
+            </div>
         </>
     )
 }

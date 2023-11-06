@@ -97,7 +97,7 @@ function Payment(props: { rideId: string | null }) {
 
         try {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const paymentPromise = new Promise((resolve, reject) => {
+            const paymentPromise = new Promise(() => {
                 const paymentObject = new window.Razorpay(options);
                 paymentObject.open();
             });

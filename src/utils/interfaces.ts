@@ -1,3 +1,5 @@
+import { SetStateAction } from "react";
+
 export interface userSignUp {
     name: string,
     email: string,
@@ -125,7 +127,7 @@ export interface UserInfo {
 }
 
 export interface driverProfile {
-    data: SetStateAction<driverInfo | null>;
+    data: SetStateAction<DriverInfo | null>;
     name: string,
     email: string,
     mobile: string,

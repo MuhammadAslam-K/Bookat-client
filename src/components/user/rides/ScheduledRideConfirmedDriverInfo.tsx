@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
-import axios, { AxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router'
-import { useDispatch } from 'react-redux'
 
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors'
 import userApis from '../../../Constraints/apis/userApis'
-import { ErrorResponse } from '../profile/UserProfile'
-import { userLogout } from '../../../services/redux/slices/userAuth'
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints'
+import { handleErrors } from '../../../Constraints/apiErrorHandling'
 
 
 interface feedback {
@@ -44,7 +41,6 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
 
     const { driverId, rideId } = props
     const navigator = useNavigate()
-    const dispatch = useDispatch()
 
     const [driverInfo, setDriverInfo] = useState<driverData | null>(null);
     const [feedback, setFeedback] = useState<feedback[] | null>(null);
@@ -65,19 +61,7 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
 
         } catch (error) {
             console.log("error in fetchDriverData", error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response?.data.error == 'jwt expired') {
-                    toast.error(axiosError.response.data.error);
-                    dispatch(userLogout())
-                    navigator(userEndPoints.login)
-
-                } else if (axiosError.response?.data.error) {
-                    toast.error(axiosError.response.data.error)
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 
@@ -94,20 +78,13 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
     const handleCancelTheRide = async () => {
         try {
             const data = { driverId, rideId }
-            await userAxios.patch(userApis.cancelTheRide, data)
+            await userAxios.post(userApis.cancelTheRide, data)
             toast.success("Cancelled the Ride SuccessFully")
             navigator(userEndPoints.home)
 
         } catch (error) {
             console.log("error in fetchComments", error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response?.data) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 

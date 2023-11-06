@@ -5,7 +5,7 @@ import { adminAxios } from "../../../Constraints/axiosInterceptors/adminAxiosInt
 import adminApis from "../../../Constraints/apis/adminApis"
 
 
-const AddCabModal = lazy(() => import("./addCabModal"))
+const AddCabModal = lazy(() => import("./AddCabModal"))
 const EditCabModal = lazy(() => import('./EditCabModal'))
 
 interface cab {

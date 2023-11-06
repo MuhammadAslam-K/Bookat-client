@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
 import { rootState } from '../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
-import io, { Socket } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import { driverLogout } from '../../services/redux/slices/driverAuth';
 
@@ -13,14 +12,11 @@ function Navbar() {
 
     const [isOpen, setIsOpen] = useState(false);
     const driver = useSelector((state: rootState) => state.driver.loggedIn);
-    const driverId = useSelector((state: rootState) => state.driver.driverId);
-    const vehicleType = useSelector((state: rootState) => state.driver.vehicleType);
-
+    const documents = useSelector((state: rootState) => state.driver.document);
+    const vehicel = useSelector((state: rootState) => state.driver.vehicle);
 
     const [toggleisOpen, setToggleIsOpen] = useState(false);
-    const [socket, setsocket] = useState<Socket | null>(null)
-    const [latitude, setLatitude] = useState<number | null>(null);
-    const [longitude, setLongitude] = useState<number | null>(null);
+
 
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -29,56 +25,6 @@ function Navbar() {
         setIsOpen(!isOpen);
     };
 
-    // SOCKET
-    useEffect(() => {
-        const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
-            transports: ["websocket"]
-        });
-        setsocket(socketClient)
-
-        if (socketClient) {
-            socketClient.on('connect', () => {
-                console.log('Connected to the Socket.IO server');
-            })
-        } else {
-            console.log("Can not connect")
-        }
-
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    setLatitude(position.coords.latitude);
-                    setLongitude(position.coords.longitude);
-                },
-            );
-        }
-
-        return () => {
-            if (socket) {
-                socket.disconnect();
-                console.log('Disconnected from the Socket.IO server');
-            }
-        };
-    }, [])
-
-    if (socket && latitude && longitude) {
-        const value = { latitude, longitude, driverId, vehicleType }
-        console.log("value", value)
-
-        socket.on('driverlocationUpdate', (data) => {
-
-            console.log('Received from server:', data);
-            socket.emit("getdriverlocationUpdate", value)
-        });
-
-        socket.on("getDriverLocation", (data) => {
-            console.log("getDriverLocation data", data)
-            if (data.driverId == driverId) {
-                const data = { latitude, longitude, driverId }
-                socket.emit("locationUpdateFromDriver", data)
-            }
-        })
-    }
 
 
     const handleSignOut = () => {
@@ -182,18 +128,37 @@ function Navbar() {
                                     onClick={() => setToggleIsOpen(false)}
                                     className="absolute right-0 z-20 w-48 py-2 mt-48 origin-top-right shadow-xl rounded-3xl overflow-hidden bg-white"
                                 >
-                                    <Link
-                                        to={driverEndPoints.driverProfile}
-                                        className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
-                                    >
-                                        Your Profile
-                                    </Link>
-                                    <Link
-                                        to={driverEndPoints.rideHistory}
-                                        className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
-                                    >
-                                        Ride History
-                                    </Link>
+                                    {documents && vehicel && (
+                                        <><Link
+                                            to={driverEndPoints.driverProfile}
+                                            className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
+                                        >
+                                            Your Profile
+                                        </Link><Link
+                                            to={driverEndPoints.rideHistory}
+                                            className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
+                                        >
+                                                Ride History
+                                            </Link></>
+                                    )}
+
+                                    {/* DOCUMENTS AND PERSONAL INFO */}
+                                    {!documents &&
+                                        <Link to={driverEndPoints.addPersonalInfo}
+
+                                            className="block px-4 py-3 cursor-pointer text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
+                                        >
+                                            Add Personale
+                                        </Link>
+                                    }
+                                    {!vehicel &&
+                                        <Link to={driverEndPoints.addVehicleInfo}
+
+                                            className="block px-4 py-3 cursor-pointer text-sm text-gray-600 capitalize transition-colors duration-300 transform dark-text-gray-300 hover-bg-gray-100 dark-hover-bg-gray-700 dark-hover-text-white"
+                                        >
+                                            Add Vehicel
+                                        </Link>
+                                    }
                                     {driver ?
                                         <p
                                             onClick={handleSignOut}

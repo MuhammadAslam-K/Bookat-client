@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../../components/admin/AdminNavbar'
 import DriverAndVehicleValidation from '../../../components/admin/driver/DriverAndVehicleValidation'
+import AdminFooter from '../../../components/admin/AdminFooter';
 
 function DriverAndVehicleValidationPage() {
 
@@ -13,6 +14,9 @@ function DriverAndVehicleValidationPage() {
         <>
             <Navbar />
             <DriverAndVehicleValidation {...data} />
+            <div className="mt-20">
+                <AdminFooter />
+            </div>
         </>
     )
 }

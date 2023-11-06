@@ -314,7 +314,7 @@ function UserHome() {
             if (selectedDateTime) {
                 const result = isOneHourGreater(selectedDateTime)
                 if (!result) {
-                    toast.error("Ride must be booked at least 1 hour in advance.")
+                    toast.error("Ride must be booked at least 2 hour in advance.")
                     return false
                 }
             } else {
@@ -409,7 +409,7 @@ function UserHome() {
                 </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-blue-800 justify-center flex mt-10 mb-3">Book a safe ride!</h1>
+            <h1 className="text-3xl font-bold text-blue-800 justify-center flex my-10">Book a safe ride!</h1>
             <div className="flex justify-center">
                 <div className="flex w-10/12 h-fit justify-center items-center rounded-3xl overflow-hidden shadow-2xl">
                     {modal &&
@@ -609,16 +609,17 @@ function UserHome() {
 
             <div className="flex flex-wrap justify-center w-10/12 mx-auto">
                 <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4 relative">
-                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg" style={{ backgroundImage: `url(${backgroundImageUrl3})` }}>
+                    <div className="bg-cover  text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg relative" style={{ backgroundImage: `url(${backgroundImageUrl3})` }}>
+                        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40 rounded-lg"></div>
                         <div className="absolute bottom-0 text-white p-4">
-                            <h1 className="font-bold text-xl mb-5">Safty</h1>
+                            <h1 className="font-bold text-xl mb-5">Safety</h1>
                             <p>At Book@, we prioritize your safety above all else. Our cab booking service is designed to provide you with a secure and comfortable travel experience</p>
-
                         </div>
                     </div>
                 </div>
                 <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4 relative">
-                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg" style={{ backgroundImage: `url(${backgroundImageUrl1})` }}>
+                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg relative" style={{ backgroundImage: `url(${backgroundImageUrl1})` }}>
+                        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40 rounded-lg"></div>
                         <div className="absolute bottom-0 text-white p-4">
                             <h1 className="font-bold text-xl mb-5">Unmatched Convenience</h1>
                             <p>Experience the ultimate convenience with Book@. All our drivers undergo strict background checks. We offer a range of services tailored to meet the diverse needs of modern women on the move.</p>
@@ -626,7 +627,8 @@ function UserHome() {
                     </div>
                 </div>
                 <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4 relative">
-                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg" style={{ backgroundImage: `url(${backgroundImageUrl2})` }}>
+                    <div className="bg-cover text-white text-center bg-center h-64 sm:h-72 md:h-80 lg:h-80 xl:h-80 rounded-lg relative" style={{ backgroundImage: `url(${backgroundImageUrl2})` }}>
+                        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-40 rounded-lg"></div>
                         <div className="absolute bottom-0 text-white p-4">
                             <h1 className="font-bold text-xl mb-5">Dedicated Assistance</h1>
                             <p>At Book@, we are committed to providing exceptional customer support. Our dedicated team is available round-the-clock to assist you with any queries or concerns you may have.</p>
@@ -634,8 +636,6 @@ function UserHome() {
                     </div>
                 </div>
             </div>
-
-
 
 
         </>
