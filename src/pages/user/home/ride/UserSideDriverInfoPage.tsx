@@ -2,6 +2,7 @@ import queryString from 'query-string';
 import UserNavbar from '../../../../components/user/UserNavbar'
 import ConfirmedDriverInfo from '../../../../components/user/rides/ScheduledRideConfirmedDriverInfo'
 import { useLocation } from 'react-router';
+import UserFooter from '../../../../components/user/UserFooter';
 
 function UserSideDriverInfoPage() {
     const location = useLocation();
@@ -15,6 +16,9 @@ function UserSideDriverInfoPage() {
         <div>
             <UserNavbar />
             <ConfirmedDriverInfo {...data} />
+            <div className="mt-16">
+                <UserFooter />
+            </div>
         </div>
     )
 }

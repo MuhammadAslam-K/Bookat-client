@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { rideDetails } from '../../user/rides/CurrentRideInfo';
 import driverApis from '../../../Constraints/apis/driverApis';
@@ -51,7 +53,6 @@ function RideConfirm(props: { rideId: string | null }) {
             try {
                 const response = await driverAxios.patch(`${driverApis.getRideDetails}?id=${rideId}`)
                 setRideInfo(response.data)
-                console.log("response :", response)
                 if (response.data.otpVerifyed) {
                     setOTPsuccess(true)
                     setEndLong(parseInt(response.data.dropoffCoordinates.longitude))

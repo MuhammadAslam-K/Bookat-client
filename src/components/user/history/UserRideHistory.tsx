@@ -159,7 +159,7 @@ function UserRideHistory() {
             if (selectedDateTime) {
                 const result = isOneHourGreater(selectedDateTime)
                 if (!result) {
-                    toast.error("Ride must be booked at least 1 hour in advance.")
+                    toast.error("Ride must be booked at least 2 hour in advance.")
                     return false
                 }
             } else {

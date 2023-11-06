@@ -1,3 +1,4 @@
+import DriverFooter from "../../../../components/driver/DriverFooter"
 import Navbar from "../../../../components/driver/Navbar"
 import DriverRideHistory from "../../../../components/driver/history/DriverRideHistory"
 
@@ -6,6 +7,9 @@ function DriverRideHistoryPage() {
         <div className=" bg-gray-100">
             <Navbar />
             <DriverRideHistory />
+            <div className="mt-20">
+                <DriverFooter />
+            </div>
         </div>
     )
 }

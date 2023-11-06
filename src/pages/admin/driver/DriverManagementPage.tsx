@@ -1,3 +1,4 @@
+import AdminFooter from "../../../components/admin/AdminFooter"
 import Navbar from "../../../components/admin/AdminNavbar"
 import DriverDataTable from "../../../components/admin/driver/DriverDataTable"
 
@@ -7,6 +8,9 @@ function DriverManagementPage() {
         <div className="bg-gray-100 h-screen">
             <Navbar />
             <DriverDataTable />
+            <div className="mt-20">
+                <AdminFooter />
+            </div>
         </div>
     )
 }

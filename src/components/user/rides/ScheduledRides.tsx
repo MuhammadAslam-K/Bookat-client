@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { userAxios } from "../../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../../Constraints/apis/userApis";
 import queryString from "query-string";
+import { handleErrors } from "../../../Constraints/apiErrorHandling";
 
 interface rideDetail {
     driverAccepted: string;
@@ -27,6 +28,7 @@ function ScheduledRides() {
     const navigate = useNavigate();
 
     const [rideDetails, setRideDetails] = useState<rideDetail[]>()
+    const [reload, SetReload] = useState(false)
 
     useEffect(() => {
         const fetchRideDetails = async () => {
@@ -49,7 +51,19 @@ function ScheduledRides() {
             }
         }
         fetchRideDetails()
-    }, [])
+    }, [reload])
+
+    const handleCancelTheRide = async (rideId: string) => {
+        try {
+            const data = { rideId }
+            await userAxios.post(userApis.cancelTheRide, data)
+            toast.success("Cancelled the Ride SuccessFully")
+            SetReload(!reload)
+        } catch (error) {
+            console.log(error)
+            handleErrors(error)
+        }
+    }
 
     const handleShowTheDriverInfo = (driverId: string, rideId: string) => {
         const data = {
@@ -118,6 +132,9 @@ function ScheduledRides() {
                                             <th scope="col" className="px-6 py-3">
                                                 Driver Status
                                             </th>
+                                            <th scope="col" className="px-6 py-3">
+                                                Action
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -151,7 +168,9 @@ function ScheduledRides() {
                                                             onClick={() => handleShowTheDriverInfo(item.driver_id, item._id)}>Driver Info</p>
                                                     }
                                                 </td>
-
+                                                <td className="px-4 py-2 text-white cursor-pointer  font-semibold text-sm" onClick={() => handleCancelTheRide(item._id)}>
+                                                    Cancel
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

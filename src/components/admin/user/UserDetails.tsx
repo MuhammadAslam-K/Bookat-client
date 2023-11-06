@@ -34,7 +34,7 @@ function UserDetails(props: { userId: string }) {
 
     const fetchUserData = async () => {
         try {
-            const response = await adminAxios.post(adminApis.getUserRideHistory, { userId })
+            const response = await adminAxios.patch(`${adminApis.getUserRideHistory}?id=${userId}`)
             console.log("response", response)
             SetQuickRidesInfo(response.data.quickRides)
             SetScheduledRidesInfo(response.data.scheduledRides)

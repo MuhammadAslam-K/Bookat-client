@@ -29,13 +29,18 @@ interface RideConfirmProps {
 
 function Notification() {
 
+    const driverId = useSelector((state: rootState) => state.driver.driverId);
+    const vehicleType = useSelector((state: rootState) => state.driver.vehicleType);
+
     const [socket, setsocket] = useState<Socket | null>(null)
 
     const [rideDetails, SetRideDetails] = useState<RideConfirmProps | null>(null)
+    const [latitude, setLatitude] = useState<number | null>(null);
+    const [longitude, setLongitude] = useState<number | null>(null);
+
     const [countdown, setCountdown] = useState<number>(15)
 
-    const driverId = useSelector((state: rootState) => state.driver.driverId);
-    // const navigate = useNavigate()
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -53,13 +58,38 @@ function Notification() {
             console.log("Can not connect")
         }
 
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    setLatitude(position.coords.latitude);
+                    setLongitude(position.coords.longitude);
+                },
+            );
+        }
 
         return () => {
             socket?.disconnect()
+            setsocket(null)
         }
     }, [])
 
-    if (socket) {
+    if (socket && latitude && longitude) {
+        const value = { latitude, longitude, driverId, vehicleType }
+
+        socket.on('driverlocationUpdate', (data) => {
+
+            console.log('Received from server:', data);
+            socket.emit("getdriverlocationUpdate", value)
+        });
+
+        socket.on("getDriverLocation", (data) => {
+            console.log("getDriverLocation data", data)
+            if (data.driverId == driverId) {
+                const data = { latitude, longitude, driverId }
+                socket.emit("locationUpdateFromDriver", data)
+            }
+        })
+
         socket.on("getDriverConfirmation", (data) => {
             console.log("getDriverConfirmation data", data)
             if (driverId == data.driverId) {

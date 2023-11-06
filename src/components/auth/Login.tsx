@@ -65,23 +65,8 @@ function Login(data: loginComponentProps) {
                 const { document, vehicle, driverId, vehicleType } = response.data
                 dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
 
-                console.log(response);
-                if (document) {
-                    if (vehicle) {
-                        console.log("Navigating to driver dashboard");
-                        navigate(driverEndPoints.dashboard);
-                        return
-                    } else {
-                        console.log("Navigating to driver vehicle info");
-                        navigate(driverEndPoints.addVehicleInfo);
-                        return
-                    }
-                } else {
-                    console.log("Navigating to driver personal info");
-                    navigate(driverEndPoints.addPersonalInfo);
-                    return
-                }
-
+                console.log("Navigating to driver dashboard");
+                navigate(driverEndPoints.dashboard);
             }
             else if (person == "admin") {
                 dispatch(adminLogin())

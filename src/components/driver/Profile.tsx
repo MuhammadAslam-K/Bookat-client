@@ -8,7 +8,6 @@ import { useFormik } from "formik";
 import driverApis from "../../Constraints/apis/driverApis";
 import { driverAxios } from "../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import { setDriverAvailable } from "../../services/redux/slices/driverAuth";
-import { driverProfile } from "../../utils/interfaces";
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
 import driverEndPoints from "../../Constraints/endPoints/driverEndPoints";
@@ -33,7 +32,7 @@ function Profile() {
 
                 const response = await driverAxios.get(driverApis.profie)
                 console.log("co", response);
-                const data: driverProfile = {
+                const data = {
                     name: response.data.name,
                     email: response.data.email,
                     mobile: response.data.mobile,
@@ -54,7 +53,7 @@ function Profile() {
                             registrationId: ""
                         }
                     },
-                    data: undefined
+                    // data: undefined
                 }
 
                 formik.setValues(data);
@@ -145,13 +144,14 @@ function Profile() {
                     formik.setFieldValue('driverImageUrl', driverImageUrl);
                 }
 
-                await driverAxios.patch(driverApis.updateProfile, values);
+                await driverAxios.post(driverApis.updateProfile, values);
                 toast.dismiss();
                 SetReadOnly(!readOnly)
                 toast.success("Updated profile successfully");
                 Setreload(!reload)
 
             } catch (error) {
+                toast.dismiss()
                 handleErrors(error)
             } finally {
                 formikHelpers.setSubmitting(false);

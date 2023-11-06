@@ -7,16 +7,14 @@ import { useNavigate } from "react-router-dom"
 import { uploadImageToStorage } from '../../../services/firebase/storage';
 import { useDispatch } from 'react-redux';
 import { driverLogin, setDocument } from '../../../services/redux/slices/driverAuth';
-import axios, { AxiosError } from 'axios';
 import driverApis from '../../../Constraints/apis/driverApis';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
 
-interface ErrorResponse {
-    error: string;
-}
+
 
 function AddPersonalInfo() {
     const dispatch = useDispatch();
@@ -138,14 +136,7 @@ function AddPersonalInfo() {
                 } catch (error) {
                     console.log(error);
                     toast.dismiss()
-                    if (axios.isAxiosError(error)) {
-                        const axiosError: AxiosError<ErrorResponse> = error;
-                        if (axiosError.response) {
-                            toast.error(axiosError.response.data.error);
-                        } else {
-                            toast.error('Network Error occurred.');
-                        }
-                    }
+                    handleErrors(error)
                 }
             }
 

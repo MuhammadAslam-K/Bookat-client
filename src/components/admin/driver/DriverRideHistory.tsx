@@ -34,7 +34,7 @@ function DriverRideHistory(props: { driverId: string }) {
 
     const fetchDriverRideHistory = async () => {
         try {
-            const response = await adminAxios.post(adminApis.getDriverRideHistory, { driverId })
+            const response = await adminAxios.patch(`${adminApis.getDriverRideHistory}?id=${driverId}`)
             console.log("response", response)
             SetQuickRidesInfo(response.data.quickRides)
             SetScheduledRidesInfo(response.data.scheduleRides)

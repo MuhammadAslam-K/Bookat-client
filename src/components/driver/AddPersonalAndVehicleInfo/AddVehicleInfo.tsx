@@ -6,17 +6,12 @@ import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from 'react-redux';
 import { driverLogin, setVehicle } from '../../../services/redux/slices/driverAuth';
-import axios, { AxiosError } from 'axios';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import driverApis from '../../../Constraints/apis/driverApis';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
-
-interface ErrorResponse {
-    error: string;
-}
 
 interface cab {
     cabType: string
@@ -158,14 +153,7 @@ function AddVehicleInfo() {
 
                 } catch (error) {
                     console.log(error)
-                    if (axios.isAxiosError(error)) {
-                        const axiosError: AxiosError<ErrorResponse> = error;
-                        if (axiosError.response) {
-                            toast.error(axiosError.response.data.error);
-                        } else {
-                            toast.error('Network Error occurred.');
-                        }
-                    }
+                    handleErrors(error)
                 }
             }
 

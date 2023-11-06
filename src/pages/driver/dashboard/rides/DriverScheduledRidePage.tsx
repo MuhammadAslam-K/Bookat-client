@@ -1,4 +1,4 @@
-import React from 'react'
+import DriverFooter from '../../../../components/driver/DriverFooter'
 import Navbar from '../../../../components/driver/Navbar'
 import ScheduledRides from '../../../../components/driver/rides/ScheduledRides'
 
@@ -7,6 +7,9 @@ function DriverScheduledRidePage() {
         <>
             <Navbar />
             <ScheduledRides />
+            <div className="mt-20">
+                <DriverFooter />
+            </div>
         </>
     )
 }

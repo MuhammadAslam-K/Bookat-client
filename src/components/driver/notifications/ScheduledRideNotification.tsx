@@ -7,6 +7,7 @@ import driverApis from "../../../Constraints/apis/driverApis";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
 import { rootState } from "../../../utils/interfaces";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
+import { customLoadingStyle } from "../../../Constraints/customizeLoaderStyle";
 
 interface rideDetails {
     _id: string;
@@ -73,9 +74,13 @@ function ScheduledRideNotification() {
     const handleAcceptScheduledRide = async (rideId: string) => {
         console.log("called")
         try {
+            toast.loading('Processing your Requist Please wait...', {
+                style: customLoadingStyle,
+            });
             if (latitude && longitude) {
                 const data = { rideId, latitude, longitude }
                 const response = await driverAxios.post(driverApis.scheduleRideConfirmation, data)
+                toast.dismiss()
                 console.log("response", response)
                 setReload(!reload)
                 toast.success("Accepted the ride Successfully")
@@ -84,6 +89,7 @@ function ScheduledRideNotification() {
                 console.log(92)
             }
         } catch (error) {
+            toast.dismiss()
             console.log(error)
             handleErrors(error)
         }

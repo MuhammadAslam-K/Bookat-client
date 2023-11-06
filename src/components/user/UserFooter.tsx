@@ -20,7 +20,6 @@ function UserFooter() {
                     <p>Copyright © 2023 - All right reserved by Book@ Ltd</p>
                 </aside>
             </footer>
-
         </>
     )
 }
