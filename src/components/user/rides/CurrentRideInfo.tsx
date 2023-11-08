@@ -96,12 +96,12 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                 setRideInfo(response.data)
                 socketConnection()
                 if (response.data.otpVerifyed) {
-                    setEndLat(parseInt(response.data.dropoffCoordinates.latitude))
-                    setEndLong(parseInt(response.data.dropoffCoordinates.longitude))
+                    setEndLat(parseFloat(response.data.dropoffCoordinates.latitude))
+                    setEndLong(parseFloat(response.data.dropoffCoordinates.longitude))
                 }
                 else {
-                    setEndLong(parseInt(response.data.driverCoordinates.longitude))
-                    setEndLat(parseInt(response.data.driverCoordinates.latitude))
+                    setEndLong(parseFloat(response.data.driverCoordinates.longitude))
+                    setEndLat(parseFloat(response.data.driverCoordinates.latitude))
                 }
 
                 fetchDriverData(response.data.driver_id)
@@ -251,7 +251,6 @@ function CurrentRideInfo(props: { rideId: string | null }) {
             console.log("endRideNotifyUser", data)
             if (data.userId == rideInfo.user_id) {
                 const queryParams = rideId ? { rideId } : {};
-                console.log("query params", queryParams)
                 const queryStringData = queryString.stringify(queryParams);
                 navigate(`${userEndPoints.payment}?${queryStringData}`);
             }

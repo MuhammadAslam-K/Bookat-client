@@ -226,7 +226,20 @@ function UserHome() {
             else {
                 if (location) {
 
-                    const data = { latitude, longitude, vehicle: selectedCab, amount, userId, fromLocation, toLocation, distance, duration, fromLocationLat, fromLocationLong, toLocationLat, toLocationLong, }
+                    const data = {
+                        latitude,
+                        longitude,
+                        vehicle: selectedCab,
+                        amount, userId,
+                        fromLocation,
+                        toLocation,
+                        distance,
+                        duration,
+                        fromLocationLat,
+                        fromLocationLong,
+                        toLocationLat,
+                        toLocationLong,
+                    }
                     if (userId) {
                         setmodal(true)
                         socket?.emit("confirmRide", data)
@@ -254,6 +267,7 @@ function UserHome() {
 
             const fromCoordinates = await getCoordinates(fromLocation);
             const toCoordinates = await getCoordinates(toLocation);
+
 
             if (fromCoordinates && toCoordinates) {
 

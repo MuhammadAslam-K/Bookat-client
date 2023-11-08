@@ -55,11 +55,11 @@ function RideConfirm(props: { rideId: string | null }) {
                 setRideInfo(response.data)
                 if (response.data.otpVerifyed) {
                     setOTPsuccess(true)
-                    setEndLong(parseInt(response.data.dropoffCoordinates.longitude))
-                    setEndLat(parseInt(response.data.dropoffCoordinates.latitude))
+                    setEndLong(parseFloat(response.data.dropoffCoordinates.longitude))
+                    setEndLat(parseFloat(response.data.dropoffCoordinates.latitude))
                 } else {
-                    setEndLong(parseInt(response.data.pickupCoordinates.longitude))
-                    setEndLat(parseInt(response.data.pickupCoordinates.latitude))
+                    setEndLong(parseFloat(response.data.pickupCoordinates.longitude))
+                    setEndLat(parseFloat(response.data.pickupCoordinates.latitude))
                 }
 
                 await fetchUserData(response.data.user_id)
@@ -185,8 +185,8 @@ function RideConfirm(props: { rideId: string | null }) {
                 socket.emit("startRide", data)
             }
             if (rideInfo) {
-                setEndLat(parseInt(rideInfo.dropoffCoordinates.latitude))
-                setEndLong(parseInt(rideInfo.dropoffCoordinates.longitude))
+                setEndLat(parseFloat(rideInfo.dropoffCoordinates.latitude))
+                setEndLong(parseFloat(rideInfo.dropoffCoordinates.longitude))
             }
 
         } catch (error) {

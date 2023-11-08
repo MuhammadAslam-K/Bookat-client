@@ -29,7 +29,9 @@ export default {
     // RIDE //
     scheduleTheRide: "/scheduleTheRide",
 
+    // PAYMENT
     payment: "/payment",
+    submitReview: "/review",
 
     currentRide: "/currentRide",
     scheduledRides: "/scheduledRides",

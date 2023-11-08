@@ -13,8 +13,6 @@ import UserRoutes from "./routers/userRouter/UserRouters.js";
 
 function App() {
 
-
-
   return (
     <>
       <Toaster />
