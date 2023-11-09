@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react"
+import { Suspense, lazy, useEffect, useState } from "react"
 import { handleErrors } from "../../Constraints/apiErrorHandling"
 import { adminAxios } from "../../Constraints/axiosInterceptors/adminAxiosInterceptors"
 import adminApis from "../../Constraints/apis/adminApis"
 
-// const PieChart = lazy(() => import("./chart/PieChart"))
-// const Barchart = lazy(() => import("./chart/BarChart"))
+const BarChart = lazy(() => import("../common/BarChart"))
 
 
 interface dashboard {
@@ -13,7 +12,17 @@ interface dashboard {
     totalRidesCount: string
     totalScheduledRidesCount: string
     totalUsersCount: string
+    totalUsers: totalUsers[]
+    totalDrivers: totalUsers[]
+    totalQuickRides: rides[]
+    totalScheduledRides: rides[]
+}
 
+interface totalUsers {
+    joinedAt: string;
+}
+interface rides {
+    date: string;
 }
 
 function Dashboard() {
@@ -34,11 +43,67 @@ function Dashboard() {
         fetchAdminDashboardData()
     }, [])
 
+    // USER
+    const userJoinDates = dashboard?.totalUsers.map((user) => {
+        const joinedAt = new Date(user.joinedAt);
+        return { month: joinedAt.getMonth(), year: joinedAt.getFullYear() };
+    });
 
-    // const pieChartData = [
-    //     { title: `Quick Rides`, value: parseInt(dashboard?.totalQuickRidesCount ?? '0'), color: '#FF5733' },
-    //     { title: `Scheduled Rides`, value: parseInt(dashboard?.totalScheduledRidesCount ?? '0'), color: '#FFC300' },
-    // ];
+    const userCountsByMonth: { [key: string]: number } = {};
+    userJoinDates?.forEach((joinDate) => {
+        const key = `${joinDate.year}-${joinDate.month}`;
+        userCountsByMonth[key] = (userCountsByMonth[key] || 0) + 1;
+    });
+
+    const userMonths = Object.keys(userCountsByMonth);
+    const userCounts = Object.values(userCountsByMonth);
+
+    // DRIVER
+    const driverJoinDates = dashboard?.totalDrivers.map((driver) => {
+        const joinedAt = new Date(driver.joinedAt);
+        return { month: joinedAt.getMonth(), year: joinedAt.getFullYear() };
+    });
+
+    const driverCountsByMonth: { [key: string]: number } = {};
+    driverJoinDates?.forEach((joinDate) => {
+        const key = `${joinDate.year}-${joinDate.month}`;
+        driverCountsByMonth[key] = (driverCountsByMonth[key] || 0) + 1;
+    });
+
+    const driverMonths = Object.keys(driverCountsByMonth);
+    const driverCounts = Object.values(driverCountsByMonth);
+
+
+    // QuickRide
+    const quickRideDates = dashboard?.totalQuickRides.map((ride) => {
+        const date = new Date(ride.date);
+        return { month: date.getMonth(), year: date.getFullYear() };
+    });
+
+    const quickRideCountsByMonth: { [key: string]: number } = {};
+    quickRideDates?.forEach((joinDate) => {
+        const key = `${joinDate.year}-${joinDate.month}`;
+        quickRideCountsByMonth[key] = (quickRideCountsByMonth[key] || 0) + 1;
+    });
+
+    const QuickRideMonths = Object.keys(quickRideCountsByMonth);
+    const QuickRideCounts = Object.values(quickRideCountsByMonth);
+
+
+    // Scheduled Ride
+    const scheduledRideDates = dashboard?.totalScheduledRides.map((ride) => {
+        const date = new Date(ride.date);
+        return { month: date.getMonth(), year: date.getFullYear() };
+    });
+
+    const scheduledRideCountsByMonth: { [key: string]: number } = {};
+    scheduledRideDates?.forEach((date) => {
+        const key = `${date.year}-${date.month}`;
+        scheduledRideCountsByMonth[key] = (scheduledRideCountsByMonth[key] || 0) + 1;
+    });
+
+    const scheduledRideMonths = Object.keys(scheduledRideCountsByMonth);
+    const scheduledRideCounts = Object.values(scheduledRideCountsByMonth);
 
 
     return (
@@ -81,26 +146,45 @@ function Dashboard() {
                 </div>
 
 
-
-                {/* <div className="flex w-10/12 mt-20 justify-center">
-                    <div className="w-full overflow-hidden rounded-3xl bg-blue-200 shadow-2xl sm:flex justify-center">
-                        <div className="w-full flex items-center justify-center">
-                            <div className="p-8">
-                                <h1 className="text-3xl font-black text-blue-900">Rides</h1>
-                                <Suspense fallback={<div>Loading...</div>}>
-                                    <PieChart data={pieChartData} />
-                                </Suspense>
-                            </div>
-                            <div className="p-8">
-                                <h1 className="text-3xl font-black text-blue-900">Rides</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div> */}
-
             </div>
 
+            <div className="flex flex-col md:flex-row w-10/12 mx-auto mt-20 justify-center">
+                <div className="w-full overflow-hidden rounded-3xl bg-blue-200 shadow-2xl sm:flex justify-center">
+                    <div className="w-full flex flex-col md:flex-row items-center justify-around">
+                        <div className="p-8">
+                            <h1 className="text-3xl font-black text-blue-900">Quick Rides</h1>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <BarChart months={QuickRideMonths} userCounts={QuickRideCounts} />
+                            </Suspense>
+                        </div>
+                        <div className="p-8">
+                            <h1 className="text-3xl font-black text-blue-900">Scheduled Rides</h1>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <BarChart months={scheduledRideMonths} userCounts={scheduledRideCounts} />
+                            </Suspense>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div className="flex flex-col md:flex-row w-10/12 mx-auto mt-20 justify-center">
+                <div className="w-full overflow-hidden rounded-3xl bg-blue-200 shadow-2xl sm:flex justify-center">
+                    <div className="w-full flex flex-col md:flex-row items-center justify-around">
+                        <div className="p-8">
+                            <h1 className="text-3xl font-black text-blue-900">Users</h1>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <BarChart months={userMonths} userCounts={userCounts} />
+                            </Suspense>
+                        </div>
+                        <div className="p-8">
+                            <h1 className="text-3xl font-black text-blue-900">Drivers</h1>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <BarChart months={driverMonths} userCounts={driverCounts} />
+                            </Suspense>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
         </div>

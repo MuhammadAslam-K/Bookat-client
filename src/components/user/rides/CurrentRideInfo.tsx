@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -18,6 +18,7 @@ import { Socket, io } from 'socket.io-client';
 import queryString from 'query-string';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
 
+const ChatModal = lazy(() => import("../../common/Chat"))
 
 
 interface driverData {
@@ -82,6 +83,7 @@ function CurrentRideInfo(props: { rideId: string | null }) {
 
     const [socket, setsocket] = useState<Socket | null>(null)
 
+    const [chat, SetChat] = useState(false)
 
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -94,7 +96,7 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                 const response = await userAxios.patch(`${userApis.getRideDetails}?id=${rideId}`)
                 console.log("response", response)
                 setRideInfo(response.data)
-                socketConnection()
+                // socketConnection()
                 if (response.data.otpVerifyed) {
                     setEndLat(parseFloat(response.data.dropoffCoordinates.latitude))
                     setEndLong(parseFloat(response.data.dropoffCoordinates.longitude))
@@ -216,7 +218,7 @@ function CurrentRideInfo(props: { rideId: string | null }) {
     //     };
     // }, [])
 
-    const socketConnection = () => {
+    useEffect(() => {
         const socketClient = io(import.meta.env.VITE_SOCKET_PORT, {
             transports: ["websocket"]
         });
@@ -226,17 +228,20 @@ function CurrentRideInfo(props: { rideId: string | null }) {
             socketClient.on('connect', () => {
                 console.log('Connected to the Socket.IO server');
             })
-        } else {
-            console.log("Can not connect")
         }
+        return () => {
+            if (socket) {
+                socket.disconnect();
+                socketClient.disconnect();
+            }
+        }
+    }, [])
+    // const interval = setInterval(() => {
+    //     getDriverLiveLocation()
+    //     console.log('Function called every 5 seconds');
 
-        // const interval = setInterval(() => {
-        //     getDriverLiveLocation()
-        //     console.log('Function called every 5 seconds');
-
-        //     // setCounter(prevCounter => prevCounter + 1);'
-        // }, 10000);
-    }
+    //     // setCounter(prevCounter => prevCounter + 1);'
+    // }, 10000);
 
     if (socket && rideInfo) {
         let otp = false
@@ -299,10 +304,20 @@ function CurrentRideInfo(props: { rideId: string | null }) {
         }
     }
 
+    const handleChangeTheChatState = () => {
+        SetChat(!chat)
+    }
+
     return (
         <div className="flex my-10 justify-center space-x-4">
-
             <div className="w-10/12 space-y-4">
+
+                {chat && rideId && socket &&
+                    <Suspense fallback="loading please wait.....">
+                        <ChatModal rideId={rideId} role={"user"} handleChangeTheChatState={handleChangeTheChatState} />
+                    </Suspense>
+                }
+
                 <div className='rounded-3xl shadow-2xl'>
                     <div className="flex">
                         <div className="w-8/12 m-10">
@@ -317,9 +332,30 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Total Rides : {driverInfo?.RideDetails?.completedRides}</p>
 
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Vehicle : {driverInfo?.vehicleDocuments.vehicleModel}</p>
-                                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">Registration no : {driverInfo?.vehicleDocuments.registration.registrationId}</p>
+                                <p className="font-normal text-gray-700 dark:text-gray-400">Registration no : {driverInfo?.vehicleDocuments.registration.registrationId}</p>
                             </div>
+
+                            <button
+                                onClick={() => handleChangeTheChatState()}
+                                className="bg-blue-500 mx-auto my-3 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center space-x-2 transition duration-300 ease-in-out focus:outline-none"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5 transform rotate-90"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M2.293 8.293a1 1 0 011.414 0L10 14.586l6.293-6.293a1 1 0 111.414 1.414l-7 7a1 1 0 01-1.414 0l-7-7a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                                <span>Chat</span>
+                            </button>
+
                         </div>
+
                     </div>
 
                     <div className="overflow-x-auto p-5 scrollbar-hide" style={{ maxWidth: '100%' }}>
@@ -333,6 +369,7 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                             ))}
                         </div>
                     </div>
+
 
                 </div>
             </div>

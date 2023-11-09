@@ -396,10 +396,10 @@ function UserHome() {
         setSuggestions([]);
     };
 
-    const backgroundImageUrl = "../../../../public/images/pexels-ketut-subiyanto-4429505.jpg"
-    const backgroundImageUrl1 = "../../../../public/images/pexels-jeshootscom-13861.jpg"
-    const backgroundImageUrl2 = "../../../../public/images/pexels-yan-krukau-8867434.jpg"
-    const backgroundImageUrl3 = "../../../../public/images/pexels-cottonbro-studio-4606338.jpg"
+    const backgroundImageUrl = "/images/pexels-ketut-subiyanto-4429505.jpg"
+    const backgroundImageUrl1 = "/images/pexels-jeshootscom-13861.jpg"
+    const backgroundImageUrl2 = "/images/pexels-yan-krukau-8867434.jpg"
+    const backgroundImageUrl3 = "/images/pexels-cottonbro-studio-4606338.jpg"
 
     const containerStyle: React.CSSProperties = {
         width: '100%',
@@ -425,13 +425,13 @@ function UserHome() {
 
             <h1 className="text-3xl font-bold text-blue-800 justify-center flex my-10">Book a safe ride!</h1>
             <div className="flex justify-center">
-                <div className="flex w-10/12 h-fit justify-center items-center rounded-3xl overflow-hidden shadow-2xl">
+                <div className="flex flex-col md:flex-row w-full md:w-10/12 justify-center items-center rounded-3xl overflow-hidden shadow-2xl">
                     {modal &&
                         <div className="fixed inset-0 flex items-center justify-center z-50">
                             <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
                             <div className="modal-content bg-white p-6 rounded-lg shadow-lg z-50">
                                 <h1 className='text-center font-semibold text-2xl'>Be relax !</h1>
-                                <p>We're connecting with the best drivers in your area.</p>
+                                <p> We're connecting with the best drivers in your area.</p>
 
                                 <div className="flex justify-center my-2 items-center h-16">
                                     <div className="relative inline-flex">
@@ -457,9 +457,8 @@ function UserHome() {
                         />
                     }
 
-                    <div className="w-full flex m-10 space-x-32">
-
-                        <form className="ms-20 m-10" onSubmit={handleListCabs} style={{ maxWidth: "270px" }}>
+                    <div className="sm:w-full flex my-5 space-x-32">
+                        <form className="md:w-1/2 w-full md:m-10 m-2" onSubmit={handleListCabs} style={{ maxWidth: "270px" }}>
                             <div className="justify-start w-full ms-10 items-start flex flex-col">
                                 <div className="w-full mb-6 md:mb-0 relative">
 
@@ -610,13 +609,15 @@ function UserHome() {
                             }
                         </form>
 
-                        <div className="w-7/12 h-96 flex my-10 justify-center items-center">
-                            <div className='rounded-3xl'
-                                ref={mapContainer} style={{ width: '100%', height: '100vh' }} />;
+                        <div className="sm:w-full md:w-7/12 h-96 flex my-5 md:my-10 justify-center items-center">
+                            <div className='rounded-3xl' ref={mapContainer} style={{ width: '100%', height: '100vh' }} />
                         </div>
+
                     </div>
                 </div>
             </div>
+
+
             <div className="text-center flex justify-center  my-5 mt-16">
                 <p className='font-bold flex text-blue-800 text-4xl'>Why Book@ ?</p>
             </div>

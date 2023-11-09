@@ -5,7 +5,7 @@ import UserDataTable from "../../../components/admin/user/UserDataTable"
 function UserManagementPage() {
 
     return (
-        <div className="bg-gray-100 h-screen">
+        <div className="bg-gray-100 h-auto">
             <Navbar />
             <UserDataTable />
             <div className="mt-20">

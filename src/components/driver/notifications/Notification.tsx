@@ -69,6 +69,7 @@ function Notification() {
 
         return () => {
             socket?.disconnect()
+            socketClient.disconnect()
             setsocket(null)
         }
     }, [])

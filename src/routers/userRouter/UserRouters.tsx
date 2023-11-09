@@ -15,6 +15,7 @@ import CurrentRidePage from '../../pages/user/home/ride/CurrentRidePage';
 import SheduledRidePage from '../../pages/user/home/ride/SheduledRide';
 import UserSideDriverInfoPage from '../../pages/user/home/ride/UserSideDriverInfoPage';
 import UserReviewAndRatingPage from '../../pages/user/home/UserReviewAndRatingPage';
+import NotFound from '../../components/common/PageNotFount';
 
 
 
@@ -37,6 +38,9 @@ const UserRoutes: React.FC = () => {
             <Route path="/currentRide" element={<UserProtectedRoute component={CurrentRidePage} />} />
             <Route path="/sheduledRide" element={<UserProtectedRoute component={SheduledRidePage} />} />
             <Route path="/driverInfo" element={<UserProtectedRoute component={UserSideDriverInfoPage} />} />
+
+            <Route path="/*" element={<NotFound role="user" />} />
+
         </Routes>
     );
 };
