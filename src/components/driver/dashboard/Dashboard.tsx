@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
-// import ScheduledRidesChart from "./chart"
+import { Suspense, useEffect, useState } from "react"
 
 import driverApis from "../../../Constraints/apis/driverApis"
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors"
 import { handleErrors } from "../../../Constraints/apiErrorHandling"
+import BarChart from "../../common/BarChart"
 
 interface dashboard {
     driverData: {
@@ -14,9 +14,14 @@ interface dashboard {
     }
     totalRide: string,
     quickRidesCount: string,
-    scheduledRidesCount: string
+    scheduledRidesCount: string,
+    quickRides: rides[]
+    scheduledRides: rides[]
 }
 
+interface rides {
+    date: string
+}
 
 function Dashboard() {
 
@@ -34,6 +39,39 @@ function Dashboard() {
         }
         fetchDriverDashboardData()
     }, [])
+
+    // QuickRide
+    const quickRideDates = dashboard?.quickRides.map((ride) => {
+        const date = new Date(ride.date);
+        return { month: date.getMonth(), year: date.getFullYear() };
+    });
+
+    const quickRideCountsByMonth: { [key: string]: number } = {};
+    quickRideDates?.forEach((joinDate) => {
+        const key = `${joinDate.year}-${joinDate.month}`;
+        quickRideCountsByMonth[key] = (quickRideCountsByMonth[key] || 0) + 1;
+    });
+
+    const QuickRideMonths = Object.keys(quickRideCountsByMonth);
+    const QuickRideCounts = Object.values(quickRideCountsByMonth);
+
+
+    // Scheduled Ride
+    const scheduledRideDates = dashboard?.scheduledRides.map((ride) => {
+        const date = new Date(ride.date);
+        return { month: date.getMonth(), year: date.getFullYear() };
+    });
+
+    const scheduledRideCountsByMonth: { [key: string]: number } = {};
+    scheduledRideDates?.forEach((date) => {
+        const key = `${date.year}-${date.month}`;
+        scheduledRideCountsByMonth[key] = (scheduledRideCountsByMonth[key] || 0) + 1;
+    });
+
+    const scheduledRideMonths = Object.keys(scheduledRideCountsByMonth);
+    const scheduledRideCounts = Object.values(scheduledRideCountsByMonth);
+
+
 
 
     return (
@@ -76,7 +114,27 @@ function Dashboard() {
                 </div>
             </div>
 
+            <div className="flex flex-col md:flex-row w-10/12 mx-auto mt-20 justify-center">
+                <div className="w-full overflow-hidden rounded-3xl bg-blue-200 shadow-2xl sm:flex justify-center">
+                    <div className="w-full flex flex-col md:flex-row items-center justify-around">
+                        <div className="p-8">
+                            <h1 className="text-3xl font-black text-blue-900">Quick Rides</h1>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <BarChart months={QuickRideMonths} userCounts={QuickRideCounts} />
+                            </Suspense>
+                        </div>
+                        <div className="p-8">
+                            <h1 className="text-3xl font-black text-blue-900">Scheduled Rides</h1>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <BarChart months={scheduledRideMonths} userCounts={scheduledRideCounts} />
+                            </Suspense>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
     )
 }
 

@@ -116,7 +116,7 @@ function UserDataTable() {
                 <p className="cursor-pointer"
                     onClick={() => { setUserDetails(true), SetUserId(row._id) }}
                 >
-                    Ride History
+                    More Details
                 </p>
             ),
         },

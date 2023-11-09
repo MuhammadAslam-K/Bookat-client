@@ -41,5 +41,8 @@ export default {
     cancelTheRide: "/cancelride",
 
     // HOME
-    getCabData: "/getCabs"
+    getCabData: "/getCabs",
+
+    // CHAT
+    chat: "/chat"
 }
