@@ -10,6 +10,7 @@ export default {
 
     rideconfirm: "/rideconfirm",
     payment: "/payment",
+    review: "/review",
 
     // HISTORY
     rideHistory: "/history",

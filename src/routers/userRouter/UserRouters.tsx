@@ -14,6 +14,8 @@ import RideHistoryPage from '../../pages/user/history/UserRideHistoryPage';
 import CurrentRidePage from '../../pages/user/home/ride/CurrentRidePage';
 import SheduledRidePage from '../../pages/user/home/ride/SheduledRide';
 import UserSideDriverInfoPage from '../../pages/user/home/ride/UserSideDriverInfoPage';
+import UserReviewAndRatingPage from '../../pages/user/home/UserReviewAndRatingPage';
+import NotFound from '../../components/common/PageNotFount';
 
 
 
@@ -29,12 +31,16 @@ const UserRoutes: React.FC = () => {
             <Route path="/rideconfirm" element={<UserProtectedRoute component={UserRideConfirmationPage} />} />
             <Route path="/profile" element={<UserProtectedRoute component={UserProfilePage} />} />
             <Route path="/payment" element={<UserProtectedRoute component={UserPaymentPage} />} />
+            <Route path="/review" element={<UserProtectedRoute component={UserReviewAndRatingPage} />} />
 
             <Route path="/history" element={<UserProtectedRoute component={RideHistoryPage} />} />
 
             <Route path="/currentRide" element={<UserProtectedRoute component={CurrentRidePage} />} />
             <Route path="/sheduledRide" element={<UserProtectedRoute component={SheduledRidePage} />} />
             <Route path="/driverInfo" element={<UserProtectedRoute component={UserSideDriverInfoPage} />} />
+
+            <Route path="/*" element={<NotFound role="user" />} />
+
         </Routes>
     );
 };

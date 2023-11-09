@@ -9,6 +9,7 @@ import DriverManagementPage from '../../pages/admin/driver/DriverManagementPage'
 import DriverAndVehicleValidationPage from '../../pages/admin/driver/DriverAndVehicleValidationPage';
 import AdminLoginPage from '../../pages/admin/auth/AdminLoginPage';
 import ListAllCabsPage from '../../pages/admin/cab/ListAllCabsPage';
+import NotFound from '../../components/common/PageNotFount';
 
 const AdminRoutes: React.FC = () => {
     return (
@@ -21,6 +22,9 @@ const AdminRoutes: React.FC = () => {
             <Route path="/drivers" element={<AdminProtectedRoute component={DriverManagementPage} />} />
             <Route path="/verify" element={<AdminProtectedRoute component={DriverAndVehicleValidationPage} />} />
             <Route path="/cabs" element={<AdminProtectedRoute component={ListAllCabsPage} />} />
+
+            <Route path="/*" element={<NotFound role='admin' />} />
+
 
         </Routes>
     );

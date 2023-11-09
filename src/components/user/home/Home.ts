@@ -28,6 +28,7 @@ export function calculateDistance(lat1: number | null, lon1: number | null, lat2
 export const getCoordinates = async (location: string) => {
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
     try {
+        console.log("location", location)
         const response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json`, {
             params: {
                 access_token: mapboxgl.accessToken,
@@ -35,7 +36,7 @@ export const getCoordinates = async (location: string) => {
         });
 
         const features = response.data.features;
-
+        console.log("features", features)
         if (features.length > 0) {
             const [longitude, latitude] = features[0].center;
             return { latitude, longitude };

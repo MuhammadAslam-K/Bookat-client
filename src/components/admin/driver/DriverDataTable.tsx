@@ -125,7 +125,7 @@ function DriverDataTable() {
                 <p className="cursor-pointer"
                     onClick={() => { SetDriverId(row._id), setDriverDetails(true) }}
                 >
-                    Ride History
+                    More Details
                 </p>
             ),
         },

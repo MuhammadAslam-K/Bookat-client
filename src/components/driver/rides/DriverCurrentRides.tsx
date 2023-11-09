@@ -31,7 +31,6 @@ function DriverCurrentRides() {
         const fetchRideDetails = async () => {
             try {
                 const response = await driverAxios.get(driverApis.currentRide)
-                console.log("response", response)
                 setRideDetails(response.data[0])
             } catch (error) {
                 console.log(error)

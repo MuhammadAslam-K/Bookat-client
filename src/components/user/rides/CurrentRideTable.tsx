@@ -1,14 +1,10 @@
-import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
-import toast from "react-hot-toast";
-import { ErrorResponse } from "../profile/UserProfile";
-import { userLogout } from "../../../services/redux/slices/userAuth";
 import userEndPoints from "../../../Constraints/endPoints/userEndPoints";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { userAxios } from "../../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../../Constraints/apis/userApis";
 import queryString from "query-string";
+import { handleErrors } from "../../../Constraints/apiErrorHandling";
 
 
 interface rideDetail {
@@ -23,7 +19,6 @@ interface rideDetail {
 
 function CurrentRide() {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [rideDetails, setRideDetails] = useState<rideDetail>()
@@ -36,16 +31,7 @@ function CurrentRide() {
                 setRideDetails(response.data[0])
             } catch (error) {
                 console.log(error)
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(userLogout())
-                        navigate(userEndPoints.login)
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchRideDetails()

@@ -17,6 +17,7 @@ import DriverRideHistoryPage from '../../pages/driver/dashboard/history/DriverRi
 import DriverScheduleRideNotificationPage from '../../pages/driver/dashboard/notification/DriverScheduleRideNotificationPage';
 import DriverCurrentRidePage from '../../pages/driver/dashboard/rides/DriverCurrentRidePage';
 import DriverScheduledRidePage from '../../pages/driver/dashboard/rides/DriverScheduledRidePage';
+import NotFound from '../../components/common/PageNotFount';
 
 const DriverRoutes: React.FC = () => {
     return (
@@ -42,6 +43,8 @@ const DriverRoutes: React.FC = () => {
 
             <Route path="/currentRide" element={<DriverProtectedRoutes component={DriverCurrentRidePage} />} />
             <Route path="/scheduledRides" element={<DriverProtectedRoutes component={DriverScheduledRidePage} />} />
+
+            <Route path="/*" element={<NotFound role="driver" />} />
 
         </Routes>
     );

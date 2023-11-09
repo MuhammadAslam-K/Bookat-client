@@ -29,7 +29,9 @@ export default {
     // RIDE //
     scheduleTheRide: "/scheduleTheRide",
 
+    // PAYMENT
     payment: "/payment",
+    submitReview: "/review",
 
     currentRide: "/currentRide",
     scheduledRides: "/scheduledRides",
@@ -39,5 +41,8 @@ export default {
     cancelTheRide: "/cancelride",
 
     // HOME
-    getCabData: "/getCabs"
+    getCabData: "/getCabs",
+
+    // CHAT
+    chat: "/chat"
 }
