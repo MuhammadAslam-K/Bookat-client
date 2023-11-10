@@ -140,7 +140,7 @@ function DriverDataTable() {
                     </Suspense>
                 </div>
                 :
-                <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+                <div className="mt-10 w-full lg:w-10/12 lg:ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
 
                     <input
                         type="text"

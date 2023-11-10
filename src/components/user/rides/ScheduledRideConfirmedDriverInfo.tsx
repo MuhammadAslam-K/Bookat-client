@@ -90,13 +90,14 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
 
     return (
         <>
-            <div className="flex my-10 justify-center space-x-4">
+            <div className="flex flex-col sm:flex-row my-10 justify-center space-x-4">
 
-                <div className="w-10/12 space-y-4">
-                    <div className='rounded-3xl shadow-2xl'>
-                        <div className="flex">
+                <div className="lg:w-10/12 w-full space-y-4">
+                    <div className='rounded-3xl shadow-2xl w-full'>
+
+                        <div className="sm:flex justify-around">
                             {/* PERSONAL */}
-                            <div className="w-4/12 m-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                            <div className="w-full sm:w-4/12 max-w-sm mt-10 bg-white border border-gray-200 rounded-lg shadow mb-4 sm:mb-0">
                                 <div className='flex justify-center'>
                                     <img className="rounded-t-lg mt-6" src={driverInfo?.driverImageUrl} alt="no" />
                                 </div>
@@ -108,7 +109,7 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
                                 </div>
                             </div>
                             {/* VEHICLE */}
-                            <div className="w-4/12 m-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                            <div className="w-full sm:w-4/12 max-w-sm mt-10 bg-white border border-gray-200 rounded-lg shadow mb-4 sm:mb-0">
                                 <div className='flex justify-center'>
                                     <img className="rounded-t-lg mt-6" src={driverInfo?.vehicleDocuments.vehicleImage1} alt="no" />
                                 </div>
@@ -123,7 +124,7 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
                             </div>
 
                             {/* DOCUMENTS */}
-                            <div className="w-4/12 m-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                            <div className="w-full sm:w-4/12 max-w-sm mt-10 bg-white border border-gray-200 rounded-lg shadow mb-4 sm:mb-0">
                                 <div className='flex justify-center'>
                                     <img className="rounded-t-lg mt-6" src={driverInfo?.vehicleDocuments.registration.registrationImage} alt="no" />
                                 </div>
@@ -143,7 +144,7 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
                             <div className="flex space-x-4">
                                 {/* Review divs */}
                                 {feedback?.map((item) => (
-                                    <div key={item._id} className="-10 border rounded-3xl shadow-2xl p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
+                                    <div key={item._id} className="-10 border bg-white rounded-3xl shadow-lg p-4" style={{ flex: '0 0 auto', width: '20rem' }}>
                                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{renderStars(item.rating)}</h5>
                                         <p className="font-normal text-gray-700">{item.feedback}</p>
                                     </div>
@@ -154,7 +155,7 @@ function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, ride
                     </div>
                 </div>
 
-            </div>
+            </div >
         </>
     )
 }

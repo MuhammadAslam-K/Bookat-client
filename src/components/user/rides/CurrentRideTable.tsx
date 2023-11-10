@@ -52,8 +52,8 @@ function CurrentRide() {
     return (
         <>
 
-            <div className="flex h-screen justify-center mt-9" >
-                <div className="w-10/12 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
+            <div className="flex h-screen lg:justify-center mt-9" >
+                <div className="lg:w-10/12 w-full overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex lg:justify-center">
                     <div className="w-full ">
                         <div className="p-8">
                             <div className="p-8">

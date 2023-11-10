@@ -13,7 +13,7 @@ function UserSideDriverInfoPage() {
 
     const data = { driverId, rideId };
     return (
-        <div>
+        <div >
             <UserNavbar />
             <ConfirmedDriverInfo {...data} />
             <div className="mt-16">

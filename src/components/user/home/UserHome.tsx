@@ -457,9 +457,9 @@ function UserHome() {
                         />
                     }
 
-                    <div className="sm:w-full flex my-5 space-x-32">
+                    <div className="sm:w-full flex flex-col md:flex-row my-5 lg:space-x-32">
                         <form className="md:w-1/2 w-full md:m-10 m-2" onSubmit={handleListCabs} style={{ maxWidth: "270px" }}>
-                            <div className="justify-start w-full ms-10 items-start flex flex-col">
+                            <div className="justify-start w-full lg:ms-10 items-start flex flex-col">
                                 <div className="w-full mb-6 md:mb-0 relative">
 
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -563,11 +563,11 @@ function UserHome() {
 
                             </div>
 
-                            <button type="submit" className="mt-4 w-full ms-10 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Search Cabs</button>
+                            <button type="submit" className="mt-4 w-full lg:ms-10 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Search Cabs</button>
 
                             {showCabs &&
                                 <>
-                                    <div className="shadow-inner h-10 ms-10 mt-5 p-2 border border-slate-500 w-full rounded-2xl justify-center text-center my-5">Distance :{distance}km</div>
+                                    <div className="shadow-inner h-10 lg:ms-10 mt-5 p-2 border border-slate-500 w-full rounded-2xl justify-center text-center my-5">Distance :{distance}km</div>
 
                                     <div className="flex ms-6 w-full max-w-xs overflow-x-scroll mt-5 scrollbar-hide" >
                                         {carData?.filter(item => item.drivers?.length != 0).map(item => (
@@ -601,16 +601,16 @@ function UserHome() {
                                         ))}
                                     </div>
 
-                                    <button type="button" onClick={() => SetSheduleRideModal(true)} className="ms-10 w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Schedule a Ride</button>
-                                    <button type="button" onClick={handleQuickRide} className="w-full ms-10 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-black dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Confirm the Ride</button>
+                                    <button type="button" onClick={() => SetSheduleRideModal(true)} className="lg:ms-10 w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Schedule a Ride</button>
+                                    <button type="button" onClick={handleQuickRide} className="w-full lg:ms-10 text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-gray-600 dark:text-black dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Confirm the Ride</button>
 
                                 </>
 
                             }
                         </form>
 
-                        <div className="sm:w-full md:w-7/12 h-96 flex my-5 md:my-10 justify-center items-center">
-                            <div className='rounded-3xl' ref={mapContainer} style={{ width: '100%', height: '100vh' }} />
+                        <div className="sm:w-full md:w-full  flex lg:my-5 md:my-10 lg:justify-center lg:items-center">
+                            <div className='rounded-3xl sm:w-full md:w-full' ref={mapContainer} style={{ width: '100%', height: '90vh' }} />
                         </div>
 
                     </div>
