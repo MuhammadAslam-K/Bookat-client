@@ -191,7 +191,7 @@ function VehicleInfo() {
     return (
         <>
             <div className="flex justify-center mt-10">
-                <div className="w-10/12 overflow-hidden rounded-3xl shadow-2xl mt-14 mb-11">
+                <div className="lg:w-10/12 w-11/12 overflow-hidden rounded-3xl shadow-2xl mt-14 mb-11">
                     <form className="w-full" onSubmit={formik.handleSubmit}>
 
                         <div className="m-5">

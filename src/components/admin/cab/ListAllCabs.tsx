@@ -103,8 +103,8 @@ function ListAllCabs() {
                 </Suspense>
             }
 
-            <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
-                <p onClick={() => SetAddCabModal(true)}>Add New Cab</p>
+            <div className="mt-10 w-full lg:w-10/12 lg:ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+                <p className="cursor-pointer" onClick={() => SetAddCabModal(true)}>Add New Cab</p>
                 <Suspense>
                     {cabData &&
                         <DataTable

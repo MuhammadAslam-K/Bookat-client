@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import io, { Socket } from 'socket.io-client';
-import DataTable from "react-data-table-component"
+import DataTable, { TableColumn } from "react-data-table-component"
 
 
 import { handleErrors } from '../../../Constraints/apiErrorHandling'
@@ -27,20 +27,6 @@ interface Ride {
     vehicleType: string;
     favourite: boolean
 }
-
-
-type Column = {
-    name: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    selector?: (row: Ride) => any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    cell?: any;
-    hide?: () => boolean;
-};
-
-type ColumnsMap = {
-    [key: string]: Column[];
-};
 
 function UserRideHistory() {
 
@@ -231,20 +217,18 @@ function UserRideHistory() {
         </p>
     );
 
-    const quickRidesColumns = [
+    const ridesColumns: TableColumn<Ride>[] = [
 
         {
             name: 'From',
-            selector: (row: Ride) => (
-                <span title={row.pickupLocation} > {row.pickupLocation}</span>
-            )
+            selector: (row: Ride) => row.pickupLocation,
         },
         {
             name: 'To',
-            selector: (row: Ride) => (
-                <span title={row.dropoffLocation} > {row.dropoffLocation}</span>
-            )
+            selector: (row: Ride) => row.dropoffLocation,
+
         },
+
         {
             name: 'Amount',
             selector: (row: Ride) => row.price,
@@ -260,30 +244,25 @@ function UserRideHistory() {
         {
             name: 'Status',
             selector: (row: Ride) => row.status,
-            hide: () => activeTab === "favouriteRides",
         },
         {
             name: 'Action',
             cell: ActionCell,
-            hide: () => activeTab !== "favouriteRides",
 
         },
 
     ]
 
-    const favouriteRidesColumns = [
-
+    const favouriteRidesColumns: TableColumn<Ride>[] = [
         {
             name: 'From',
-            selector: (row: Ride) => (
-                <span title={row.pickupLocation} > {row.pickupLocation}</span>
-            )
+            selector: (row: Ride) => row.dropoffLocation,
+
         },
         {
             name: 'To',
-            selector: (row: Ride) => (
-                <span title={row.dropoffLocation} > {row.dropoffLocation}</span>
-            )
+            selector: (row: Ride) => row.dropoffLocation,
+
         },
         {
             name: 'Amount',
@@ -303,7 +282,7 @@ function UserRideHistory() {
         },
         {
             name: 'Action',
-            selector: (row: Ride) => (
+            cell: (row: Ride) => (
                 <div className="cursor-pointer">
                     <p
                         className="p-2 m-2 rounded-lg border-2 border-blue-500 hover:bg-blue-500 hover:text-white focus:outline-none"
@@ -318,23 +297,14 @@ function UserRideHistory() {
                         Schedule Ride
                     </p>
                 </div>
-
-            )
-        }
+            ),
+        },
 
     ]
 
-    const columnsMap: ColumnsMap = {
-        quickRides: quickRidesColumns,
-        scheduledRides: quickRidesColumns,
-        favouriteRides: favouriteRidesColumns,
-    };
-    const columns = columnsMap[activeTab] || [];
-
-
     return (
 
-        <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+        <div className="mt-10 w-full lg:w-10/12 lg:ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
             {modal &&
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
@@ -406,7 +376,7 @@ function UserRideHistory() {
             {quickRidesInfo && scheduledRidesInfo && favouriteRidesInfo && (
                 <DataTable
                     style={{ zIndex: '-1' }}
-                    columns={columns}
+                    columns={activeTab === "quickRides" ? ridesColumns : activeTab === "scheduledRides" ? ridesColumns : favouriteRidesColumns}
                     data={activeTab === "quickRides" ? quickRidesInfo : activeTab === "scheduledRides" ? scheduledRidesInfo : favouriteRidesInfo}
                     fixedHeader
                     highlightOnHover

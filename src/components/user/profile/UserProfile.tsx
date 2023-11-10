@@ -150,7 +150,7 @@ function UserProfile() {
                 :
 
                 <div className="flex mt-20 justify-center" >
-                    <div className="w-9/12 mb-40 overflow-hidden rounded-3xl bg-gray-100 shadow-2xl sm:flex justify-center">
+                    <div className="lg:w-9/12 w-11/12 mb-40 overflow-hidden rounded-3xl bg-gray-100 shadow-2xl sm:flex justify-center">
                         <div className="w-full ">
                             <div className="p-8">
                                 {formik.values &&
@@ -177,9 +177,9 @@ function UserProfile() {
                                             )}
                                         </div>
 
-                                        <div className="flex ms-36">
+                                        <div className="flex flex-col md:flex-row lg:ms-36  mt-5">
 
-                                            <div className='mb-4 w-full'>
+                                            <div className='mb-4 w-full md:w-1/2'>
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                     Name
                                                 </label>
@@ -199,7 +199,7 @@ function UserProfile() {
                                                 )}
                                             </div>
 
-                                            <div className='mb-4 w-full'>
+                                            <div className='mb-4 w-full md:w-1/2'>
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                     Email
                                                 </label>
@@ -220,8 +220,8 @@ function UserProfile() {
                                             </div>
                                         </div>
 
-                                        <div className="flex ms-36">
-                                            <div className='mb-4 w-full'>
+                                        <div className="flex flex-col md:flex-row lg:ms-36 mt-5">
+                                            <div className='mb-4 w-full md:w-1/2'>
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                     Mobile
                                                 </label>
@@ -245,7 +245,7 @@ function UserProfile() {
                                                 }
                                             </div>
 
-                                            <div className='mb-4 w-full'>
+                                            <div className='mb-4 w-full md:w-1/2'>
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                     Refrel
                                                 </label>
@@ -263,8 +263,8 @@ function UserProfile() {
                                             </div>
                                         </div>
 
-                                        <div className="flex ms-36">
-                                            <div className='mb-4 w-full'>
+                                        <div className="flex flex-col md:flex-row lg:ms-36 mt-5">
+                                            <div className='mb-4 w-full md:w-1/2'>
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                     Total Rides
                                                 </label>
@@ -279,7 +279,7 @@ function UserProfile() {
                                                 <p className='cursor-pointer' onClick={() => navigate(userEndPoints.rideHistory)}>Ride History</p>
                                             </div>
 
-                                            <div className='mb-4 w-full'>
+                                            <div className='mb-4 w-full md:w-1/2'>
                                                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                     Wallet
                                                 </label>

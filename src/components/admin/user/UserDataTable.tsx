@@ -1,12 +1,11 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Modal, Ripple, initTE } from "tw-elements";
 import { adminAxios } from "../../../Constraints/axiosInterceptors/adminAxiosInterceptors";
 import adminApis from "../../../Constraints/apis/adminApis";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
 initTE({ Modal, Ripple });
 import DataTable from "react-data-table-component"
-
-const UserDetails = lazy(() => import("./UserDetails"))
+import UserDetails from "./UserDetails";
 
 
 export interface ErrorResponse {
@@ -126,12 +125,12 @@ function UserDataTable() {
         <>
             {userDetails ?
                 <div>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <UserDetails userId={userId} />
-                    </Suspense>
+                    {/* <Suspense fallback={<div>Loading...</div>}> */}
+                    <UserDetails userId={userId} />
+                    {/* </Suspense> */}
                 </div>
                 :
-                <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+                <div className="mt-10 lg:w-10/12 w-full lg:ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center ">
 
                     <input
                         type="text"
