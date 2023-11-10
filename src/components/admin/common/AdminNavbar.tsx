@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import adminEndPoint from '../../Constraints/endPoints/adminEndPoint';
+import adminEndPoint from '../../../Constraints/endPoints/adminEndPoint';
 import { useDispatch } from 'react-redux';
-import { adminLogout } from '../../services/redux/slices/adminAuth';
+import { adminLogout } from '../../../services/redux/slices/adminAuth';
 
 function Navbar() {
 

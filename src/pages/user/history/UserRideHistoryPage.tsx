@@ -1,6 +1,6 @@
 import UserRideHistory from "../../../components/user/history/UserRideHistory"
-import UserFooter from "../../../components/user/UserFooter"
-import UserNavbar from "../../../components/user/UserNavbar"
+import UserFooter from "../../../components/user/common/UserFooter"
+import UserNavbar from "../../../components/user/common/UserNavbar"
 
 function UserRideHistoryPage() {
     return (

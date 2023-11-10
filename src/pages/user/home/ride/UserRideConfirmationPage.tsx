@@ -1,8 +1,8 @@
-import UserNavbar from '../../../../components/user/UserNavbar'
+import UserNavbar from '../../../../components/user/common/UserFooter'
+import UserFooter from '../../../../components/user/common/UserNavbar'
 import RideConfermation from '../../../../components/user/rides/CurrentRideInfo'
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import UserFooter from '../../../../components/user/UserFooter';
 
 function UserRideConfirmationPage() {
     const location = useLocation();
