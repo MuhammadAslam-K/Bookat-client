@@ -1,5 +1,5 @@
-import UserFooter from '../../../../components/user/UserFooter'
-import UserNavbar from '../../../../components/user/UserNavbar'
+import UserFooter from '../../../../components/user/common/UserFooter'
+import UserNavbar from '../../../../components/user/common/UserNavbar'
 import ScheduledRides from '../../../../components/user/rides/ScheduledRides'
 
 function SheduledRidePage() {

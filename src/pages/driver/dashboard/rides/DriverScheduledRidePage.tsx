@@ -1,5 +1,5 @@
-import DriverFooter from '../../../../components/driver/DriverFooter'
-import Navbar from '../../../../components/driver/Navbar'
+import DriverFooter from '../../../../components/driver/common/Navbar'
+import Navbar from '../../../../components/driver/common/DriverFooter'
 import ScheduledRides from '../../../../components/driver/rides/ScheduledRides'
 
 function DriverScheduledRidePage() {
