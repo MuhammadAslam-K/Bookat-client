@@ -1,8 +1,8 @@
+import UserNavbar from '../../../../components/user/common/UserFooter'
+import UserFooter from '../../../../components/user/common/UserNavbar'
 import queryString from 'query-string';
-import UserNavbar from '../../../../components/user/UserNavbar'
 import ConfirmedDriverInfo from '../../../../components/user/rides/ScheduledRideConfirmedDriverInfo'
 import { useLocation } from 'react-router';
-import UserFooter from '../../../../components/user/UserFooter';
 
 function UserSideDriverInfoPage() {
     const location = useLocation();

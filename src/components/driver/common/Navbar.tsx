@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
-import { rootState } from '../../utils/interfaces';
+import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
+import { rootState } from '../../../utils/interfaces';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { driverLogout } from '../../services/redux/slices/driverAuth';
+import { driverLogout } from '../../../services/redux/slices/driverAuth';
 
 function Navbar() {
 

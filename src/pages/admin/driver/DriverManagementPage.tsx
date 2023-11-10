@@ -1,5 +1,5 @@
-import AdminFooter from "../../../components/admin/AdminFooter"
-import Navbar from "../../../components/admin/AdminNavbar"
+import Navbar from "../../../components/admin/common/AdminNavbar"
+import AdminFooter from "../../../components/admin/common/AdminFooter"
 import DriverDataTable from "../../../components/admin/driver/DriverDataTable"
 
 function DriverManagementPage() {

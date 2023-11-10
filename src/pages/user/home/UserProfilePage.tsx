@@ -1,5 +1,5 @@
-import UserFooter from "../../../components/user/UserFooter"
-import UserNavbar from "../../../components/user/UserNavbar"
+import UserFooter from "../../../components/user/common/UserFooter"
+import UserNavbar from "../../../components/user/common/UserNavbar"
 import UserProfile from "../../../components/user/profile/UserProfile"
 
 function UserProfilePage() {

@@ -165,13 +165,13 @@ function AddVehicleInfo() {
 
     return (
         <>
-            <div className="flex h-screen items-center justify-center bg-gray-100 " >
+            <div className="flex h-screen items-center justify-center bg-gray-100">
                 <div className="w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                     <div className="w-full">
                         <h1 className="text-3xl text-center font-black text-blue mt-6">Vehicle Info</h1>
                         <div className="p-8">
                             <form className="mt-8" onSubmit={formik.handleSubmit}>
-                                <div className='mb-6 flex space-x-20'>
+                                <div className="mb-6 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-20">
                                     <input
                                         type="text"
                                         name="registrationId"
@@ -214,8 +214,8 @@ function AddVehicleInfo() {
                                     )}
                                 </div>
 
-                                <div className='mb-6 flex space-x-20'>
-                                    <label className="w-96 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                <div className="mb-6 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-20">
+                                    <label className="lg:w-96 w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
 
                                         {rcImage ?
                                             <img src={typeof rcImage === 'string' ? rcImage : URL.createObjectURL(rcImage)} className="max-h-32 w-full object-cover mt-4" />
@@ -267,8 +267,8 @@ function AddVehicleInfo() {
                                     </div>
                                 </div>
 
-                                <div className='mb-6 flex space-x-20'>
-                                    <label className="w-3/4 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                <div className="mb-6 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-20">
+                                    <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
 
                                         {vehicleImage1 ?
                                             <img src={typeof vehicleImage1 === 'string' ? vehicleImage1 : URL.createObjectURL(vehicleImage1)} className="max-h-32 w-full object-cover mt-4" />
@@ -288,7 +288,7 @@ function AddVehicleInfo() {
                                     </label>
 
 
-                                    <label className="w-3/4 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                    <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                         {vehicleImage2 ?
                                             <img src={typeof vehicleImage2 === 'string' ? vehicleImage2 : URL.createObjectURL(vehicleImage2)} className="max-h-32 w-full object-cover mt-4" />
                                             :

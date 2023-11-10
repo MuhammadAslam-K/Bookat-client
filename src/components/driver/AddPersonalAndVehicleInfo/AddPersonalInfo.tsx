@@ -152,13 +152,13 @@ function AddPersonalInfo() {
 
     return (
         <>
-            <div className="flex h-screen items-center justify-center bg-gray-100 " >
+            <div className="flex h-screen items-center justify-center bg-gray-100">
                 <div className="w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
-                    <div className="w-full ">
+                    <div className="w-full">
                         <h1 className="text-3xl text-center font-black text-blue mt-6">Personal Info</h1>
                         <div className="p-8">
                             <form className="mt-8" onSubmit={formik.handleSubmit}>
-                                <div className='mb-6 flex space-x-20'>
+                                <div className="mb-6 flex flex-col sm:flex-row  sm:space-x-20">
 
                                     <input
                                         type="text"
@@ -206,8 +206,8 @@ function AddPersonalInfo() {
                                     </div>
                                 </div>
 
-                                <div className='mb-6 flex space-x-20'>
-                                    <label className="w-3/4 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                <div className="mb-6 flex flex-col sm:flex-row space-x-0 sm:space-x-20">
+                                    <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
 
                                         {aadharImage ?
                                             <img src={typeof aadharImage === 'string' ? aadharImage : URL.createObjectURL(aadharImage)} className="max-h-32 w-full object-cover mt-4" />
@@ -227,7 +227,7 @@ function AddPersonalInfo() {
                                     </label>
 
 
-                                    <label className="w-3/4 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                    <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                         {licenseImage ?
                                             <img src={typeof licenseImage === 'string' ? licenseImage : URL.createObjectURL(licenseImage)} className="max-h-32 w-full object-cover mt-4" />
                                             :
@@ -246,7 +246,7 @@ function AddPersonalInfo() {
                                     </label>
                                 </div>
 
-                                <div className='mb-6 flex space-x-20'>
+                                <div className="mb-6 flex flex-col sm:flex-row space-x-0 sm:space-x-20">
                                     <textarea
                                         id="textArea"
                                         name="address"
@@ -261,7 +261,7 @@ function AddPersonalInfo() {
                                         }
                                     ></textarea>
 
-                                    <label className="w-3/4 flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                    <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                         {driverImage ?
                                             <img src={typeof driverImage === 'string' ? driverImage : URL.createObjectURL(driverImage)} className="max-h-32 w-full object-cover mt-4" />
                                             :

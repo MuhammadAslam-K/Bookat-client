@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
-import Navbar from '../../../../components/driver/Navbar'
+import Navbar from '../../../../components/driver/common/Navbar'
+import DriverFooter from '../../../../components/driver/common/DriverFooter'
 import RideConfirm from '../../../../components/driver/rides/RideConfirm'
 import queryString from 'query-string';
-import DriverFooter from '../../../../components/driver/DriverFooter';
 
 function DriverRideConfirmationPage() {
     const location = useLocation();

@@ -1,4 +1,4 @@
-import UserNavbar from '../../../components/user/UserNavbar'
+import UserNavbar from '../../../components/user/common/UserNavbar';
 import Payment from '../../../components/user/Payment'
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
