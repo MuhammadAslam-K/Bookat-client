@@ -219,9 +219,9 @@ function RideConfirm(props: { rideId: string | null }) {
     }
 
     return (
-        <div className="flex my-10 justify-center space-x-4">
+        <div className="flex flex-col items-center my-10 space-y-4">
 
-            <div className="w-10/12 space-y-4">
+            <div className='w-full sm:w-10/12 md:w-10/12 lg:w-10/12 xl:w-10/12 space-y-4'>
                 <div className='rounded-3xl shadow-2xl'>
                     {paymentModal &&
                         <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -245,11 +245,11 @@ function RideConfirm(props: { rideId: string | null }) {
                     }
 
                     {/* {driverData && */}
-                    <div className="flex">
-                        <div className="w-9/12 m-10">
+                    <div className="flex flex-col sm:flex-row">
+                        <div className="sm:w-full m-10">
                             <div ref={mapContainer} style={{ width: '100%', height: '80vh' }} />
                         </div>
-                        <div className="w-3/12 h-56 m-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow-2xl">
+                        <div className="sm:w-full h-56 m-10 max-w-sm bg-white border border-gray-200 rounded-lg shadow-2xl">
                             <div className="p-5 m-3">
                                 {OTPsuccess ?
                                     <button

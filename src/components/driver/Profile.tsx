@@ -211,11 +211,11 @@ function Profile() {
     return (
         <div className="flex justify-center" >
             {formik.values &&
-                <div className="w-11/12 overflow-hidden rounded-3xl bg-white shadow-2xl mt-11 mb-11">
+                <div className="w-full lg:w-11/12 overflow-hidden rounded-3xl bg-white shadow-2xl my-11 ">
                     <div className="w-full">
                         <section className="bg-white ">
                             {/* SECTION ONE */}
-                            <form className="relative lg:flex" onSubmit={formik.handleSubmit}>
+                            <form className="relative flex flex-col lg:flex-row" onSubmit={formik.handleSubmit}>
                                 <div className="min-h-screen mt-4 lg:w-1/3 flex flex-col text-center justify-center items-center">
                                     <div>
                                         <label
@@ -270,9 +270,9 @@ function Profile() {
                                     </div>
                                 </div>
                                 {/* SECTION TWO */}
-                                <div className="hidden w-3/4 min-h-screen bg-gray-200 lg:block">
-
+                                <div className="w-full min-h-screen bg-gray-200 lg:w-2/3">
                                     <h1 className="text-2xl my-5 items-center font-semibold flex flex-col text-center justify-center text-gray-800 capitalize lg:text-3xl dark:text-black">
+
                                         <input
                                             type="text"
                                             name="name"
@@ -289,7 +289,7 @@ function Profile() {
                                     </h1>
 
 
-                                    <div className=" lg:flex lg:items-center  ms-7">
+                                    <div className="lg:flex lg:items-center lg:ms-7">
 
                                         <div className="p-8 me-5 bg-white rounded-2xl w-full">
 
@@ -315,9 +315,9 @@ function Profile() {
                                             </div>
 
 
-                                            <div className="flex space-x-20 mx-3 mb-6">
+                                            <div className="flex flex-col lg:flex-row space-y-4 mx-3 mb-6">
 
-                                                <div className="w-full md:w-4/5 px-3 mb-6 md:mb-0">
+                                                <div className="w-full md:w-full px-3 lg:mb-6 lg:mt-4">
                                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                         Email
                                                     </label>
@@ -339,7 +339,7 @@ function Profile() {
 
                                                 </div>
 
-                                                <div className="w-full md:w-4/5 px-3 mb-6 md:mb-0">
+                                                <div className="w-full md:w-full px-3 lg:mb-6">
                                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                         Mobile
                                                     </label>
@@ -360,7 +360,7 @@ function Profile() {
 
                                                 </div>
 
-                                                <div className="w-full md:w-4/5 px-3 mb-6 md:mb-0">
+                                                <div className="w-full md:w-full px-3 lg:mb-6">
                                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                         Refrel
                                                     </label>
@@ -371,8 +371,8 @@ function Profile() {
 
                                             </div>
 
-                                            <div className="flex space-x-20 mx-3 mb-6">
-                                                <div className="w-full md:w-4/5 px-3 mb-6 md:mb-0">
+                                            <div className="flex flex-col lg:flex-row space-y-4 mx-3 mb-6">
+                                                <div className="w-full md:w-4/5 px-3 mb-6 lg:mt-4">
                                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                         Aadhar Id
                                                     </label>
@@ -415,8 +415,8 @@ function Profile() {
                                                 </div>
 
                                             </div>
-                                            <div className="flex space-x-20 mx-3 mb-6 ">
-                                                <div className="w-full md:w-4/5 px-3 mb-6 md:mb-0">
+                                            <div className="flex flex-col lg:flex-row space-y-4 mx-3 mb-6">
+                                                <div className="w-full md:w-4/5 px-3 mb-6">
                                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                         Aadhar Image
                                                         <img src={formik.values.aadharImageUrl} className="rounded-lg max-h-44" />
@@ -430,7 +430,7 @@ function Profile() {
                                                     </label>
                                                 </div>
 
-                                                <div className="w-full md:w-4/5  px-3 mb-6 md:mb-0 ">
+                                                <div className="w-full md:w-4/5 px-3 mb-6">
                                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >
                                                         license Image
                                                         <img src={formik.values.licenseImageUrl} className="rounded-lg max-h-44" />

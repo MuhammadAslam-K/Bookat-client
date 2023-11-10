@@ -140,7 +140,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             {/* PERSONAL INFO */}
 
             {data &&
-                <div className="flex  h-full justify-center bg-gray-100">
+                <div className="flex h-full justify-center ">
 
                     <div className="w-10/12 mt-16 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                         <div className="w-full">
@@ -148,48 +148,46 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
                             <div className="p-8">
                                 <form className="mt-8">
 
-                                    <div className="my-6 flex flex-wrap justify-around">
+                                    <div className="flex flex-wrap justify-around">
 
-                                        <label className="flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 flex flex-col items-center justify-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Name: {data.name}
                                         </label>
 
-                                        <label className="flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 my-2 flex flex-col items-center justify-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Email Id: {data.email}
                                         </label>
 
-                                        <label className="flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 flex flex-col items-center justify-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Mobile No: {data.mobile}
                                         </label>
                                     </div>
 
-                                    <div className="mt-16 flex flex-wrap justify-around">
+                                    <div className="mt-10 flex flex-wrap justify-around">
 
 
-                                        <label className="flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 mb-2 flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             License ID: {data.license.licenseId}
                                         </label>
-                                        <label className="flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             AAdhar ID: {data.aadhar.aadharId}
                                         </label>
 
                                     </div>
 
-                                    <div className="my-11 flex justify-around">
+                                    <div className="my-11 flex flex-wrap justify-around">
 
-                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
+                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 mb-5 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
                                             <img src={data.license.licenseImage} className="w-full  max-h-64" alt="" />
                                         </div>
-                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
+                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3  bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
                                             <img src={data.aadhar.aadharImage} className="w-full  max-h-64" alt="" />
                                         </div>
                                     </div>
-                                    <div className="w-11/12 sm:w-2/3 lg:w-1/3 ms-24 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
-                                        <img src={data.driverImageUrl} className="w-full max-h-64" alt="" />
-                                    </div>
 
 
-                                    <div className="flex justify-end">
+
+                                    <div className="flex justify-end mt-5">
                                         <button type="button" className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                                             onClick={handleApprovePersonalInfo}
                                         >Approve</button>
@@ -234,7 +232,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
             {/* VEHICLE INFO  */}
 
             {data &&
-                <div className="flex  h-full justify-center bg-gray-100">
+                <div className="flex  h-full justify-center">
                     <div className="w-10/12 mt-16 overflow-hidden rounded-3xl bg-white shadow-2xl sm:flex justify-center">
                         <div className="w-full">
                             <h1 className="text-3xl text-center font-black text-blue mt-6">Vehicle Info</h1>
@@ -243,39 +241,55 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
 
                                     <div className="my-6 flex flex-wrap justify-around">
 
-                                        <label className="flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Vehicle Model: {data.vehicleDocuments.vehicleModel}
                                         </label>
 
-                                        <label className="flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 my-2 flex flex-col  items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Vehicle Type: {data.vehicleDocuments.vehicleType}
                                         </label>
 
-                                        <label className="flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
+                                        <label className="w-full lg:w-1/4 flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Max peoples: {data.vehicleDocuments.maxPersons}
                                         </label>
                                     </div>
 
-                                    <div className="mt-16 ms-28 flex flex-wrap justify-start">
+                                    <div className="mt-16 lg:ms-28 flex flex-wrap justify-start">
                                         <label className="w-full sm:w-1/2 lg:w-1/3 flex flex-col items-center px-4 py-3 bg-white text-blue rounded-lg shadow-lg tracking-wide border border-blue cursor-pointer hover:bg-slate-100">
                                             Registration No: {data.vehicleDocuments.registration.registrationId}
                                         </label>
 
                                     </div>
 
-                                    <div className="my-11 flex justify-around">
-                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover:bg-slate-100">
+                                    <div className="my-11 flex flex-wrap justify-around">
+
+                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100 mb-4 sm:mb-0">
                                             <img src={data.vehicleDocuments.registration.registrationImage} className="w-full max-h-64" alt="" />
                                         </div>
+
+                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 lg:ms-24 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
+                                            <img src={data.driverImageUrl} className="w-full max-h-64" alt="" />
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div className="my-11 flex flex-wrap justify-around">
+
                                         <div className="w-11/12 sm:w-2/3 lg:w-1/3 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
                                             <img src={data.vehicleDocuments.vehicleImage1} className="w-full max-h-64" alt="" />
                                         </div>
-                                    </div>
-                                    <div className="w-11/12 sm:w-2/3 lg:w-1/3 ms-24 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
-                                        <img src={data.vehicleDocuments.vehicleImage2} className="w-full max-h-64" alt="" />
+
+                                        <div className="w-11/12 sm:w-2/3 lg:w-1/3 lg:ms-24 bg-white text-blue rounded-lg shadow-2xl tracking-wide border-4 border-blue cursor-pointer hover-bg-slate-100">
+                                            <img src={data.vehicleDocuments.vehicleImage2} className="w-full max-h-64" alt="" />
+                                        </div>
+
                                     </div>
 
-                                    <div className="flex justify-end">
+
+
+                                    <div className="flex justify-end mt-5">
                                         <button type="button"
                                             onClick={handleApproveVehicleInfo}
                                             className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Approve</button>

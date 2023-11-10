@@ -7,7 +7,7 @@ export default defineConfig({
     exclude: ['stream', 'os'], // Exclude problematic modules
   },
   build: {
-    chunkSizeWarningLimit: 1000, // Set the limit to a higher value.
+    chunkSizeWarningLimit: 2000, // Set the limit to a higher value.
     rollupOptions: {
       output: {
         manualChunks(id) {

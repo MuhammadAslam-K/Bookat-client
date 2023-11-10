@@ -104,7 +104,7 @@ function UserDetails(props: { userId: string }) {
 
     return (
         <>
-            <div className="mt-10 w-10/12 ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
+            <div className="mt-10 lg:w-10/12 w-full lg:ms-32 bg-white p-6 rounded-3xl shadow-2xl justify-center">
                 <div className="border-b border-gray-200">
                     <ul className="flex" role="tablist">
                         <li className="mr-1">
@@ -163,13 +163,13 @@ function UserDetails(props: { userId: string }) {
                 <div className="w-full overflow-hidden rounded-3xl bg-blue-200 shadow-2xl sm:flex justify-center">
                     <div className="w-full flex flex-col md:flex-row items-center justify-around">
                         <div className="p-8">
-                            <h1 className="text-3xl font-black text-blue-900">Quick Rides</h1>
+                            <h1 className="text-3xl font-black mb-5 text-blue-900">Quick Rides</h1>
                             <Suspense fallback={<div>Loading...</div>}>
                                 <BarChart months={QuickRideMonths} userCounts={QuickRideCounts} />
                             </Suspense>
                         </div>
                         <div className="p-8">
-                            <h1 className="text-3xl font-black text-blue-900">Scheduled Rides</h1>
+                            <h1 className="text-3xl font-black mb-5 text-blue-900">Scheduled Rides</h1>
                             <Suspense fallback={<div>Loading...</div>}>
                                 <BarChart months={scheduledRideMonths} userCounts={scheduledRideCounts} />
                             </Suspense>

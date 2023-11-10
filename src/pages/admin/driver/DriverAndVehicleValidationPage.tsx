@@ -11,13 +11,13 @@ function DriverAndVehicleValidationPage() {
 
     const data = { id: id }
     return (
-        <>
+        <div className='bg-gray-100'>
             <Navbar />
             <DriverAndVehicleValidation {...data} />
             <div className="mt-20">
                 <AdminFooter />
             </div>
-        </>
+        </div>
     )
 }
 

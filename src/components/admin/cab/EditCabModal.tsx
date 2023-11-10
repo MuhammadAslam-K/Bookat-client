@@ -119,7 +119,7 @@ function EditCabModal({ handleCabEditResult, cabId }: AddCabModalProps) {
         <div>
             <div className="fixed inset-0 flex items-center justify-center z-50">
                 <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
-                <form className="modal-content w-3/12 bg-white p-6 rounded-lg shadow-lg z-50" onSubmit={formik.handleSubmit}>
+                <form className="modal-content lg:w-3/12 w-full bg-white p-6 rounded-lg shadow-lg z-50" onSubmit={formik.handleSubmit}>
                     <h1 className='text-center font-semibold text-2xl'>Add New Cab Type</h1>
 
                     <div className="mt-4">
