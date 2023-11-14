@@ -1,5 +1,5 @@
-import UserNavbar from '../../../../components/user/common/UserFooter'
-import UserFooter from '../../../../components/user/common/UserNavbar'
+import UserNavbar from '../../../../components/user/common/UserNavbar'
+import UserFooter from '../../../../components/user/common/UserFooter'
 import queryString from 'query-string';
 import ConfirmedDriverInfo from '../../../../components/user/rides/ScheduledRideConfirmedDriverInfo'
 import { useLocation } from 'react-router';

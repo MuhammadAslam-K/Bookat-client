@@ -57,7 +57,7 @@ export interface rideDetails {
     pickupLocation: string;
     price: string;
     distance: string;
-    otpVerifyed: boolean
+    otpVerifyed: boolean;
 }
 
 interface commnet {

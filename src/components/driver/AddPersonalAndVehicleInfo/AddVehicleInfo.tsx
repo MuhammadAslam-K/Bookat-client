@@ -144,7 +144,7 @@ function AddVehicleInfo() {
 
 
                     const response = await driverAxios.post(driverApis.addVehicleInfo, formData);
-                    const { document, vehicle, driverId, vehicleType } = response.data
+                    const { document, driverId, vehicle, vehicleType } = response.data
                     dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
                     dispatch(setVehicle())
                     toast.dismiss()
@@ -153,6 +153,7 @@ function AddVehicleInfo() {
 
                 } catch (error) {
                     console.log(error)
+                    toast.dismiss()
                     handleErrors(error)
                 }
             }
