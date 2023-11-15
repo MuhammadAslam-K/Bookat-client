@@ -8,7 +8,7 @@ import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates, handlePrice, isOneHourGreater } from './Home';
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
-import { rootState } from '../../../utils/interfaces';
+import { rootState } from '../../../interfaces/comman';
 import { useNavigate } from "react-router-dom"
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
 import { userLogout } from '../../../services/redux/slices/userAuth';
@@ -18,20 +18,10 @@ import DateTimePickerModal from '../DateTimeModal'; // Make sure to import the D
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
+import { LocationSuggestion, cabDataUser } from '../../../interfaces/user';
 
 
-export interface LocationSuggestion {
-    text: string;
-    place_name: string;
-}
 
-interface carData {
-    cabType: string,
-    maxPersons: string,
-    price: string,
-    image: string,
-    drivers: []
-}
 
 function UserHome() {
 
@@ -61,7 +51,7 @@ function UserHome() {
     const [toLocationSuggestions, setToLocationSuggestions] = useState<LocationSuggestion[]>([]);
 
     const [amount, SetAmount] = useState<string>('')
-    const [carData, SetCarData] = useState<carData[]>()
+    const [carData, SetCarData] = useState<cabDataUser[]>()
 
 
     const [distance, SetDistance] = useState<string>("");

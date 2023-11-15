@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
-import { rootState } from '../../../utils/interfaces';
+import { rootState } from '../../../interfaces/comman';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { driverLogout } from '../../../services/redux/slices/driverAuth';

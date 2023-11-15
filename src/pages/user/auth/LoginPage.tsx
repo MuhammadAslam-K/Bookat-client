@@ -1,5 +1,5 @@
 import Login from "../../../components/auth/Login"
-import { loginComponentProps } from "../../../utils/interfaces"
+import { loginComponentProps } from "../../../interfaces/comman"
 import userApis from "../../../Constraints/apis/userApis"
 import userEndPoints from "../../../Constraints/endPoints/userEndPoints"
 

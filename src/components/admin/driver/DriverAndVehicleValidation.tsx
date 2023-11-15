@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { adminAxios } from '../../../Constraints/axiosInterceptors/adminAxiosInterceptors';
 import adminApis from '../../../Constraints/apis/adminApis';
-import { DriverInfo } from '../../../utils/interfaces';
+import { DriverInfo } from '../../../interfaces/driver';
 
 import { Modal, Ripple, initTE } from "tw-elements";
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
@@ -24,7 +24,7 @@ function DriverAndVehicleValidation(props: { id: string | null }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response: DriverInfo = await adminAxios.get(`${adminApis.getDriverInfo}/?id=${id}`)
+                const response = await adminAxios.get(`${adminApis.getDriverInfo}/?id=${id}`)
                 Setdata(response.data)
 
             } catch (error) {

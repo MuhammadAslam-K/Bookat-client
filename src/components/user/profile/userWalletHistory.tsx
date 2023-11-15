@@ -1,13 +1,8 @@
 import { Suspense } from "react";
 import DataTable from "react-data-table-component"
+import { wallet } from "../../../interfaces/user";
 
 
-interface wallet {
-    date: Date,
-    amount: string,
-    status: string,
-    details: string,
-}
 
 function WalletHistory(props: { transactions: []; }) {
 

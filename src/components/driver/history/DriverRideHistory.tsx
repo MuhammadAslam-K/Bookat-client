@@ -2,26 +2,18 @@ import { Suspense, useEffect, useState } from 'react'
 import { handleErrors } from '../../../Constraints/apiErrorHandling'
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
 import driverApis from '../../../Constraints/apis/driverApis';
+import { driverRideHistory } from '../../../interfaces/admin';
 
 import DataTable from "react-data-table-component"
 
-interface Ride {
-    _id: string;
-    status: string;
-    date: string;
-    distance: string;
-    dropoffLocation: string;
-    pickupLocation: string;
-    driverRevenu: number;
-    rating: number;
-}
+
 
 
 function DriverRideHistory() {
 
 
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>([])
-    const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[] | null>(null)
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<driverRideHistory[]>([])
+    const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<driverRideHistory[] | null>(null)
     const [quickRides, SetQuickRides] = useState(true)
 
     useEffect(() => {
@@ -47,23 +39,23 @@ function DriverRideHistory() {
 
         {
             name: 'From',
-            selector: (row: Ride) => row.pickupLocation,
+            selector: (row: driverRideHistory) => row.pickupLocation,
         },
         {
             name: 'To',
-            selector: (row: Ride) => row.dropoffLocation,
+            selector: (row: driverRideHistory) => row.dropoffLocation,
         },
         {
             name: 'Amount',
-            selector: (row: Ride) => row.driverRevenu.toFixed(0),
+            selector: (row: driverRideHistory) => row.driverRevenu.toFixed(0),
         },
         {
             name: 'Distance',
-            selector: (row: Ride) => row.distance,
+            selector: (row: driverRideHistory) => row.distance,
         },
         {
             name: 'Status',
-            selector: (row: Ride) => row.status,
+            selector: (row: driverRideHistory) => row.status,
         },
 
     ]

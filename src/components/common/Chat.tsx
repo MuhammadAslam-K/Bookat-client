@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Socket, io } from 'socket.io-client';
+import { Message, chat } from '../../interfaces/comman';
 
-interface Message {
-    sender: string;
-    content: string;
-    timestamp: Date;
-}
 
-interface chat {
-    rideId: string;
-    handleChangeTheChatState: () => void
-    role: string
-}
 
 const ChatModal = (props: chat) => {
 
@@ -34,11 +25,13 @@ const ChatModal = (props: chat) => {
             console.log('Connected to the Socket.IO server');
         })
 
-        socketClient.emit('join-chat', rideId);
+        socketClient.emit('join-chat', rideId)
 
-        socketClient.on('chat-message', (message: Message) => {
+        socketClient.on('chat-message', (message: Message, messageRideId: string) => {
             console.log("chat-message", message)
-            setMessages(message as unknown as Message[]);
+            if (message && (messageRideId == rideId)) {
+                setMessages(message as unknown as Message[]);
+            }
         });
 
         return () => {
@@ -48,6 +41,17 @@ const ChatModal = (props: chat) => {
 
     }, [reload]);
 
+    const handleReload = () => {
+        socket?.emit('join-chat', rideId)
+
+        socket?.on('chat-message', (message: Message, messageRideId: string) => {
+            console.log("chat-message", message)
+            if (message && (messageRideId == rideId)) {
+                setMessages(message as unknown as Message[]);
+            }
+        });
+    }
+
     const handleSendMessage = () => {
         if (newMessage.trim() !== '') {
             const message: Message = {
@@ -55,9 +59,10 @@ const ChatModal = (props: chat) => {
                 content: newMessage,
                 timestamp: new Date(),
             };
-            socket?.emit('update-chat-message', { rideId, message });
+            socket?.emit('update-chat-message', { rideId, message })
             setMessages([...messages, message]);
             SetReload(!reload)
+            handleReload()
             setNewMessage('');
         }
     };

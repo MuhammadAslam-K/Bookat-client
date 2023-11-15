@@ -1,7 +1,7 @@
 import driverApis from '../../../Constraints/apis/driverApis';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import SignUp from '../../../components/auth/SignUp';
-import { signupComponentProps } from '../../../utils/interfaces';
+import { signupComponentProps } from '../../../interfaces/comman';
 
 
 function DriverSignup() {

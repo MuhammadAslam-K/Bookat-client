@@ -126,9 +126,12 @@ function AddPersonalInfo() {
                     };
 
                     const response = await driverAxios.post(driverApis.addPersonalInfo, formData);
-                    const { document, vehicle, driverId, vehicleType } = response.data
-                    dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
+                    const document = response.data.driver.driverDocuments
+                    const { vehicle, driverId, vehicleType } = response.data
+                    console.log(response.data)
+                    console.log("document", document, vehicle)
                     dispatch(setDocument())
+                    dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
                     toast.dismiss()
                     toast.success("Form submitted successfully")
                     navigate(driverEndPoints.addVehicleInfo)

@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { BarChartProps } from '../../interfaces/comman';
 
-interface BarChartProps {
-    months: string[];
-    userCounts: number[];
-}
 
 const BarChart: React.FC<BarChartProps> = ({ months, userCounts }) => {
     const chartData = {

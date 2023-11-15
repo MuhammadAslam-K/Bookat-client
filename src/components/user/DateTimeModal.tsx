@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
+import { DateTimePickerModalProps } from '../../interfaces/user';
 
-interface DateTimePickerModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSelectDate: (date: Date) => void;
-    handleScheduleBooking: () => void
-}
+
 
 const DateTimePickerModal: React.FC<DateTimePickerModalProps> = ({ isOpen, onClose, onSelectDate, handleScheduleBooking }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());

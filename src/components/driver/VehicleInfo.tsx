@@ -7,28 +7,17 @@ import * as Yup from "yup"
 import { customLoadingStyle } from "../../Constraints/customizeLoaderStyle";
 import { uploadImageToStorage } from "../../services/firebase/storage";
 import { handleErrors } from "../../Constraints/apiErrorHandling";
+import { driverCab, driverVehicleDocuments } from "../../interfaces/driver";
 
 
-interface vehicleDocuments {
-    registrationId: string,
-    rcImageUrl: string,
-    vehicleModel: string,
-    maxPersons: string,
-    vehicleType: string,
-    vehicleImageUrl1: string,
-    vehicleImageUrl2: string,
-}
 
-interface cab {
-    cabType: string
-}
 
 function VehicleInfo() {
 
     const [readOnly, SetReadOnly] = useState(true)
     const [reload, Setreload] = useState(true)
 
-    const [cabData, SetCabData] = useState<cab[]>()
+    const [cabData, SetCabData] = useState<driverCab[]>()
     const [rcImagesName, setRcImagesName] = useState<string | null>(null);
     const [vehicleImageName1, SetVehicleImageName1] = useState<string | null>(null);
     const [vehicleImageName2, setvehicleImageName2] = useState<string | null>(null);
@@ -45,7 +34,7 @@ function VehicleInfo() {
                 SetCabData(response.data.cabs)
                 const responseData = response.data.vehicle.vehicleDocuments
 
-                const data: vehicleDocuments = {
+                const data: driverVehicleDocuments = {
                     registrationId: responseData.registration.registrationId,
                     rcImageUrl: responseData.registration.registrationImage,
                     vehicleModel: responseData.vehicleModel,

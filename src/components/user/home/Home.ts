@@ -1,6 +1,6 @@
 import axios from "axios";
 import mapboxgl from "mapbox-gl";
-import { LocationSuggestion } from "./UserHome";
+import { LocationSuggestion } from "../../../interfaces/user";
 
 function degreesToRadians(degrees: number) {
     return degrees * (Math.PI / 180);

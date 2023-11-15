@@ -1,34 +1,20 @@
 import { useEffect, useState, Suspense, lazy } from 'react';
-import axios, { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from "yup"
 
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
-import { userLogin, userLogout } from '../../../services/redux/slices/userAuth';
+import { userLogin } from '../../../services/redux/slices/userAuth';
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
+import { handleErrors } from '../../../Constraints/apiErrorHandling';
+import { UserProfileData } from '../../../interfaces/user';
 
 const WalletComponent = lazy(() => import("./userWalletHistory"))
 
-export interface ErrorResponse {
-    error: string;
-}
 
-interface UserProfileData {
-    email: string;
-    mobile: string;
-    name: string;
-    refrel: string;
-    totalRides: string;
-    joinedAt: string;
-    wallet: {
-        balance: string;
-    };
 
-}
 
 function UserProfile() {
     const [readOnly, setReadOnly] = useState(true);
@@ -66,17 +52,7 @@ function UserProfile() {
 
             } catch (error) {
                 console.log(error)
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(userLogout())
-                        navigate(userEndPoints.login)
-
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchData()
@@ -124,14 +100,7 @@ function UserProfile() {
             console.log(error);
             SetReload(!reload)
             setReadOnly(!readOnly)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     }
 

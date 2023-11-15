@@ -4,11 +4,9 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../Constraints/apis/userApis';
+import { OtpProps } from '../../interfaces/comman';
 
-interface OtpProps {
-    mobile: string;
-    submitSignUpForm: () => Promise<void>;
-}
+
 
 function Otp(props: OtpProps) {
 

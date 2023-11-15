@@ -6,37 +6,9 @@ import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInter
 import userApis from '../../../Constraints/apis/userApis'
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints'
 import { handleErrors } from '../../../Constraints/apiErrorHandling'
+import { driverData, feedback } from '../../../interfaces/user'
 
 
-interface feedback {
-    feedback: string
-    rating: string
-    _id: string
-}
-
-interface driverData {
-    name: string
-    mobile: string
-    email: string
-    RideDetails: {
-        completedRides: string
-    },
-    vehicleDocuments: {
-        vehicleModel: string
-        registration: {
-            registrationId: string,
-            registrationImage: string
-        }
-        vehicleImage1: string
-        vehicleImage2: string
-    }
-    license: {
-        licenseId: string
-        licenseImage: string
-    }
-    joinedAt: string,
-    driverImageUrl: string
-}
 function ScheduledRideConfirmedDriverInfo(props: { driverId: string | null, rideId: string | null }) {
 
     const { driverId, rideId } = props

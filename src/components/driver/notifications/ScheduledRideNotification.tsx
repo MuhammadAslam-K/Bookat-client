@@ -5,28 +5,19 @@ import { Link } from "react-router-dom";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import driverApis from "../../../Constraints/apis/driverApis";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
-import { rootState } from "../../../utils/interfaces";
+import { rootState } from "../../../interfaces/comman";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
 import { customLoadingStyle } from "../../../Constraints/customizeLoaderStyle";
+import { scheduledRideDetails } from "../../../interfaces/driver";
 
-interface rideDetails {
-    _id: string;
-    pickupLocation: string,
-    dropoffLocation: string,
-    price: string,
-    distance: string,
-    status: string,
-    driverAccepted: string,
-    pickUpDate: string
-    vehicleType: string
-}
+
 
 function ScheduledRideNotification() {
 
     const driverVehicle = useSelector((state: rootState) => state.driver.vehicleType)
 
 
-    const [rideDetails, setRideDetails] = useState<rideDetails[]>()
+    const [rideDetails, setRideDetails] = useState<scheduledRideDetails[]>()
     const [reload, setReload] = useState(false)
 
     const [latitude, setLatitude] = useState<number | null>(null)

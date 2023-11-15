@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate, Link } from "react-router-dom"
-import axios, { AxiosError } from 'axios';
 import { toast } from "react-hot-toast"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
@@ -12,17 +11,13 @@ import { useDispatch } from 'react-redux';
 import { userLogin } from '../../services/redux/slices/userAuth';
 import { driverLogin } from "../../services/redux/slices/driverAuth"
 import { adminLogin } from "../../services/redux/slices/adminAuth"
-import { loginComponentProps } from '../../utils/interfaces';
+import { loginComponentProps } from '../../interfaces/comman';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import { customLoadingStyle } from '../../Constraints/customizeLoaderStyle';
 import userEndPoints from '../../Constraints/endPoints/userEndPoints';
 import driverEndPoints from '../../Constraints/endPoints/driverEndPoints';
 import adminEndPoint from '../../Constraints/endPoints/adminEndPoint';
-
-
-interface ErrorResponse {
-    error: string;
-}
+import { handleErrors } from '../../Constraints/apiErrorHandling';
 
 
 function Login(data: loginComponentProps) {
@@ -76,14 +71,7 @@ function Login(data: loginComponentProps) {
 
         } catch (error) {
             console.log(error)
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     };
 
@@ -122,14 +110,8 @@ function Login(data: loginComponentProps) {
             }
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            console.log(error)
+            handleErrors(error)
         }
     }
 
@@ -152,14 +134,8 @@ function Login(data: loginComponentProps) {
             }
         } catch (error) {
             toast.dismiss()
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            console.log(error)
+            handleErrors(error)
         }
     }
 
@@ -245,7 +221,7 @@ function Login(data: loginComponentProps) {
                                                 <div className="w-full border-t border-gray-400"></div>
                                                 <div className="mx-4 text-sm text-gray-600">or</div>
                                                 <div className="w-full border-t border-gray-400"></div>
-                                            </div><button className="mt-2 w-full cursor-pointer rounded-lg bg-red-600 pt-3 pb-3 text-white shadow-lg hover:bg-red-400"
+                                            </div><button className="mt-2 w-full cursor-pointer rounded-lg border bg-red-600 pt-3 pb-3 text-white shadow-2xl hover:bg-red-400"
                                                 onClick={signIpWithGoogle}
                                             >
                                                 Sign in with Google

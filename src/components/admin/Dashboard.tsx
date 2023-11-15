@@ -2,32 +2,16 @@ import { Suspense, lazy, useEffect, useState } from "react"
 import { handleErrors } from "../../Constraints/apiErrorHandling"
 import { adminAxios } from "../../Constraints/axiosInterceptors/adminAxiosInterceptors"
 import adminApis from "../../Constraints/apis/adminApis"
+import { driverDashboard } from "../../interfaces/driver"
 
 const BarChart = lazy(() => import("../common/BarChart"))
 
 
-interface dashboard {
-    totalDriversCount: string
-    totalQuickRidesCount: string
-    totalRidesCount: string
-    totalScheduledRidesCount: string
-    totalUsersCount: string
-    totalUsers: totalUsers[]
-    totalDrivers: totalUsers[]
-    totalQuickRides: rides[]
-    totalScheduledRides: rides[]
-}
 
-interface totalUsers {
-    joinedAt: string;
-}
-interface rides {
-    date: string;
-}
 
 function Dashboard() {
 
-    const [dashboard, SetDashboard] = useState<dashboard | null>(null)
+    const [dashboard, SetDashboard] = useState<driverDashboard | null>(null)
 
     useEffect(() => {
         const fetchAdminDashboardData = async () => {

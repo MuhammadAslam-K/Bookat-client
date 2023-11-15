@@ -6,64 +6,17 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 import { toast } from 'react-hot-toast';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import axios, { AxiosError } from 'axios';
-import { userLogout } from '../../../services/redux/slices/userAuth';
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ErrorResponse } from '../profile/UserProfile';
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
 import { Socket, io } from 'socket.io-client';
 import queryString from 'query-string';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
+import { commnet, driverData, rideDetails } from '../../../interfaces/driver';
 
 const ChatModal = lazy(() => import("../../common/Chat"))
 
-
-interface driverData {
-    name: string
-    // totalRides: string,
-    RideDetails: {
-        completedRides: string
-    },
-    vehicleDocuments: {
-        vehicleModel: string
-        registration: {
-            registrationId: string
-        }
-    }
-    joinedAt: string,
-    driverImageUrl: string
-}
-
-export interface rideDetails {
-    _id: string;
-    driver_id: string;
-    user_id: string;
-    driverCoordinates: {
-        latitude: string;
-        longitude: string;
-    };
-    dropoffCoordinates: {
-        latitude: string;
-        longitude: string;
-    };
-    pickupCoordinates: {
-        latitude: string;
-        longitude: string;
-    };
-    dropoffLocation: string;
-    pickupLocation: string;
-    price: string;
-    distance: string;
-    otpVerifyed: boolean
-}
-
-interface commnet {
-    feedback: string
-    rating: string
-}
 
 function CurrentRideInfo(props: { rideId: string | null }) {
 
@@ -85,7 +38,6 @@ function CurrentRideInfo(props: { rideId: string | null }) {
 
     const [chat, SetChat] = useState(false)
 
-    const dispatch = useDispatch();
     const navigate = useNavigate()
 
 
@@ -109,16 +61,7 @@ function CurrentRideInfo(props: { rideId: string | null }) {
                 fetchDriverData(response.data.driver_id)
             } catch (error) {
                 console.log(error)
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(userLogout())
-                        navigate(userEndPoints.login)
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchRideDetails()

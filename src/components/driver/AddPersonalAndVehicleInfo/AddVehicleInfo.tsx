@@ -11,11 +11,8 @@ import driverApis from '../../../Constraints/apis/driverApis';
 import { customLoadingStyle } from '../../../Constraints/customizeLoaderStyle';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
+import { driverCab } from '../../../interfaces/driver';
 
-
-interface cab {
-    cabType: string
-}
 
 function AddVehicleInfo() {
     const dispatch = useDispatch();
@@ -31,7 +28,7 @@ function AddVehicleInfo() {
     const [vehicleImage2, setVehicleImage2] = useState<string | null>(null);
     const [vehicleImageName2, setVehicleImageName2] = useState<string | null>(null);
 
-    const [cabData, SetCabData] = useState<cab[]>()
+    const [cabData, SetCabData] = useState<driverCab[]>()
 
     const without_error_class = "pl-2 outline-none border-4 w-full rounded-lg p-2.5 sm:text-sm";
     const with_error_class = "pl-2 outline-none border-2 border-red-400 w-full rounded-lg p-2.5 sm:text-sm  placeholder:text-red-500";
@@ -144,7 +141,7 @@ function AddVehicleInfo() {
 
 
                     const response = await driverAxios.post(driverApis.addVehicleInfo, formData);
-                    const { document, vehicle, driverId, vehicleType } = response.data
+                    const { document, driverId, vehicle, vehicleType } = response.data
                     dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
                     dispatch(setVehicle())
                     toast.dismiss()
@@ -153,6 +150,7 @@ function AddVehicleInfo() {
 
                 } catch (error) {
                     console.log(error)
+                    toast.dismiss()
                     handleErrors(error)
                 }
             }

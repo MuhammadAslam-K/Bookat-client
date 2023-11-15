@@ -3,23 +3,17 @@ import DataTable from "react-data-table-component"
 import { handleErrors } from "../../../Constraints/apiErrorHandling"
 import { adminAxios } from "../../../Constraints/axiosInterceptors/adminAxiosInterceptors"
 import adminApis from "../../../Constraints/apis/adminApis"
+import { adminListAllCabs } from "../../../interfaces/admin"
 
 
 const AddCabModal = lazy(() => import("./AddCabModal"))
 const EditCabModal = lazy(() => import('./EditCabModal'))
 
-interface cab {
-    _id: string,
-    cabType: string,
-    maxPersons: string,
-    price: string,
-    available: string,
-    drivers: string[]
-}
+
 
 function ListAllCabs() {
 
-    const [cabData, SetCabData] = useState<cab[]>()
+    const [cabData, SetCabData] = useState<adminListAllCabs[]>()
     const [cabId, SetCabId] = useState<string>('')
 
     const [addCabModal, SetAddCabModal] = useState(false)
@@ -48,23 +42,23 @@ function ListAllCabs() {
 
         {
             name: 'Type',
-            selector: (row: cab) => row.cabType,
+            selector: (row: adminListAllCabs) => row.cabType,
         },
         {
             name: 'Price per KM',
-            selector: (row: cab) => row.price,
+            selector: (row: adminListAllCabs) => row.price,
         },
         {
             name: 'Max Persons',
-            selector: (row: cab) => row.maxPersons,
+            selector: (row: adminListAllCabs) => row.maxPersons,
         },
         {
             name: 'Available Drivers',
-            selector: (row: cab) => row.drivers.length,
+            selector: (row: adminListAllCabs) => row.drivers.length,
         },
         {
             name: 'Edit',
-            cell: (row: cab) => (
+            cell: (row: adminListAllCabs) => (
                 <h2 className="cursor-pointer"
                     onClick={() => { SetHandleCabEditModal(true), SetCabId(row._id) }}
                 >
