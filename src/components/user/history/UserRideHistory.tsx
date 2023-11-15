@@ -11,7 +11,7 @@ import { calculateTravelTime, isOneHourGreater } from '../home/Home';
 import queryString from 'query-string';
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
 import { useNavigate } from 'react-router';
-import { rootState } from '../../../utils/interfaces';
+import { rootState } from '../../../interfaces/comman';
 import { useSelector } from 'react-redux';
 import DateTimePickerModal from '../DateTimeModal';
 import { userRideHistory } from '../../../interfaces/user';

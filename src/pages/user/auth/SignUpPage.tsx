@@ -1,7 +1,7 @@
 import SignUp from "../../../components/auth/SignUp";
 import userApis from "../../../Constraints/apis/userApis";
 import userEndPoints from "../../../Constraints/endPoints/userEndPoints";
-import { signupComponentProps } from "../../../utils/interfaces";
+import { signupComponentProps } from "../../../interfaces/comman";
 
 function SignUpPage() {
     const data: signupComponentProps = {

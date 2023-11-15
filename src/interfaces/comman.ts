@@ -41,3 +41,48 @@ export interface chat {
 export interface RouteProps {
     component: React.FC;
 }
+
+// AUTH
+
+export interface loginComponentProps {
+    loginserver: string,
+    signup: string,
+    resetpassword: string,
+    person: string,
+}
+
+export interface signupComponentProps {
+    login: string;
+    signupSuccess: string;
+    signupServer: string;
+    checkExists: string,
+    person: string,
+}
+
+// REDUX
+
+interface userAuthSlice {
+    loggedIn: boolean
+    userId: null | string,
+    mobile: null | string
+}
+
+interface driverAuthSlice {
+    loggedIn: boolean
+    document: boolean
+    vehicle: boolean
+    driverId: null | string;
+    vehicleType: null | string
+    available: boolean
+}
+
+interface adminAuthSlice {
+    loggedIn: boolean
+}
+
+export interface rootState {
+    user: userAuthSlice,
+    driver: driverAuthSlice,
+    admin: adminAuthSlice
+}
+

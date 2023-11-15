@@ -1,3 +1,5 @@
+import { SetStateAction } from "react"
+
 export interface driverDashboard {
     totalDriversCount: string
     totalQuickRidesCount: string
@@ -117,4 +119,83 @@ export interface rideDetails {
 export interface commnet {
     feedback: string
     rating: string
+}
+
+
+export interface DriverInfo {
+    _id: string
+    name: string;
+    mobile: string;
+    email: string;
+    password: string;
+    refrel: string;
+    block: boolean;
+    isAvailable: boolean;
+    joiningAt: string;
+    driverImageUrl: string;
+    // totalRides: string;
+    RideDetails: {
+        completedRides: string;
+    };
+    driver: {
+        driverVerified: boolean;
+        driverDocuments: boolean;
+    };
+    vehicle: {
+        vehicleVerified: boolean;
+        vehicleDocuments: boolean;
+    };
+    wallet: {
+        balance: number;
+        transactions: {
+            date: Date;
+            details: string;
+            amount: number;
+            status: string;
+        }[];
+    };
+    aadhar: {
+        aadharId: string;
+        aadharImage: string;
+    };
+    license: {
+        licenseId: string;
+        licenseImage: string;
+    };
+    vehicleDocuments: {
+        registration: {
+            registrationId: string;
+            registrationImage: string;
+        };
+        vehicleModel: string;
+        maxPersons: string;
+        vehicleType: string;
+        vehicleImage1: string;
+        vehicleImage2: string;
+    };
+}
+
+
+export interface driverProfile {
+    data: SetStateAction<DriverInfo | null>;
+    name: string,
+    email: string,
+    mobile: string,
+    aadharId: string,
+    licenseId: string,
+    aadharImageUrl: string,
+    licenseImageUrl: string,
+    driverImageUrl: string,
+    vehicleVerified: string,
+    driverVerified: string,
+    refrel: string,
+    isAvailable: boolean,
+    totalRides: string,
+    joinedAt: string,
+    vehicleDocuments: {
+        vehicleModel: string
+        registration: {
+            registrationId: string
+        }
+    }
 }

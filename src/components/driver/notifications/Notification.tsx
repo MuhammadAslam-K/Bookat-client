@@ -4,7 +4,7 @@ initTE({ Modal, Ripple });
 
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from "react-redux";
-import { rootState } from "../../../utils/interfaces";
+import { rootState } from "../../../interfaces/comman";
 import { setDriverAvailable } from "../../../services/redux/slices/driverAuth";
 import queryString from "query-string";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";

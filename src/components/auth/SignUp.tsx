@@ -7,8 +7,8 @@ import { useNavigate, Link } from "react-router-dom"
 
 import { auth } from "../../services/firebase/config"
 import { basicSchema } from "../../utils/schema"
-import { userSignUp } from '../../utils/interfaces';
-import { signupComponentProps } from '../../utils/interfaces';
+import { userSignUp } from '../../interfaces/user';
+import { signupComponentProps } from '../../interfaces/comman';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../Constraints/apis/userApis';
 import { handleErrors } from '../../Constraints/apiErrorHandling';

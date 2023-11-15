@@ -111,3 +111,36 @@ export interface RazorpayOptions {
     };
     handler?: (response: { razorpay_payment_id: unknown }) => void;
 }
+
+export interface userSignUp {
+    name: string,
+    email: string,
+    mobile: string,
+    password: string,
+}
+
+
+
+export interface UserInfo {
+    _id: string
+    name: string;
+    mobile?: string;
+    email: string;
+    password?: string;
+    refrel: string;
+    block: boolean;
+    joiningAt: string;
+    // totalRides: number;
+    wallet: {
+        balance: number;
+        transactions: {
+            date: Date;
+            details: string;
+            amount: number;
+            status: string;
+        }[];
+    };
+    RideDetails: {
+        completedRides: string;
+    };
+}

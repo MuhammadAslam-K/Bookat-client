@@ -1,6 +1,6 @@
 import Login from '../../../components/auth/Login'
 import adminApis from '../../../Constraints/apis/adminApis'
-import { loginComponentProps } from '../../../utils/interfaces'
+import { loginComponentProps } from '../../../interfaces/comman'
 
 
 

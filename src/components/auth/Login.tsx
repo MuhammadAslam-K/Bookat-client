@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { userLogin } from '../../services/redux/slices/userAuth';
 import { driverLogin } from "../../services/redux/slices/driverAuth"
 import { adminLogin } from "../../services/redux/slices/adminAuth"
-import { loginComponentProps } from '../../utils/interfaces';
+import { loginComponentProps } from '../../interfaces/comman';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import { customLoadingStyle } from '../../Constraints/customizeLoaderStyle';
 import userEndPoints from '../../Constraints/endPoints/userEndPoints';

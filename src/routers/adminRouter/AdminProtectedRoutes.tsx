@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { rootState } from '../../utils/interfaces';
+import { rootState } from '../../interfaces/comman';
 import { RouteProps } from '../../interfaces/comman';
 
 

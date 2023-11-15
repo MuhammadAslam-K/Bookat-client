@@ -5,7 +5,7 @@ import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import { userLogout } from '../../../services/redux/slices/userAuth';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { rootState } from '../../../utils/interfaces';
+import { rootState } from '../../../interfaces/comman';
 
 function UserNavbar() {
 

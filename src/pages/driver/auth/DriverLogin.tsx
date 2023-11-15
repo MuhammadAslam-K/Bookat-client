@@ -1,7 +1,7 @@
 import Login from '../../../components/auth/Login'
 import driverApis from '../../../Constraints/apis/driverApis'
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints'
-import { loginComponentProps } from '../../../utils/interfaces'
+import { loginComponentProps } from '../../../interfaces/comman'
 
 
 function DriverLogin() {

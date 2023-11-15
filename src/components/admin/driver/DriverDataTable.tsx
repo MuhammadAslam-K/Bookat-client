@@ -6,7 +6,7 @@ import { Modal, Ripple, initTE } from "tw-elements";
 import adminApis from "../../../Constraints/apis/adminApis";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
 import { adminAxios } from "../../../Constraints/axiosInterceptors/adminAxiosInterceptors";
-import { DriverInfo } from "../../../utils/interfaces";
+import { DriverInfo } from "../../../interfaces/driver";
 import adminEndPoint from "../../../Constraints/endPoints/adminEndPoint";
 import { Link } from "react-router-dom";
 initTE({ Modal, Ripple });

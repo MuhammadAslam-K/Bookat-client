@@ -8,7 +8,7 @@ import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import { calculateDistance, calculateTravelTime, fetchLocationName, fetchLocationSuggestions, getCoordinates, handlePrice, isOneHourGreater } from './Home';
 import io, { Socket } from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
-import { rootState } from '../../../utils/interfaces';
+import { rootState } from '../../../interfaces/comman';
 import { useNavigate } from "react-router-dom"
 import userEndPoints from '../../../Constraints/endPoints/userEndPoints';
 import { userLogout } from '../../../services/redux/slices/userAuth';

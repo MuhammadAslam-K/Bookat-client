@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import driverApis from "../../../Constraints/apis/driverApis";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
-import { rootState } from "../../../utils/interfaces";
+import { rootState } from "../../../interfaces/comman";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
 import { customLoadingStyle } from "../../../Constraints/customizeLoaderStyle";
 import { scheduledRideDetails } from "../../../interfaces/driver";
