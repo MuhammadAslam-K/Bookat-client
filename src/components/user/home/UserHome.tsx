@@ -18,20 +18,10 @@ import DateTimePickerModal from '../DateTimeModal'; // Make sure to import the D
 import { userAxios } from '../../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../../Constraints/apis/userApis';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
+import { LocationSuggestion, cabDataUser } from '../../../interfaces/user';
 
 
-export interface LocationSuggestion {
-    text: string;
-    place_name: string;
-}
 
-interface carData {
-    cabType: string,
-    maxPersons: string,
-    price: string,
-    image: string,
-    drivers: []
-}
 
 function UserHome() {
 
@@ -61,7 +51,7 @@ function UserHome() {
     const [toLocationSuggestions, setToLocationSuggestions] = useState<LocationSuggestion[]>([]);
 
     const [amount, SetAmount] = useState<string>('')
-    const [carData, SetCarData] = useState<carData[]>()
+    const [carData, SetCarData] = useState<cabDataUser[]>()
 
 
     const [distance, SetDistance] = useState<string>("");

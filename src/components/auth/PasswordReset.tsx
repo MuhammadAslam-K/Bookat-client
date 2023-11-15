@@ -2,13 +2,10 @@ import { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from "yup"
 import toast from 'react-hot-toast';
-import axios, { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
+import { handleErrors } from '../../Constraints/apiErrorHandling';
 
-interface ErrorResponse {
-    error: string;
-}
 
 
 function PasswordReset(data: { passwordResetServer: string, id: string | null, successNavigation: string }) {
@@ -53,14 +50,8 @@ function PasswordReset(data: { passwordResetServer: string, id: string | null, s
             navigate(successNavigation)
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error("link expired");
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            console.log(error)
+            handleErrors(error)
         }
     }
 

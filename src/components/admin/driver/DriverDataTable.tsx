@@ -14,10 +14,6 @@ initTE({ Modal, Ripple });
 const DriverRideHistory = lazy(() => import("./DriverRideHistory"))
 
 
-export interface ErrorResponse {
-    error: string;
-}
-
 
 function DriverDataTable() {
 

@@ -2,7 +2,6 @@ import React, { useState, Suspense } from 'react'
 import { useFormik } from "formik"
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-hot-toast"
-import axios, { AxiosError } from 'axios';
 import { useNavigate, Link } from "react-router-dom"
 
 
@@ -12,12 +11,9 @@ import { userSignUp } from '../../utils/interfaces';
 import { signupComponentProps } from '../../utils/interfaces';
 import { userAxios } from '../../Constraints/axiosInterceptors/userAxiosInterceptors';
 import userApis from '../../Constraints/apis/userApis';
+import { handleErrors } from '../../Constraints/apiErrorHandling';
 const Otp = React.lazy(() => import('./Otp'));
 
-
-interface ErrorResponse {
-    error: string;
-}
 
 function SignUp(data: signupComponentProps) {
 
@@ -65,14 +61,7 @@ function SignUp(data: signupComponentProps) {
 
         } catch (error) {
             console.log(error);
-            if (axios.isAxiosError(error)) {
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            handleErrors(error)
         }
     };
 
@@ -84,16 +73,8 @@ function SignUp(data: signupComponentProps) {
             navigate(signupSuccess)
 
         } catch (error) {
-
-            if (axios.isAxiosError(error)) {
-                console.log("submitSignUpWithGoogle", error);
-                const axiosError: AxiosError<ErrorResponse> = error;
-                if (axiosError.response) {
-                    toast.error(axiosError.response.data.error);
-                } else {
-                    toast.error('Network Error occurred.');
-                }
-            }
+            console.log(error);
+            handleErrors(error)
         }
     }
 

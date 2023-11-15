@@ -5,25 +5,15 @@ import adminApis from '../../../Constraints/apis/adminApis'
 
 import DataTable from "react-data-table-component"
 import BarChart from '../../common/BarChart'
+import { RideHistoryRide } from '../../../interfaces/comman'
 
-
-interface Ride {
-    _id: string;
-    status: string;
-    date: string;
-    distance: string;
-    dropoffLocation: string;
-    pickupLocation: string;
-    price: number;
-    rating: number;
-}
 
 
 function DriverRideHistory(props: { driverId: string }) {
 
     const { driverId } = props
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>([])
-    const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[]>()
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<RideHistoryRide[]>([])
+    const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<RideHistoryRide[]>()
     const [quickRides, SetQuickRides] = useState(true)
 
     useEffect(() => {
@@ -80,23 +70,23 @@ function DriverRideHistory(props: { driverId: string }) {
 
         {
             name: 'From',
-            selector: (row: Ride) => row.pickupLocation,
+            selector: (row: RideHistoryRide) => row.pickupLocation,
         },
         {
             name: 'To',
-            selector: (row: Ride) => row.dropoffLocation,
+            selector: (row: RideHistoryRide) => row.dropoffLocation,
         },
         {
             name: 'Amount',
-            selector: (row: Ride) => row.price,
+            selector: (row: RideHistoryRide) => row.price,
         },
         {
             name: 'Distance',
-            selector: (row: Ride) => row.distance,
+            selector: (row: RideHistoryRide) => row.distance,
         },
         {
             name: 'Status',
-            selector: (row: Ride) => row.status,
+            selector: (row: RideHistoryRide) => row.status,
         },
 
     ]

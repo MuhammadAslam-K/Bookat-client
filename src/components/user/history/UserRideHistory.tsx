@@ -14,28 +14,19 @@ import { useNavigate } from 'react-router';
 import { rootState } from '../../../utils/interfaces';
 import { useSelector } from 'react-redux';
 import DateTimePickerModal from '../DateTimeModal';
+import { userRideHistory } from '../../../interfaces/user';
 
 
-interface Ride {
-    _id: string;
-    status: string;
-    date: string;
-    distance: string;
-    dropoffLocation: string;
-    pickupLocation: string;
-    price: number;
-    vehicleType: string;
-    favourite: boolean
-}
+
 
 function UserRideHistory() {
 
     const userId = useSelector((state: rootState) => state.user.userId);
     const navigate = useNavigate()
 
-    const [quickRidesInfo, SetQuickRidesInfo] = useState<Ride[]>([])
-    const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<Ride[] | null>(null)
-    const [favouriteRidesInfo, setFavouriteRidesInfo] = useState<Ride[]>([]);
+    const [quickRidesInfo, SetQuickRidesInfo] = useState<userRideHistory[]>([])
+    const [scheduledRidesInfo, SetScheduledRidesInfo] = useState<userRideHistory[] | null>(null)
+    const [favouriteRidesInfo, setFavouriteRidesInfo] = useState<userRideHistory[]>([]);
 
     const [latitude, setLatitude] = useState<number | null>(null);
     const [longitude, setLongitude] = useState<number | null>(null);
@@ -203,7 +194,7 @@ function UserRideHistory() {
     })
 
 
-    const ActionCell = (row: Ride) => (
+    const ActionCell = (row: userRideHistory) => (
         <p title={row.favourite ? "Remove From Favourite" : "Add To Favourite"} className='cursor-pointer' onClick={() => handleFavouriteRide(row._id)}>
             {row.favourite ? (
                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
@@ -217,33 +208,33 @@ function UserRideHistory() {
         </p>
     );
 
-    const ridesColumns: TableColumn<Ride>[] = [
+    const ridesColumns: TableColumn<userRideHistory>[] = [
 
         {
             name: 'From',
-            selector: (row: Ride) => row.pickupLocation,
+            selector: (row: userRideHistory) => row.pickupLocation,
         },
         {
             name: 'To',
-            selector: (row: Ride) => row.dropoffLocation,
+            selector: (row: userRideHistory) => row.dropoffLocation,
 
         },
 
         {
             name: 'Amount',
-            selector: (row: Ride) => row.price,
+            selector: (row: userRideHistory) => row.price,
         },
         {
             name: 'Distance',
-            selector: (row: Ride) => row.distance,
+            selector: (row: userRideHistory) => row.distance,
         },
         {
             name: 'Vehicle Type',
-            selector: (row: Ride) => row.vehicleType,
+            selector: (row: userRideHistory) => row.vehicleType,
         },
         {
             name: 'Status',
-            selector: (row: Ride) => row.status,
+            selector: (row: userRideHistory) => row.status,
         },
         {
             name: 'Action',
@@ -253,28 +244,28 @@ function UserRideHistory() {
 
     ]
 
-    const favouriteRidesColumns: TableColumn<Ride>[] = [
+    const favouriteRidesColumns: TableColumn<userRideHistory>[] = [
         {
             name: 'From',
-            selector: (row: Ride) => row.dropoffLocation,
+            selector: (row: userRideHistory) => row.dropoffLocation,
 
         },
         {
             name: 'To',
-            selector: (row: Ride) => row.dropoffLocation,
+            selector: (row: userRideHistory) => row.dropoffLocation,
 
         },
         {
             name: 'Amount',
-            selector: (row: Ride) => row.price,
+            selector: (row: userRideHistory) => row.price,
         },
         {
             name: 'Distance',
-            selector: (row: Ride) => row.distance,
+            selector: (row: userRideHistory) => row.distance,
         },
         {
             name: 'Vehicle Type',
-            selector: (row: Ride) => row.vehicleType,
+            selector: (row: userRideHistory) => row.vehicleType,
         },
         {
             name: 'Favourite',
@@ -282,7 +273,7 @@ function UserRideHistory() {
         },
         {
             name: 'Action',
-            cell: (row: Ride) => (
+            cell: (row: userRideHistory) => (
                 <div className="cursor-pointer">
                     <p
                         className="p-2 m-2 rounded-lg border-2 border-blue-500 hover:bg-blue-500 hover:text-white focus:outline-none"

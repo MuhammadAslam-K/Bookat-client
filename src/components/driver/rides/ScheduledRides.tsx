@@ -7,16 +7,9 @@ import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
 import queryString from "query-string";
 import { handleErrors } from "../../../Constraints/apiErrorHandling";
+import { rideDetail } from "../../../interfaces/driver";
 
-interface rideDetail {
-    _id: string;
-    pickupLocation: string,
-    dropoffLocation: string,
-    price: string,
-    distance: string,
-    status: string,
-    driver_id: string,
-}
+
 
 function ScheduledRides() {
 

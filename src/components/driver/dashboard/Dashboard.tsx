@@ -4,28 +4,13 @@ import driverApis from "../../../Constraints/apis/driverApis"
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors"
 import { handleErrors } from "../../../Constraints/apiErrorHandling"
 import BarChart from "../../common/BarChart"
+import { AdminDashboard } from "../../../interfaces/admin"
 
-interface dashboard {
-    driverData: {
-        RideDetails: {
-            completedRides: string
-        },
-        revenue: string
-    }
-    totalRide: string,
-    quickRidesCount: string,
-    scheduledRidesCount: string,
-    quickRides: rides[]
-    scheduledRides: rides[]
-}
 
-interface rides {
-    date: string
-}
 
 function Dashboard() {
 
-    const [dashboard, SetDashboard] = useState<dashboard | null>(null)
+    const [dashboard, SetDashboard] = useState<AdminDashboard | null>(null)
 
     useEffect(() => {
         const fetchDriverDashboardData = async () => {

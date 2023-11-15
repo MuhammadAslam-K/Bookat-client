@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Socket, io } from 'socket.io-client';
+import { Message, chat } from '../../interfaces/comman';
 
-interface Message {
-    sender: string;
-    content: string;
-    timestamp: Date;
-}
 
-interface chat {
-    rideId: string;
-    handleChangeTheChatState: () => void
-    role: string
-}
 
 const ChatModal = (props: chat) => {
 

@@ -9,23 +9,10 @@ import { setDriverAvailable } from "../../../services/redux/slices/driverAuth";
 import queryString from "query-string";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
 import { Link, useNavigate } from "react-router-dom";
+import { RideConfirmProps } from "../../../interfaces/driver";
 
 
-export interface rideDetails {
-    driverId: string
-    userId: string
-    userLat: string
-    userLon: string
-}
 
-interface RideConfirmProps {
-    amount: string
-    userFromLocation: string
-    userToLocation: string
-    rideDistance: string
-    distance: string
-
-}
 
 function Notification() {
 

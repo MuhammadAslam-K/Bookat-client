@@ -6,27 +6,15 @@ import { handleErrors } from "../../../Constraints/apiErrorHandling";
 initTE({ Modal, Ripple });
 import DataTable from "react-data-table-component"
 import UserDetails from "./UserDetails";
+import { adminUserDataTable } from "../../../interfaces/admin";
 
 
-export interface ErrorResponse {
-    error: string;
-}
 
-interface user {
-    _id: string;
-    name: string;
-    email: string;
-    mobile: string;
-    block: boolean;
-    RideDetails: {
-        completedRides: number;
-    }
-}
 
 
 function UserDataTable() {
 
-    const [data, Setdata] = useState<(user)[]>()
+    const [data, Setdata] = useState<(adminUserDataTable)[]>()
 
     const [searchTerm, setSearchTerm] = useState("");
     const [userId, SetUserId] = useState("");
@@ -43,7 +31,7 @@ function UserDataTable() {
                 const response = await adminAxios.get(adminApis.getAllUsers)
                 console.log(response);
 
-                const Data: user[] = response.data;
+                const Data: adminUserDataTable[] = response.data;
                 Setdata(Data)
             } catch (error) {
                 handleErrors(error)
@@ -60,7 +48,7 @@ function UserDataTable() {
 
 
 
-    const handleBlock = async (id: user) => {
+    const handleBlock = async (id: adminUserDataTable) => {
 
         try {
             await adminAxios.patch(`${adminApis.blockUser}?id=${id._id}`)
@@ -72,7 +60,7 @@ function UserDataTable() {
         }
     }
 
-    const getButtonColor = (user: user) => {
+    const getButtonColor = (user: adminUserDataTable) => {
         const red = "text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  m-2"
         const blue = "text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  m-2"
         return user.block ? red : blue;
@@ -83,19 +71,19 @@ function UserDataTable() {
 
         {
             name: 'Name',
-            selector: (row: user) => row.name,
+            selector: (row: adminUserDataTable) => row.name,
         },
         {
             name: 'Email',
-            selector: (row: user) => row.email,
+            selector: (row: adminUserDataTable) => row.email,
         },
         {
             name: 'Mobile',
-            selector: (row: user) => row.mobile,
+            selector: (row: adminUserDataTable) => row.mobile,
         },
         {
             name: 'Status',
-            cell: (row: user) => (
+            cell: (row: adminUserDataTable) => (
                 <button
                     className={getButtonColor(row)}
                     onClick={() => handleBlock(row)}
@@ -107,11 +95,11 @@ function UserDataTable() {
         },
         {
             name: 'Completed Rides',
-            selector: (row: user) => row.RideDetails.completedRides,
+            selector: (row: adminUserDataTable) => row.RideDetails.completedRides,
         },
         {
             name: 'View Details',
-            cell: (row: user) => (
+            cell: (row: adminUserDataTable) => (
                 <p className="cursor-pointer"
                     onClick={() => { setUserDetails(true), SetUserId(row._id) }}
                 >

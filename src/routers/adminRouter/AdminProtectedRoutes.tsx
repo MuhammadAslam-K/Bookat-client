@@ -2,12 +2,11 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { rootState } from '../../utils/interfaces';
+import { RouteProps } from '../../interfaces/comman';
 
-interface ProtectedRouteProps {
-    component: React.FC;
-}
 
-const AdminProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component }) => {
+
+const AdminProtectedRoute: React.FC<RouteProps> = ({ component: Component }) => {
     const admin = useSelector((state: rootState) => state.admin.loggedIn);
 
     console.log(admin)

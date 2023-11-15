@@ -1,24 +1,15 @@
-import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react"
-import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import driverApis from "../../../Constraints/apis/driverApis";
-import { driverLogout, setDriverAvailable } from "../../../services/redux/slices/driverAuth";
+import { setDriverAvailable } from "../../../services/redux/slices/driverAuth";
 import driverEndPoints from "../../../Constraints/endPoints/driverEndPoints";
-import { ErrorResponse } from "../../user/profile/UserProfile";
 import { driverAxios } from "../../../Constraints/axiosInterceptors/driverAxiosInterceptors";
+import { rideDetail } from "../../../interfaces/driver";
+import { handleErrors } from "../../../Constraints/apiErrorHandling";
 
-interface rideDetail {
-    _id: string;
-    pickupLocation: string,
-    dropoffLocation: string,
-    price: string,
-    distance: string,
-    status: string,
-    driver_id: string,
-}
+
 
 function DriverCurrentRides() {
 
@@ -34,16 +25,7 @@ function DriverCurrentRides() {
                 setRideDetails(response.data[0])
             } catch (error) {
                 console.log(error)
-                if (axios.isAxiosError(error)) {
-                    const axiosError: AxiosError<ErrorResponse> = error;
-                    if (axiosError.response?.data) {
-                        toast.error(axiosError.response.data.error);
-                        dispatch(driverLogout())
-                        navigate(driverEndPoints.login)
-                    } else {
-                        toast.error('Network Error occurred.');
-                    }
-                }
+                handleErrors(error)
             }
         }
         fetchRideDetails()

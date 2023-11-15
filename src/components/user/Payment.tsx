@@ -2,29 +2,14 @@ import { useEffect, useState } from "react"
 
 import { userAxios } from "../../Constraints/axiosInterceptors/userAxiosInterceptors";
 import userApis from "../../Constraints/apis/userApis";
-import { rideDetails } from "./rides/CurrentRideInfo";
+import { rideDetails } from "../../interfaces/driver";
 import { handleErrors } from "../../Constraints/apiErrorHandling";
 import { useNavigate } from "react-router-dom";
 import userEndPoints from "../../Constraints/endPoints/userEndPoints";
 import queryString from "query-string";
+import { RazorpayOptions } from "../../interfaces/user";
 
-declare global {
-    interface Window {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        Razorpay: any;
-    }
-}
 
-interface RazorpayOptions {
-    key: string;
-    currency: string;
-    amount: number;
-    name: string;
-    prefill: {
-        name: string;
-    };
-    handler?: (response: { razorpay_payment_id: unknown }) => void;
-}
 
 
 function Payment(props: { rideId: string | null }) {

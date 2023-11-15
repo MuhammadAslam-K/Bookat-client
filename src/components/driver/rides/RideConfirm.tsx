@@ -5,7 +5,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import { rideDetails } from '../../user/rides/CurrentRideInfo';
+import { rideDetails } from '../../../interfaces/driver';
 import driverApis from '../../../Constraints/apis/driverApis';
 import toast from 'react-hot-toast';
 import { driverAxios } from '../../../Constraints/axiosInterceptors/driverAxiosInterceptors';
@@ -15,13 +15,12 @@ import { useNavigate } from 'react-router-dom';
 import { setDriverAvailable } from '../../../services/redux/slices/driverAuth';
 import driverEndPoints from '../../../Constraints/endPoints/driverEndPoints';
 import { handleErrors } from '../../../Constraints/apiErrorHandling';
+import { userInfoMobile } from '../../../interfaces/driver';
 
 const ChatModal = lazy(() => import("../../common/Chat"))
 
 
-interface userInfo {
-    mobile: string
-}
+
 function RideConfirm(props: { rideId: string | null }) {
 
     const { rideId, } = props
@@ -42,7 +41,7 @@ function RideConfirm(props: { rideId: string | null }) {
     const [rideInfo, setRideInfo] = useState<rideDetails | null>(null);
     const [OTP, setOTP] = useState<string>("")
 
-    const [mobile, setmobile] = useState<userInfo | null>(null)
+    const [mobile, setmobile] = useState<userInfoMobile | null>(null)
 
     const [socket, setsocket] = useState<Socket | null>(null)
     const [map, setMap] = useState<mapboxgl.Map | undefined>(undefined);
