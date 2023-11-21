@@ -85,12 +85,12 @@ function UserNavbar() {
                                 }`}
                         >
                             <div className="flex flex-col text-xl -mx-6 lg:flex-row lg:items-center lg:mx-8">
-                                <Link
+                                {/* <Link
                                     to="/about"
                                     className="px-3 py-2 mx-3 mt-2 text-black-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-black-200 hover:text-gray-100 dark:hover:bg-blue-700"
                                 >
                                     About
-                                </Link>
+                                </Link> */}
                                 <Link
                                     to={userEndPoints.currentRide}
                                     className="px-3 py-2 mx-3 mt-2 text-black-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-black-200 hover:text-gray-100 dark:hover:bg-blue-700"
