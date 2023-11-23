@@ -1,5 +1,5 @@
-import DriverFooter from '../../../../components/driver/common/Navbar'
-import Navbar from '../../../../components/driver/common/DriverFooter'
+import DriverFooter from '../../../../components/driver/common/DriverFooter'
+import Navbar from '../../../../components/driver/common/Navbar'
 import DriverRideHistory from "../../../../components/driver/history/DriverRideHistory"
 
 function DriverRideHistoryPage() {
