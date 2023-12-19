@@ -143,7 +143,7 @@ function AddVehicleInfo() {
                     const response = await driverAxios.post(driverApis.addVehicleInfo, formData);
                     const { document, driverId, vehicle, vehicleType } = response.data
                     dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
-                    dispatch(setVehicle())
+                    dispatch(setVehicle(true))
                     toast.dismiss()
                     toast.success("Submitted the form successfully")
                     navigate(driverEndPoints.dashboard)

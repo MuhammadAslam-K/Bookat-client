@@ -130,7 +130,7 @@ function AddPersonalInfo() {
                     const { vehicle, driverId, vehicleType } = response.data
                     console.log(response.data)
                     console.log("document", document, vehicle)
-                    dispatch(setDocument())
+                    dispatch(setDocument(true))
                     dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
                     toast.dismiss()
                     toast.success("Form submitted successfully")

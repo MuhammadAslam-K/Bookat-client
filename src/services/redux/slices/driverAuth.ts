@@ -20,11 +20,11 @@ export const driverAuthSlice = createSlice({
             state.driverId = action.payload.driverId;
             state.vehicleType = action.payload.vehicleType
         },
-        setDocument: (state) => {
-            state.document = true;
+        setDocument: (state, actions) => {
+            state.document = actions.payload.document
         },
-        setVehicle: (state) => {
-            state.vehicle = true;
+        setVehicle: (state, actions) => {
+            state.vehicle = actions.payload.vehicle
         },
         setDriverAvailable: (state, action) => {
             state.available = action.payload.available

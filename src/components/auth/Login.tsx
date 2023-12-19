@@ -58,6 +58,7 @@ function Login(data: loginComponentProps) {
                 localStorage.setItem('driverToken', response.data.token);
                 console.log(response)
                 const { document, vehicle, driverId, vehicleType } = response.data
+                console.log("doc", document, "vehickle", vehicle)
                 dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
 
                 console.log("Navigating to driver dashboard");
