@@ -12,7 +12,6 @@ const ChatModal = (props: chat) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [newMessage, setNewMessage] = useState<string>('');
 
-    const [reload, SetReload] = useState(false)
 
     useEffect(() => {
 
@@ -39,18 +38,8 @@ const ChatModal = (props: chat) => {
             socketClient.disconnect();
         };
 
-    }, [reload]);
+    }, []);
 
-    const handleReload = () => {
-        socket?.emit('join-chat', rideId)
-
-        socket?.on('chat-message', (message: Message, messageRideId: string) => {
-            console.log("chat-message", message)
-            if (message && (messageRideId == rideId)) {
-                setMessages(message as unknown as Message[]);
-            }
-        });
-    }
 
     const handleSendMessage = () => {
         if (newMessage.trim() !== '') {
@@ -60,9 +49,6 @@ const ChatModal = (props: chat) => {
                 timestamp: new Date(),
             };
             socket?.emit('update-chat-message', { rideId, message })
-            setMessages([...messages, message]);
-            SetReload(!reload)
-            handleReload()
             setNewMessage('');
         }
     };

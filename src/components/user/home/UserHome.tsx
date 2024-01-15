@@ -84,7 +84,7 @@ function UserHome() {
                     setLongitude(position.coords.longitude);
                 },
                 function (error) {
-                    toast.error("Error getting location");
+                    toast.error("Error getting location. Please allow location permission");
                     console.error('Error getting location:', error.message);
                 }
             );

@@ -58,6 +58,7 @@ function Login(data: loginComponentProps) {
                 localStorage.setItem('driverToken', response.data.token);
                 console.log(response)
                 const { document, vehicle, driverId, vehicleType } = response.data
+                console.log("doc", document, "vehickle", vehicle)
                 dispatch(driverLogin({ document, vehicle, driverId, vehicleType }))
 
                 console.log("Navigating to driver dashboard");
@@ -221,13 +222,22 @@ function Login(data: loginComponentProps) {
                                                 <div className="w-full border-t border-gray-400"></div>
                                                 <div className="mx-4 text-sm text-gray-600">or</div>
                                                 <div className="w-full border-t border-gray-400"></div>
-                                            </div><button className="mt-2 w-full cursor-pointer rounded-lg border bg-red-600 pt-3 pb-3 text-white shadow-2xl hover:bg-red-400"
+                                            </div>
+                                            <button className="mt-2 w-full cursor-pointer rounded-lg border bg-red-600 pt-3 pb-3 text-white shadow-2xl hover:bg-red-400"
                                                 onClick={signIpWithGoogle}
                                             >
                                                 Sign in with Google
                                             </button>
+
                                         </>
                                     }
+                                    <div className="flex item-center w-full text-center ms-20 my-5">
+                                        <div className="">
+                                            <h1 className='ms-5'>Demo User</h1>
+                                            <p>Email : jazool@yopmail.com</p>
+                                            <p>password : Muhammad2003</p>
+                                        </div>
+                                    </div>
                                     <div className="mt-1 text-center">
                                         <p className="text-sm text-gray-600">create an account? <Link to={signup} className="font-bold text-blue-600 no-underline hover:text-blue-400">Sign up</Link></p>
                                     </div>
