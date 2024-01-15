@@ -272,8 +272,14 @@ function SignUp(data: signupComponentProps) {
                                     >
                                         Sign up with Google
                                     </button>
+
                                 </>
                             }
+                            <div className="flex item-center w-full text-center my-5">
+                                <div className="">
+                                    <p>The Twilio account is for trial so please use the demo user credentials provided in Sign in page.</p>
+                                </div>
+                            </div>
                             <div className="mt-2 text-center">
                                 <p className="text-sm text-gray-600">Already have an account? <Link to={login} className="font-bold text-blue-600 no-underline hover:text-blue-400">Sign in</Link></p>
                             </div>
